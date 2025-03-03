@@ -3,8 +3,8 @@
 #include "debugger_plugin.h"
 #include "../agent_behaviours/agent.h"
 #include "../behaviour_tree/root.h"
-#include "../state_tree/root.h"
 #include "../noodle_nodes.h"
+#include "../state_tree/root.h"
 #include <godot_cpp/classes/label.hpp>
 
 using namespace godot;

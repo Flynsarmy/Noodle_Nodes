@@ -3,8 +3,8 @@
 
 #include "behaviours.h"
 #include "considerations.h"
-#include "resources/considerations/consideration_resources.h"
 #include "noodle_nodes.h"
+#include "resources/considerations/consideration_resources.h"
 #include <godot_cpp/classes/node.hpp>
 
 namespace godot {

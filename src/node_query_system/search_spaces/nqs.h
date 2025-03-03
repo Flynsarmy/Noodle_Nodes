@@ -2,8 +2,8 @@
 #define NNNQSSearchSpaces_H_INCLUDED
 
 //#include "node_query_system.h"
-#include "../search_criteria/nqs.h"
 #include "../noodle_nodes.h"
+#include "../search_criteria/nqs.h"
 #include <godot_cpp/classes/node.hpp>
 
 namespace godot {

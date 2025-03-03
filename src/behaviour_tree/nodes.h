@@ -2,8 +2,8 @@
 #define NNBTNodes_H_INCLUDED
 
 #include "../agent_behaviours/considerations.h"
-#include "../resources/considerations/consideration_resources.h"
 #include "../noodle_nodes.h"
+#include "../resources/considerations/consideration_resources.h"
 #include "definitions.h"
 #include <godot_cpp/classes/node.hpp>
 
