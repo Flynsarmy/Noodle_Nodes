@@ -1,0 +1,42 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "generate docs",
+            "type": "shell",
+            "command": "\"$APPDATA/Godot/app_userdata/Godot Version Manager/versions/Godot_v4.4-rc3_win64.exe\" --doctool ../ --gdextension-docs",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/demo"
+            }
+        },
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "find src/ -iname '*.h' -o -iname '*.cpp' | xargs clang-format -i",
+            "problemMatcher": [],
+        },
+        {
+            "label": "build",
+            "group": "build",
+            "type": "shell",
+            "command": "scons",
+            "args": [],
+            "problemMatcher": "$msCompile",
+        }
+        ,
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "addons/gdunit4/runtest_bin.sh --godot_bin \"$APPDATA/Godot/app_userdata/Godot Version Manager/versions/Godot_v4.4-rc3_win64.exe\" -a 'test'",
+            "options": {
+                "env": {
+                    "GODOT_BIN_OLD": "${env:APPDATA//\\/}/Godot/app_userdata/Godot Version Manager/versions/Godot_v4.4-rc3_win64.exe"
+                },
+                "cwd": "${workspaceFolder}/demo"
+            }
+        }
+    ]
+}

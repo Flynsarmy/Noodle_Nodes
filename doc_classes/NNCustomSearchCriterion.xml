@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNCustomSearchCriterion" inherits="NNNQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Defines a method [code]apply_criterion()[/code] that will be called to execute the filtering.
+	</brief_description>
+	<description>
+		With the custom search criterion you can define a method [code]apply_criterion()[/code] that will be called to execute the filtering. You need to set the [member NNNQSSearchCriteria.is_filtered] and [member NNNQSSearchCriteria.score] properties in the method.
+	</description>
+	<tutorials>
+	</tutorials>
+</class>

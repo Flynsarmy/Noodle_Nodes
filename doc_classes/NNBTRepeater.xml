@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNBTRepeater" inherits="NNBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Repeats its child node for [member max_repeat_times] number of times before returning [code]SUCCESS[/code].
+	</brief_description>
+	<description>
+		The Repeater node repeats its child node for [member max_repeat_times] number of successes before returning [code]FAILURE[/code] until which point it returns [code]RUNNING[/code]. If the child returns [code]FAILURE[/code] this node immediately returns [code]FAILURE[/code].
+
+		If [member max_repeat_times] is set to [code]-1[/code] the child will be ticked indefinitely.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_times_repeated" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the number of times this node has repeated.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="repeat_times" type="int" setter="set_repeat_times" getter="get_repeat_times" default="-1">
+			The maximum times the limiter node can be ticked. [code]-1[/code] for to repeat indefinitely.
+		</member>
+	</members>
+</class>

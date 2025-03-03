@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNBTTaskNodes" inherits="NNBTNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Base class for Noodle Nodes behaviour tree task nodes.
+	</brief_description>
+	<description>
+		Provides a [method on_tick] method for task nodes to implement to run their custom logic.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="on_tick" qualifiers="virtual">
+			<return type="int" enum="NNBTNodes.Status" />
+			<param index="0" name="blackboard" type="Variant" />
+			<param index="1" name="delta" type="float" />
+			<description>
+				Logic to be executed each tick.
+			</description>
+		</method>
+	</methods>
+</class>

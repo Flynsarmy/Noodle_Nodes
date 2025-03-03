@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNSensors" inherits="NoodleNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Base class for [NNSensor] and [NNSensorGroup].
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="sensor_value" type="float" setter="set_sensor_value" getter="get_sensor_value" default="0.0001">
+			A floating point value in the range of [code]0..1[/code].
+		</member>
+	</members>
+</class>

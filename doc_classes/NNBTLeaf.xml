@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNBTLeaf" inherits="NNBTTaskNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Used for conditions and actions. You should define your own [code]on_tick()[/code] method where you do your logic.
+	</brief_description>
+	<description>
+		The leaf node is used for conditions and actions. You should define your own [method NNBTTaskNodes._tick] method where you do your logic.
+		Example:
+		[gdscript]
+		func on_tick(blackboard: Variant, delta: float) -&gt; Status:
+		    return Status.SUCCESS
+		[/gdscript]
+	</description>
+	<tutorials>
+	</tutorials>
+</class>

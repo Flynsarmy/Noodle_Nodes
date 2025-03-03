@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNSTRoot" inherits="NNSTNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		The root node for a State Tree.
+	</brief_description>
+	<description>
+		This is the root node for a State Tree. To update the tree, you call the [method tick] method of its root node. This will tick all the child nodes.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_active_states" qualifiers="const">
+			<return type="NNSTNode[]" />
+			<description>
+				Returns a list of currently active states. This number won't update until [method NNSTNodes.transition_to] is called.
+			</description>
+		</method>
+		<method name="get_child_sensors">
+			<return type="NNSensors[]" />
+			<description>
+				Returns a list of child sensors.
+			</description>
+		</method>
+		<method name="tick">
+			<return type="void" />
+			<param index="0" name="blackboard" type="Variant" />
+			<param index="1" name="delta" type="float" />
+			<description>
+				The [method tick] method is used to update the State Tree state. You can provide any Godot variant type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. [code]blackboard[/code] and [code]delta[/code] are passed to the [method NNSTNodes.on_enter_state], [method NNSTNodes.on_exit_state], [method NNSTNodes.on_tick] and [method NNSTNodes.on_enter_condition] methods of the child nodes.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="total_tick_usec" type="int" setter="set_total_tick_usec" getter="get_total_tick_usec" default="0">
+			The time to complete a tick in usec.
+		</member>
+	</members>
+</class>

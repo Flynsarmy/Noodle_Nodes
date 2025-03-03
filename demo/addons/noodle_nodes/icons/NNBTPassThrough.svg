@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="16"
+   viewBox="0 0 16 16"
+   width="16"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="NNBTPassThrough.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="79.372736"
+     inkscape:cx="6.1293087"
+     inkscape:cy="10.028632"
+     inkscape:window-width="3840"
+     inkscape:window-height="2054"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <path
+     style="fill:#ef9f4c;stroke-width:0.0101919"
+     d="M 5.7215876,13.151118 C 4.4718385,11.589131 3.4477878,10.307245 3.4459193,10.302481 c -0.00186,-0.0048 0.7651994,-0.0087 1.7045953,-0.0087 H 6.8585072 V 5.1469095 0 H 8 9.1414928 v 5.1469095 5.1469095 h 1.7079922 c 0.939396,0 1.706464,0.0039 1.704596,0.0087 -0.0061,0.01546 -4.547753,5.688579 -4.554081,5.688579 -0.00337,0 -1.0286634,-1.277989 -2.2784124,-2.839974 z"
+     id="path2" />
+</svg>

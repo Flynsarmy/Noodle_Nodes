@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="16"
+   viewBox="0 0 16 16"
+   width="16"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="NNSearchSpaces.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="78.223688"
+     inkscape:cx="5.8038685"
+     inkscape:cy="8.3734227"
+     inkscape:window-width="3840"
+     inkscape:window-height="2054"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <path
+     d="M 10.526858,8.9038312 A 5.7391321,5.7391321 0 1 0 8.9038312,10.526858 L 13.85785,15.480877 15.480877,13.85785 Z M 5.7427172,2.299238 a 3.4434793,3.4434793 0 0 1 0,6.8869585 3.4434793,3.4434793 0 0 1 0,-6.8869585 z"
+     fill="#775599"
+     id="path1"
+     style="stroke-width:1.14783;fill:#ef9f4c;fill-opacity:1" />
+</svg>

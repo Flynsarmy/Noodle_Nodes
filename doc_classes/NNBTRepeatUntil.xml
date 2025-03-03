@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNBTRepeatUntil" inherits="NNBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Ticks its child either until the [member expected_tick_result] is returned by its child for [member max_repeat_times] number of times.
+	</brief_description>
+	<description>
+		The RepeatUntil node ticks its child either until the [member expected_tick_result] is returned by its child for [member max_repeat_times] number of times. If [member max_repeat_times] is set to [code]-1[/code], only the [member expected_tick_result] will end the loop.
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="expected_tick_result" type="int" setter="set_expected_tick_result" getter="get_expected_tick_result" default="1">
+			The result that the child node should return to end the loop. Can be either [code]-1[/code]=Failure, [code]0[/code]=Running or [code]1[/code]=Success.
+		</member>
+		<member name="max_repeat_times" type="int" setter="set_max_repeat_times" getter="get_max_repeat_times" default="-1">
+			The maximum times the limiter node can be ticked.
+		</member>
+		<member name="reset_rule" type="int" setter="set_reset_rule" getter="get_reset_rule" overrides="NNBTNodes" default="3" />
+	</members>
+</class>
