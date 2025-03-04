@@ -6,7 +6,7 @@
         {
             "label": "generate docs",
             "type": "shell",
-            "command": "\"$APPDATA/Godot/app_userdata/Godot Version Manager/versions/Godot_v4.4-rc3_win64.exe\" --doctool ../ --gdextension-docs",
+            "command": "\"$APPDATA/Godot/app_userdata/Godot Version Manager/versions/Godot_v4.4-stable_win64.exe\" --doctool ../ --gdextension-docs",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/demo"
@@ -30,11 +30,8 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "addons/gdunit4/runtest_bin.sh --godot_bin \"$APPDATA/Godot/app_userdata/Godot Version Manager/versions/Godot_v4.4-rc3_win64.exe\" -a 'test'",
+            "command": "\"$APPDATA/Godot/app_userdata/Godot Version Manager/versions/Godot_v4.4-stable_win64.exe\" --headless --path \"$PWD\" -d -s addons/gut/gut_cmdln.gd -gdir=res://test/ -gprefix=test_ -gsuffix=.gd -gexit -ginclude_subdirs",
             "options": {
-                "env": {
-                    "GODOT_BIN_OLD": "${env:APPDATA//\\/}/Godot/app_userdata/Godot Version Manager/versions/Godot_v4.4-rc3_win64.exe"
-                },
                 "cwd": "${workspaceFolder}/demo"
             }
         }

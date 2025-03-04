@@ -12,28 +12,25 @@ jobs:
         with:
           path:  ${{ github.workspace }}
           name: noodle_nodes_demo_project
-      - name: Run GDUnit4 tests
-        uses: MikeSchulze/gdUnit4-action@v1.1.5
-        with:
-          godot-version: 4.4
-          godot-status: "rc3"
-          timeout: 3
-          paths: "res://test"
-          version: "installed"
-          publish-report: false
-          report-name: report_Godot4.4-rc3_unit-tests
-      # - name: Download Godot
-      #   shell: sh
-      #   run: |
-      #     curl -fLO https://github.com/godotengine/godot-builds/releases/download/4.4-rc1/Godot_v4.4-rc1_linux.x86_64.zip
-      #     unzip Godot_v4.4-rc1_linux.x86_64.zip -d /usr/local/bin
-      #     mv /usr/local/bin/Godot_v4.4-rc1_linux.x86_64 /usr/local/bin/godot
-      #     chmod +x /usr/local/bin/godot
-      # - name: Run tests
-      #   shell: sh
-      #   env:
-      #     GODOT_BIN: /usr/local/bin/godot
-      #   run: |
-      #     cd ${{ github.workspace }}
-      #     chmod +x addons/gdUnit4/runtest.sh
-      #     addons/gdUnit4/runtest.sh -a 'addons/noodle_nodes/tests' --headless --ignoreHeadlessMode
+      # - name: Run GDUnit4 tests
+      #   uses: MikeSchulze/gdUnit4-action@v1.1.5
+      #   with:
+      #     godot-version: 4.4
+      #     timeout: 3
+      #     paths: "res://test"
+      #     version: "installed"
+      #     publish-report: false
+      #     report-name: report_Godot4.4-rc3_unit-tests
+      - name: Download Godot
+        shell: sh
+        run: |
+          curl -fLO https://github.com/godotengine/godot-builds/releases/download/4.4-rc3/Godot_v4.4-rc3_linux.x86_64.zip
+          unzip Godot_v4.4-rc3_linux.x86_64.zip -d /usr/local/bin
+          mv /usr/local/bin/Godot_v4.4-rc3_linux.x86_64 /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+      - name: Run tests
+        shell: sh
+        run: |
+          cd ${{ github.workspace }}
+          /usr/local/bin/godot --headless --path "$PWD" --import --quit
+          /usr/local/bin/godot --headless --path "$PWD" -d -s addons/gut/gut_cmdln.gd -gdir=res://test/ -gprefix=test_ -gsuffix=.gd -gexit -ginclude_subdirs
