@@ -1,0 +1,78 @@
+[gd_scene load_steps=12 format=3 uid="uid://bj4s2t6pibv55"]
+
+[ext_resource type="Texture2D" uid="uid://dnb3lf0bwnjw0" path="res://assets/Standard sprites upd.png" id="1_c7us1"]
+[ext_resource type="Script" uid="uid://dyry2hsdic0se" path="res://demo_02_behaviour_trees/ai_entity.gd" id="2_c7us1"]
+[ext_resource type="Script" uid="uid://cplowv66stmf" path="res://demo_02_behaviour_trees/is_too_far_from_the_cursor.gd" id="3_x644d"]
+[ext_resource type="Script" uid="uid://d1qnnc65h6ck2" path="res://demo_02_behaviour_trees/move_closer.gd" id="4_ow4sd"]
+[ext_resource type="Script" uid="uid://bri3suit6dca8" path="res://demo_02_behaviour_trees/is_too_close_to_the_cursor.gd" id="5_awsmy"]
+[ext_resource type="Script" uid="uid://d2mkyo1wv7jmh" path="res://demo_02_behaviour_trees/move_away.gd" id="6_boo42"]
+[ext_resource type="Script" uid="uid://d11qttt2vyy8v" path="res://demo_02_behaviour_trees/set_to_idle_animation.gd" id="7_bdvfu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sd31o"]
+atlas = ExtResource("1_c7us1")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_do0k8"]
+atlas = ExtResource("1_c7us1")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ocycv"]
+atlas = ExtResource("1_c7us1")
+region = Rect2(48, 32, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fl4xp"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sd31o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_do0k8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ocycv")
+}],
+"loop": true,
+"name": &"moving",
+"speed": 5.0
+}]
+
+[node name="ai_entity" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_fl4xp")
+animation = &"moving"
+script = ExtResource("2_c7us1")
+
+[node name="NNBTRoot" type="NNBTRoot" parent="."]
+
+[node name="NNDistanceVector2Sensor" type="NNDistanceVector2Sensor" parent="NNBTRoot"]
+max_distance = 200.0
+is_distance_calculated = true
+is_direction_vector_calculated = true
+
+[node name="Keep a fixed distance to the cursor" type="NNBTSelector" parent="NNBTRoot"]
+
+[node name="Move closer to the cursor" type="NNBTSequence" parent="NNBTRoot/Keep a fixed distance to the cursor"]
+
+[node name="Is too far from the cursor" type="NNBTLeaf" parent="NNBTRoot/Keep a fixed distance to the cursor/Move closer to the cursor"]
+script = ExtResource("3_x644d")
+
+[node name="Move closer" type="NNBTLeaf" parent="NNBTRoot/Keep a fixed distance to the cursor/Move closer to the cursor"]
+script = ExtResource("4_ow4sd")
+
+[node name="Move away from the cursor" type="NNBTSequence" parent="NNBTRoot/Keep a fixed distance to the cursor"]
+
+[node name="Is too close to the cursor" type="NNBTLeaf" parent="NNBTRoot/Keep a fixed distance to the cursor/Move away from the cursor"]
+script = ExtResource("5_awsmy")
+
+[node name="Move away" type="NNBTLeaf" parent="NNBTRoot/Keep a fixed distance to the cursor/Move away from the cursor"]
+script = ExtResource("6_boo42")
+
+[node name="Wait" type="NNBTSequence" parent="NNBTRoot/Keep a fixed distance to the cursor"]
+
+[node name="Set to idle animation" type="NNBTLeaf" parent="NNBTRoot/Keep a fixed distance to the cursor/Wait"]
+script = ExtResource("7_bdvfu")

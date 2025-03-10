@@ -1,0 +1,96 @@
+[gd_scene load_steps=11 format=3 uid="uid://duasdbfifkc0f"]
+
+[ext_resource type="Texture2D" uid="uid://dnb3lf0bwnjw0" path="res://assets/Standard sprites upd.png" id="1_67sfx"]
+[ext_resource type="Script" uid="uid://d2ww2tpwlsr7x" path="res://demo_01_ai_behaviours/ai_entity.gd" id="2_sd31o"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sd31o"]
+atlas = ExtResource("1_67sfx")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_do0k8"]
+atlas = ExtResource("1_67sfx")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ocycv"]
+atlas = ExtResource("1_67sfx")
+region = Rect2(48, 32, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fl4xp"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sd31o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_do0k8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ocycv")
+}],
+"loop": true,
+"name": &"moving",
+"speed": 5.0
+}]
+
+[sub_resource type="Curve" id="Curve_do0k8"]
+_data = [Vector2(0.495, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ocycv"]
+_data = [Vector2(0.22, 1), 0.0, 0.0, 0, 0, Vector2(0.225, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_fl4xp"]
+_data = [Vector2(0.22, 1), 0.0, 0.0, 0, 0, Vector2(0.225, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_lj6xm"]
+_data = [Vector2(0.495, 0.3), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[node name="ai_entity" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_fl4xp")
+animation = &"moving"
+script = ExtResource("2_sd31o")
+
+[node name="NNAgent" type="NNAgent" parent="."]
+thinking_delay_in_seconds = 0.5
+
+[node name="MouseSensor" type="NNDistanceVector2Sensor" parent="NNAgent"]
+max_distance = 200.0
+is_distance_calculated = true
+is_direction_vector_calculated = true
+
+[node name="BoxSensor" type="NNDistanceVector2Sensor" parent="NNAgent"]
+max_distance = 200.0
+is_distance_calculated = true
+is_direction_vector_calculated = true
+
+[node name="Approach" type="NNBehaviour" parent="NNAgent"]
+
+[node name="Do I need to go closer?" type="NNConsideration" parent="NNAgent/Approach" node_paths=PackedStringArray("input_sensor")]
+input_sensor = NodePath("../../MouseSensor")
+activation_curve = SubResource("Curve_do0k8")
+
+[node name="Flee" type="NNBehaviour" parent="NNAgent"]
+
+[node name="Do I need to go away?" type="NNConsideration" parent="NNAgent/Flee" node_paths=PackedStringArray("input_sensor")]
+input_sensor = NodePath("../../MouseSensor")
+activation_curve = SubResource("Curve_ocycv")
+
+[node name="Do I need to go away from a box?" type="NNConsideration" parent="NNAgent/Flee" node_paths=PackedStringArray("input_sensor")]
+input_sensor = NodePath("../../BoxSensor")
+activation_curve = SubResource("Curve_fl4xp")
+
+[node name="Wait" type="NNBehaviour" parent="NNAgent"]
+
+[node name="Do I just idle?" type="NNConsideration" parent="NNAgent/Wait" node_paths=PackedStringArray("input_sensor")]
+input_sensor = NodePath("../../MouseSensor")
+activation_curve = SubResource("Curve_lj6xm")
+
+[connection signal="behaviour_changed" from="NNAgent" to="." method="_on_nn_agent_behaviour_changed"]

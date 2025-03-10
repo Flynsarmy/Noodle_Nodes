@@ -25,13 +25,13 @@ void NNSTNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_on_entered_condition"), &NNSTNodes::get_is_on_entered_condition_true);
 	//ADD_PROPERTY(PropertyInfo(Variant::INT, "child_state_selection_rule", PROPERTY_HINT_ENUM, "OnEnterConditionMethod:0,UtilityScoring:1" ), "set_child_state_selection_rule","get_child_state_selection_rule");
 
+	ClassDB::bind_method(D_METHOD("get_tree_root"), &NNSTNodes::get_tree_root);
+
 	ADD_SUBGROUP("Debugging", "");
 
 	ClassDB::bind_method(D_METHOD("set_score", "score"), &NNSTNodes::set_score);
 	ClassDB::bind_method(D_METHOD("get_score"), &NNSTNodes::get_score);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE), "set_score", "get_score");
-
-	ClassDB::bind_method(D_METHOD("get_tree_root"), &NNSTNodes::get_tree_root);
 
 	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "blackboard", "delta"), &NNSTNodes::transition_to);
 

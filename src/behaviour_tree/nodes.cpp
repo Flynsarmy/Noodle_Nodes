@@ -26,6 +26,8 @@ void NNBTNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_considerations"), &NNBTNodes::get_considerations);
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "considerations", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "NNConsiderationResources")), "set_considerations", "get_considerations");
 
+	ClassDB::bind_method(D_METHOD("get_tree_root"), &NNBTNodes::get_tree_root);
+
 	ADD_SUBGROUP("Debugging", "");
 
 	ClassDB::bind_method(D_METHOD("set_score", "score"), &NNBTNodes::set_score);
@@ -51,6 +53,7 @@ void NNBTNodes::_bind_methods() {
 // Constructor and destructor.
 
 NNBTNodes::NNBTNodes() {
+	_tree_root_node = nullptr;
 	_score = 0.0;
 	_evaluation_method = NNBTNodesEvaluationMethod::Multiply;
 	_invert_score = false;
@@ -147,6 +150,28 @@ void NNBTNodes::set_considerations(TypedArray<NNConsiderationResources> consider
 
 TypedArray<NNConsiderationResources> NNBTNodes::get_considerations() const {
 	return _considerations;
+}
+
+NNBTNodes* NNBTNodes::get_tree_root() const {
+	if (_tree_root_node != nullptr) {
+        return _tree_root_node;
+    }
+
+    NNBTNodes* furthest_ancestor = nullptr;
+    Node* current_node = const_cast<NNBTNodes*>(this); // Cast away const temporarily
+
+    while (current_node) {
+        if (NNBTNodes* node = Object::cast_to<NNBTNodes>(current_node)) {
+            furthest_ancestor = node; // Update with the current NNBTNodes node
+			current_node = current_node->get_parent();
+        } else {
+			break;
+		}
+
+    }
+
+	_tree_root_node = furthest_ancestor;
+    return furthest_ancestor;
 }
 
 // Handling methods.

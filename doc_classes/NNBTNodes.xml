@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="NNBTNodes" inherits="NoodleNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
-		Base class for all NN behaviour tree nodes.
+		Base class for all Noodle Nodes  behaviour tree nodes.
 	</brief_description>
 	<description>
 		Behaviour Trees are a commonly used structure that can be used to create artificial intelligence in games for the non-playable characters. A behaviour tree has a root node and under it a tree structure, where the branches of the tree define the behaviour for the AI.
@@ -10,6 +10,14 @@
 	</description>
 	<tutorials>
 	</tutorials>
+	<methods>
+		<method name="get_tree_root" qualifiers="const">
+			<return type="NNBTNodes" />
+			<description>
+				Returns the highest direct [NNBTNodes] ancestor in the tree.
+			</description>
+		</method>
+	</methods>
 	<members>
 		<member name="considerations" type="NNConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
 		</member>

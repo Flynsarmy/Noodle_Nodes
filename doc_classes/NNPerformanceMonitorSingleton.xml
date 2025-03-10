@@ -63,6 +63,6 @@
 		</method>
 	</methods>
 	<members>
-		<member name="is_active" type="bool" setter="set_is_active" getter="get_is_active" overrides="NN" default="false" />
+		<member name="is_active" type="bool" setter="set_is_active" getter="get_is_active" overrides="NoodleNodes" default="false" />
 	</members>
 </class>

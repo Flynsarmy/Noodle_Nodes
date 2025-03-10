@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0mc85mfebe1q"]
+
+[ext_resource type="Script" uid="uid://c8f66m6e3wjpq" path="res://demo_04_node_query_system/tutorial_scene.gd" id="1_tombb"]
+[ext_resource type="Texture2D" uid="uid://cuofdbjs1n1b0" path="res://icon.svg" id="2_r70gy"]
+
+[node name="tutorial_scene" type="Node2D"]
+script = ExtResource("1_tombb")
+
+[node name="NNPointGrid2DSearchSpace" type="NNPointGrid2DSearchSpace" parent="." node_paths=PackedStringArray("point_grid_parent_node")]
+point_grid_parent_node = NodePath("../mouse_point_grid")
+grid_size = Vector2(400, 400)
+point_grid_lattice_type = 4
+point_grid_base_spacing_vector = Vector2(96, 48)
+point_grid_lattice_vector = Vector2(48, 24)
+
+[node name="DEBUG" type="Sprite2D" parent="NNPointGrid2DSearchSpace" groups=["point_grid"]]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_r70gy")
+
+[node name="mouse_point_grid" type="Node2D" parent="."]

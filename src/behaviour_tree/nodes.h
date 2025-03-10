@@ -78,6 +78,9 @@ public:
 
 	inline virtual bool has_completed() { return (_internal_status == BT_INTERNAL_STATUS_COMPLETED); };
 
+	mutable NNBTNodes *_tree_root_node;
+	NNBTNodes *get_tree_root() const;
+
 	// Godot virtuals.
 	virtual void _notification(int p_what);
 

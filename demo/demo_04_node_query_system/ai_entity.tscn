@@ -1,0 +1,79 @@
+[gd_scene load_steps=11 format=3 uid="uid://sssu4xsrudoo"]
+
+[ext_resource type="Texture2D" uid="uid://dnb3lf0bwnjw0" path="res://assets/Standard sprites upd.png" id="1_i8syt"]
+[ext_resource type="Script" uid="uid://m4s2tus6ge72" path="res://demo_04_node_query_system/ai_entity.gd" id="2_f4brg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sd31o"]
+atlas = ExtResource("1_i8syt")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_do0k8"]
+atlas = ExtResource("1_i8syt")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ocycv"]
+atlas = ExtResource("1_i8syt")
+region = Rect2(48, 32, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fl4xp"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sd31o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_do0k8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ocycv")
+}],
+"loop": true,
+"name": &"moving",
+"speed": 5.0
+}]
+
+[sub_resource type="Curve" id="Curve_f4brg"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="SphereMesh" id="SphereMesh_f4brg"]
+
+[sub_resource type="Gradient" id="Gradient_pkdti"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_k74kn"]
+gradient = SubResource("Gradient_pkdti")
+
+[node name="ai_entity" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_fl4xp")
+animation = &"moving"
+script = ExtResource("2_f4brg")
+
+[node name="NNNodeGroupSearchSpace" type="NNNodeGroupSearchSpace" parent="."]
+group_name = &"point_grid"
+
+[node name="NNDistanceToVector2SearchCriterion" type="NNDistanceToVector2SearchCriterion" parent="NNNodeGroupSearchSpace"]
+use_for_scoring = false
+use_for_filtering = true
+
+[node name="NNDistanceToNode2DSearchCriterion" type="NNDistanceToNode2DSearchCriterion" parent="NNNodeGroupSearchSpace" node_paths=PackedStringArray("distance_to")]
+distance_to = NodePath("../..")
+max_distance = 1000.0
+activation_curve = SubResource("Curve_f4brg")
+
+[node name="NNBTRoot" type="NNBTRoot" parent="."]
+
+[node name="NNBTRunNQSQuery" type="NNBTRunNQSQuery" parent="NNBTRoot" node_paths=PackedStringArray("nqs_search_space")]
+nqs_search_space = NodePath("../../NNNodeGroupSearchSpace")
+
+[node name="debug_circle" type="MeshInstance2D" parent="."]
+scale = Vector2(9.5, 9.5)
+mesh = SubResource("SphereMesh_f4brg")
+texture = SubResource("GradientTexture2D_k74kn")
+
+[connection signal="query_completed" from="NNNodeGroupSearchSpace" to="." method="_on_nn_node_group_search_space_query_completed"]

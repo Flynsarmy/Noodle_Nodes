@@ -1,8 +1,8 @@
 #ifndef NNBTRoot_H_INCLUDED
 #define NNBTRoot_H_INCLUDED
 
-#include "../agent_behaviours/sensors.h"
 #include "nodes.h"
+#include "../agent_behaviours/sensors.h"
 #include <godot_cpp/classes/node.hpp>
 
 namespace godot {

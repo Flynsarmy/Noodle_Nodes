@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3 uid="uid://272pbqsyrky2"]
+
+[ext_resource type="Texture2D" uid="uid://dnb3lf0bwnjw0" path="res://assets/Standard sprites upd.png" id="1_3c80q"]
+[ext_resource type="Script" uid="uid://bq6u11o8c7i86" path="res://demo_03_state_trees/ai_entity.gd" id="2_3c80q"]
+[ext_resource type="Script" uid="uid://b7wfyndy0vnvq" path="res://demo_03_state_trees/moving_closer.gd" id="3_tipgv"]
+[ext_resource type="Script" uid="uid://bk630yuo6i3fn" path="res://demo_03_state_trees/moving_away.gd" id="4_r2j35"]
+[ext_resource type="Script" uid="uid://bjefkthgv5hyl" path="res://demo_03_state_trees/waiting.gd" id="5_eokkp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sd31o"]
+atlas = ExtResource("1_3c80q")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_do0k8"]
+atlas = ExtResource("1_3c80q")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ocycv"]
+atlas = ExtResource("1_3c80q")
+region = Rect2(48, 32, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fl4xp"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sd31o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_do0k8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ocycv")
+}],
+"loop": true,
+"name": &"moving",
+"speed": 5.0
+}]
+
+[node name="ai_entity" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_fl4xp")
+animation = &"moving"
+script = ExtResource("2_3c80q")
+
+[node name="NNSTRoot" type="NNSTRoot" parent="."]
+
+[node name="MouseSensor" type="NNDistanceVector2Sensor" parent="NNSTRoot"]
+max_distance = 200.0
+is_distance_calculated = true
+is_direction_vector_calculated = true
+
+[node name="Moving" type="NNSTNode" parent="NNSTRoot"]
+
+[node name="Moving closer" type="NNSTNode" parent="NNSTRoot/Moving"]
+script = ExtResource("3_tipgv")
+
+[node name="Moving away" type="NNSTNode" parent="NNSTRoot/Moving"]
+script = ExtResource("4_r2j35")
+
+[node name="Waiting" type="NNSTNode" parent="NNSTRoot"]
+script = ExtResource("5_eokkp")
