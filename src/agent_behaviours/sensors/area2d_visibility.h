@@ -1,5 +1,4 @@
-#ifndef UTILITYAIArea2DVisibilitySENSOR_H_INCLUDED
-#define UTILITYAIArea2DVisibilitySENSOR_H_INCLUDED
+#pragma once
 
 #include "../sensor.h"
 #include <godot_cpp/classes/area2d.hpp>
@@ -135,5 +134,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

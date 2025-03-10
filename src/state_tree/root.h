@@ -1,5 +1,4 @@
-#ifndef NNSTRoot_H_INCLUDED
-#define NNSTRoot_H_INCLUDED
+#pragma once
 
 #include "node.h"
 #include "nodes.h"
@@ -57,4 +56,3 @@ public:
 
 } //namespace godot
 
-#endif

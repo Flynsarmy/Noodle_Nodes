@@ -1,5 +1,4 @@
-#ifndef NNBTNodes_H_INCLUDED
-#define NNBTNodes_H_INCLUDED
+#pragma once
 
 #include "../agent_behaviours/considerations.h"
 #include "../noodle_nodes.h"
@@ -112,5 +111,3 @@ protected:
 } //namespace godot
 
 VARIANT_ENUM_CAST(NNBTNodes::Status)
-
-#endif

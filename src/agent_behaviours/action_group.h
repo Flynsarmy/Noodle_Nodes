@@ -1,5 +1,4 @@
-#ifndef NNActionGroup_H_INCLUDED
-#define NNActionGroup_H_INCLUDED
+#pragma once
 
 #include "actions.h"
 #include <godot_cpp/classes/node.hpp>
@@ -61,4 +60,3 @@ public:
 
 } //namespace godot
 
-#endif

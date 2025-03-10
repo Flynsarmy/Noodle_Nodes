@@ -1,8 +1,7 @@
-#ifndef NNBTRoot_H_INCLUDED
-#define NNBTRoot_H_INCLUDED
+#pragma once
 
-#include "nodes.h"
 #include "../agent_behaviours/sensors.h"
+#include "nodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 namespace godot {
@@ -40,5 +39,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

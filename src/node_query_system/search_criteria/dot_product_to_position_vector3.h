@@ -1,5 +1,4 @@
-#ifndef NNDotProductToPositionVector3SearchCriterion_H_INCLUDED
-#define NNDotProductToPositionVector3SearchCriterion_H_INCLUDED
+#pragma once
 
 #include "nqs.h"
 
@@ -46,5 +45,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef NNNodeGroupSearchSpace_H_INCLUDED
-#define NNNodeGroupSearchSpace_H_INCLUDED
+#pragma once
 
 #include "nqs.h"
 #include <godot_cpp/classes/node.hpp>
@@ -27,5 +26,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

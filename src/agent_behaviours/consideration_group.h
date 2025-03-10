@@ -1,5 +1,4 @@
-#ifndef NNConsiderationGROUP_H_INCLUDED
-#define NNConsiderationGROUP_H_INCLUDED
+#pragma once
 
 #include "considerations.h"
 
@@ -45,5 +44,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

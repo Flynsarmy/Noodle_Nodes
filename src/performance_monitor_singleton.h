@@ -1,5 +1,4 @@
-#ifndef NNPERFORMANCE_MONITOR_SINGLETON_H_INCLUDED
-#define NNPERFORMANCE_MONITOR_SINGLETON_H_INCLUDED
+#pragma once
 
 //#include <godot_cpp/classes/node.hpp>
 #include "noodle_nodes.h"
@@ -57,5 +56,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

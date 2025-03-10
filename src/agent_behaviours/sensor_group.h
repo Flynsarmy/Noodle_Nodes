@@ -1,5 +1,4 @@
-#ifndef NNSensorGroup_H_INCLUDED
-#define NNSensorGroup_H_INCLUDED
+#pragma once
 
 #include "sensors.h"
 #include <godot_cpp/classes/node.hpp>
@@ -43,5 +42,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

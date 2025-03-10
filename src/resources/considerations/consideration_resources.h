@@ -1,5 +1,4 @@
-#ifndef UTILITY_AI_CONSIDERATION_RESOURCES_H_INCLUDED
-#define UTILITY_AI_CONSIDERATION_RESOURCES_H_INCLUDED
+#pragma once
 
 #include "../../agent_behaviours/sensors.h"
 #include <godot_cpp/classes/curve.hpp>
@@ -34,5 +33,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

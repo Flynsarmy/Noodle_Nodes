@@ -1,5 +1,4 @@
-#ifndef NNDistanceToVector2SearchCriterion_H_INCLUDED
-#define NNDistanceToVector2SearchCriterion_H_INCLUDED
+#pragma once
 
 #include "nqs.h"
 
@@ -44,5 +43,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

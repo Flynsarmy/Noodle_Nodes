@@ -1,5 +1,4 @@
-#ifndef NNSTSelector_H_INCLUDED
-#define NNSTSelector_H_INCLUDED
+#pragma once
 
 #include "nodes.h"
 //#include <godot_cpp/classes/node.hpp>
@@ -19,5 +18,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

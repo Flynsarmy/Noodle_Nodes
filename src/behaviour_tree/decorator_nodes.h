@@ -1,5 +1,4 @@
-#ifndef NNBTDecoratorNodes_H_INCLUDED
-#define NNBTDecoratorNodes_H_INCLUDED
+#pragma once
 
 #include "task_nodes.h"
 #include <godot_cpp/classes/node.hpp>
@@ -19,5 +18,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

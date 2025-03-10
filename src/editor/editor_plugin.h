@@ -1,5 +1,4 @@
-#ifndef UTILITY_AI_EDITOR_PLUGIN_H_INCLUDED
-#define UTILITY_AI_EDITOR_PLUGIN_H_INCLUDED
+#pragma once
 
 #ifdef DEBUG_ENABLED
 
@@ -61,5 +60,3 @@ public:
 } //namespace godot
 
 #endif //debug enabled
-
-#endif

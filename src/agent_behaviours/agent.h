@@ -1,5 +1,4 @@
-#ifndef UTILITYAIAGENT_H_INCLUDED
-#define UTILITYAIAGENT_H_INCLUDED
+#pragma once
 
 #include "noodle_nodes.h"
 
@@ -121,5 +120,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef UTILITYAIANGLEVECTOR3SENSOR_H_INCLUDED
-#define UTILITYAIANGLEVECTOR3SENSOR_H_INCLUDED
+#pragma once
 
 #include "../sensor.h"
 
@@ -54,5 +53,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

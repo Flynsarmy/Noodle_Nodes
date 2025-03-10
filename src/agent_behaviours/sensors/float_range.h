@@ -1,5 +1,4 @@
-#ifndef UTILITYAIFLOATRANGESENSOR_H_INCLUDED
-#define UTILITYAIFLOATRANGESENSOR_H_INCLUDED
+#pragma once
 
 #include "../sensor.h"
 #include <godot_cpp/classes/node.hpp>
@@ -40,5 +39,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef NNBTRunNQSQuery_H_INCLUDED
-#define NNBTRunNQSQuery_H_INCLUDED
+#pragma once
 
 #include "../node_query_system/node_query_system.h"
 #include "../node_query_system/search_spaces/nqs.h"
@@ -58,5 +57,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

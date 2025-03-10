@@ -1,5 +1,4 @@
-#ifndef NNConsideration_H_INCLUDED
-#define NNConsideration_H_INCLUDED
+#pragma once
 
 #include "considerations.h"
 #include "sensors.h"
@@ -48,5 +47,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

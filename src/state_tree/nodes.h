@@ -1,5 +1,4 @@
-#ifndef NNSTNodes_H_INCLUDED
-#define NNSTNodes_H_INCLUDED
+#pragma once
 
 #include "../agent_behaviours/considerations.h"
 #include "../resources/considerations/consideration_resources.h"
@@ -105,5 +104,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

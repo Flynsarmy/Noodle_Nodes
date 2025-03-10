@@ -1,5 +1,4 @@
-#ifndef NNMetadataSearchCriterion_H_INCLUDED
-#define NNMetadataSearchCriterion_H_INCLUDED
+#pragma once
 
 #include "nqs.h"
 
@@ -33,5 +32,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

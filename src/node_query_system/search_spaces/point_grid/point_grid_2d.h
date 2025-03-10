@@ -1,5 +1,4 @@
-#ifndef NNPointGrid2DSearchSpaces_H_INCLUDED
-#define NNPointGrid2DSearchSpaces_H_INCLUDED
+#pragma once
 
 #include "../nqs.h"
 #include <godot_cpp/classes/node2d.hpp>
@@ -96,5 +95,3 @@ protected:
 };
 
 } //namespace godot
-
-#endif

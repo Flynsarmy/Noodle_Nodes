@@ -1,5 +1,4 @@
-#ifndef UTILITY_AI_CONSIDERATION_RESOURCE_H_INCLUDED
-#define UTILITY_AI_CONSIDERATION_RESOURCE_H_INCLUDED
+#pragma once
 
 #include "../../agent_behaviours/sensors.h"
 #include "consideration_resources.h"
@@ -38,5 +37,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef NNNQSSearchSpaces_H_INCLUDED
-#define NNNQSSearchSpaces_H_INCLUDED
+#pragma once
 
 //#include "node_query_system.h"
 #include "../noodle_nodes.h"
@@ -147,5 +146,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

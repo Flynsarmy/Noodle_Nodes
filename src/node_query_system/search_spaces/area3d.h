@@ -1,5 +1,4 @@
-#ifndef NNArea3DSearchSpace_H_INCLUDED
-#define NNArea3DSearchSpace_H_INCLUDED
+#pragma once
 
 #include "nqs.h"
 #include <godot_cpp/classes/area3d.hpp>
@@ -39,5 +38,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

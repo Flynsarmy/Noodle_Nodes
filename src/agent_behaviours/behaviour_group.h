@@ -1,5 +1,4 @@
-#ifndef NNBEHAVIOURGROUP_H_INCLUDED
-#define NNBEHAVIOURGROUP_H_INCLUDED
+#pragma once
 
 #include "behaviours.h"
 #include "considerations.h"
@@ -55,5 +54,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

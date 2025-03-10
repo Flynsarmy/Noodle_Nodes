@@ -1,5 +1,4 @@
-#ifndef NNCustomPropertyConsideration_H_INCLUDED
-#define NNCustomPropertyConsideration_H_INCLUDED
+#pragma once
 
 #include "../considerations.h"
 #include <godot_cpp/classes/curve.hpp>
@@ -50,5 +49,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

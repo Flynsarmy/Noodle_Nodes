@@ -1,5 +1,4 @@
-#ifndef UTILITYAIDISTANCEVECTOR3SENSOR_H_INCLUDED
-#define UTILITYAIDISTANCEVECTOR3SENSOR_H_INCLUDED
+#pragma once
 
 #include "../sensor.h"
 
@@ -68,5 +67,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

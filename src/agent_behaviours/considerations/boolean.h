@@ -1,5 +1,4 @@
-#ifndef NNBooleanConsideration_H_INCLUDED
-#define NNBooleanConsideration_H_INCLUDED
+#pragma once
 
 #include "../consideration.h"
 
@@ -39,5 +38,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

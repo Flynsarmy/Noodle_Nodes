@@ -152,26 +152,25 @@ TypedArray<NNConsiderationResources> NNBTNodes::get_considerations() const {
 	return _considerations;
 }
 
-NNBTNodes* NNBTNodes::get_tree_root() const {
-	if (_tree_root_node != nullptr) {
-        return _tree_root_node;
-    }
+NNBTNodes *NNBTNodes::get_tree_root() const {
+	// if (_tree_root_node != nullptr) {
+	// 	return _tree_root_node;
+	// }
 
-    NNBTNodes* furthest_ancestor = nullptr;
-    Node* current_node = const_cast<NNBTNodes*>(this); // Cast away const temporarily
+	NNBTNodes *furthest_ancestor = nullptr;
+	Node *current_node = const_cast<NNBTNodes *>(this); // Cast away const temporarily
 
-    while (current_node) {
-        if (NNBTNodes* node = Object::cast_to<NNBTNodes>(current_node)) {
-            furthest_ancestor = node; // Update with the current NNBTNodes node
+	while (current_node) {
+		if (NNBTNodes *node = Object::cast_to<NNBTNodes>(current_node)) {
+			furthest_ancestor = node; // Update with the current NNBTNodes node
 			current_node = current_node->get_parent();
-        } else {
+		} else {
 			break;
 		}
-
-    }
+	}
 
 	_tree_root_node = furthest_ancestor;
-    return furthest_ancestor;
+	return furthest_ancestor;
 }
 
 // Handling methods.

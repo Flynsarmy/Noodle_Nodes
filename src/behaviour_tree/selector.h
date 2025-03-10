@@ -1,5 +1,4 @@
-#ifndef NNBTSelector_H_INCLUDED
-#define NNBTSelector_H_INCLUDED
+#pragma once
 
 #include "composite_nodes.h"
 #include <godot_cpp/classes/node.hpp>
@@ -26,5 +25,3 @@ public:
 };
 
 } //namespace godot
-
-#endif

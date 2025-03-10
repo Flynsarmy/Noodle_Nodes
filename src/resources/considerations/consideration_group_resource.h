@@ -1,5 +1,4 @@
-#ifndef UTILITY_AI_CONSIDERATION_GROUP_RESOURCE_H_INCLUDED
-#define UTILITY_AI_CONSIDERATION_GROUP_RESOURCE_H_INCLUDED
+#pragma once
 
 #include "consideration_resources.h"
 
@@ -48,5 +47,3 @@ public:
 };
 
 } //namespace godot
-
-#endif
