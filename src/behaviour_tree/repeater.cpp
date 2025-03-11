@@ -74,7 +74,7 @@ void NNBTRepeater::reset_bt_node() {
 }
 
 NNBTNodes::Status NNBTRepeater::tick(Variant blackboard, float delta) {
-	if (!get_is_active() || _child_btnodes.size() == 0)
+	if (!get_is_enabled() || _child_btnodes.size() == 0)
 		return Status::FAILURE;
 	if (Engine::get_singleton()->is_editor_hint())
 		return Status::FAILURE;
@@ -106,7 +106,7 @@ NNBTNodes::Status NNBTRepeater::tick(Variant blackboard, float delta) {
 	//    if( NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(get_child(i)) ) {
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
 		NNBTNodes *btnode = _child_btnodes[i];
-		if (!btnode->get_is_active()) {
+		if (!btnode->get_is_enabled()) {
 			continue;
 		}
 

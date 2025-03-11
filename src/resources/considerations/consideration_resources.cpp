@@ -3,7 +3,7 @@
 using namespace godot;
 
 NNConsiderationResources::NNConsiderationResources() {
-	_is_active = true;
+	_is_enabled = true;
 	//_has_vetoed = false;
 }
 
@@ -11,9 +11,9 @@ NNConsiderationResources::~NNConsiderationResources() {
 }
 
 void NNConsiderationResources::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("set_is_active", "is_active"), &NNConsiderationResources::set_is_active);
-	ClassDB::bind_method(D_METHOD("get_is_active"), &NNConsiderationResources::get_is_active);
-	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_active", PROPERTY_HINT_NONE), "set_is_active", "get_is_active");
+	ClassDB::bind_method(D_METHOD("set_is_enabled", "is_enabled"), &NNConsiderationResources::set_is_enabled);
+	ClassDB::bind_method(D_METHOD("get_is_enabled"), &NNConsiderationResources::get_is_enabled);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_enabled", PROPERTY_HINT_NONE), "set_is_enabled", "get_is_enabled");
 
 	//ClassDB::bind_method(D_METHOD("set_has_vetoed", "has_vetoed"), &NNConsiderationResources::set_has_vetoed);
 	//ClassDB::bind_method(D_METHOD("get_has_vetoed"), &NNConsiderationResources::get_has_vetoed);
@@ -22,12 +22,12 @@ void NNConsiderationResources::_bind_methods() {
 
 // Getters and setters.
 
-void NNConsiderationResources::set_is_active(bool is_active) {
-	_is_active = is_active;
+void NNConsiderationResources::set_is_enabled(bool is_enabled) {
+	_is_enabled = is_enabled;
 }
 
-bool NNConsiderationResources::get_is_active() const {
-	return _is_active;
+bool NNConsiderationResources::get_is_enabled() const {
+	return _is_enabled;
 }
 
 /**

@@ -62,7 +62,7 @@ func test_child_sensor_count() -> void:
 	_root.add_child(_child2)
 	assert_eq(_root.get_child_sensors().size(), 2)
 	## inactive children still get counted
-	_child3.is_active = false
+	_child3.is_enabled = false
 	_root.add_child(_child3)
 	assert_eq(_root.get_child_sensors().size(), 3)
 	_root.free()

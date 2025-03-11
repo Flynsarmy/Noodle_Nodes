@@ -10,7 +10,7 @@ class NNConsiderationResources : public Resource {
 	GDCLASS(NNConsiderationResources, Resource)
 
 private:
-	bool _is_active;
+	bool _is_enabled;
 	//bool _has_vetoed;
 protected:
 	static void _bind_methods();
@@ -21,8 +21,8 @@ public:
 
 	// Getters and setters for attributes.
 	/**/
-	void set_is_active(bool is_active);
-	bool get_is_active() const;
+	void set_is_enabled(bool is_enabled);
+	bool get_is_enabled() const;
 
 	//void  set_has_vetoed( bool has_vetoed );
 	//bool  get_has_vetoed() const;

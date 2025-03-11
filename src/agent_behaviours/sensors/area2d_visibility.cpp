@@ -178,7 +178,7 @@ void NNArea2DVisibilitySensor::_update_cache() {
 }
 
 void NNArea2DVisibilitySensor::initialize_sensor() {
-	if (!get_is_active())
+	if (!get_is_enabled())
 		return;
 	if (Engine::get_singleton()->is_editor_hint())
 		return;

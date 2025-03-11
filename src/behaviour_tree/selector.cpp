@@ -75,7 +75,7 @@ NNBTNodes::Status NNBTSelector::tick(Variant blackboard, float delta) {
 	//if( btnode != nullptr ) {
 	while (_current_child_index < (int)_num_child_btnodes) {
 		NNBTNodes *btnode = _child_btnodes[_current_child_index];
-		if (btnode->get_is_active()) {
+		if (btnode->get_is_enabled()) {
 			Status result = btnode->tick(blackboard, delta);
 			set_tick_result(result);
 			if (result == Status::SUCCESS) { //&& _current_child_index == get_child_count() - 1 ) {

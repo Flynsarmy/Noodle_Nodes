@@ -6,7 +6,7 @@ using namespace godot;
 NNPerformanceMonitorSingleton *NNPerformanceMonitorSingleton::_singleton = nullptr;
 
 NNPerformanceMonitorSingleton::NNPerformanceMonitorSingleton() {
-	set_is_active(false);
+	set_is_enabled(false);
 	_total_time_elapsed_ai_agents_usec = 0;
 	_total_time_elapsed_behaviour_trees_usec = 0;
 	_total_time_elapsed_state_trees_usec = 0;
@@ -98,7 +98,7 @@ void NNPerformanceMonitorSingleton::initialize_performance_counters() {
 	perf->add_custom_monitor("NN/Behaviour Tree tick time usec", Callable(this, "get_total_time_elapsed_behaviour_trees_usec"));
 	perf->add_custom_monitor("NN/State Tree tick time usec", Callable(this, "get_total_time_elapsed_state_trees_usec"));
 	_is_performance_counter_initialized = true;
-	set_is_active(true);
+	set_is_enabled(true);
 #endif
 }
 

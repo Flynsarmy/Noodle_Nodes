@@ -27,7 +27,7 @@ void NNBTRandomSelector::reset_bt_node() {
 	_child_node_order.clear();
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
 		NNBTNodes *btnode = _child_btnodes[i];
-		if (!btnode->get_is_active()) {
+		if (!btnode->get_is_enabled()) {
 			continue;
 		}
 		_child_node_order.push_back(i);
@@ -52,7 +52,7 @@ NNBTNodes::Status NNBTRandomSelector::tick(Variant blackboard, float delta) {
 		//NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(get_child(_child_node_order[_current_child_index]));
 		NNBTNodes *btnode = _child_btnodes[(int)_child_node_order[_current_child_index]];
 		//if( btnode != nullptr ) {
-		//if( !btnode->get_is_active() ) {
+		//if( !btnode->get_is_enabled() ) {
 		//    continue;
 		//}
 		Status result = btnode->tick(blackboard, delta);

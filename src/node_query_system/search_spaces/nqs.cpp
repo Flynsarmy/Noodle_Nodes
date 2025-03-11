@@ -87,7 +87,7 @@ void NNNQSSearchSpaces::_bind_methods() {
 }
 
 void NNNQSSearchSpaces::_ready() {
-	//if( !get_is_active() ) return;
+	//if( !get_is_enabled() ) return;
 	if (Engine::get_singleton()->is_editor_hint())
 		return;
 	initialize_search_space(); // Maybe not really needed? We'll see.
@@ -262,7 +262,7 @@ void NNNQSSearchSpaces::reset_query_variables() {
 }
 
 void NNNQSSearchSpaces::start_query() {
-	if (!get_is_active())
+	if (!get_is_enabled())
 		return;
 	if (Engine::get_singleton()->is_editor_hint())
 		return;
@@ -278,7 +278,7 @@ bool NNNQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
 	uint64_t method_time_limit_timestamp_usec = method_start_time_usec + time_budget_usec;
 	uint64_t time_budget_remaining_usec = time_budget_usec;
 
-	if (!get_is_active())
+	if (!get_is_enabled())
 		return true;
 	if (Engine::get_singleton()->is_editor_hint())
 		return true;
@@ -352,7 +352,7 @@ bool NNNQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
 			//    continue;
 			//}
 			NNNQSSearchCriteria *criterion = _filtering_criteria[_current_criterion_index];
-			if (!criterion->get_is_active()) {
+			if (!criterion->get_is_enabled()) {
 				++_current_criterion_index;
 				continue;
 			}

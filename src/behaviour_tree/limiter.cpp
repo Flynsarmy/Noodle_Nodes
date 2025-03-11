@@ -64,7 +64,7 @@ void NNBTLimiter::reset_bt_node() {
 }
 
 NNBTNodes::Status NNBTLimiter::tick(Variant blackboard, float delta) {
-	//if( !get_is_active() ) return BT_SKIP;
+	//if( !get_is_enabled() ) return BT_SKIP;
 	if (Engine::get_singleton()->is_editor_hint())
 		return Status::FAILURE;
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
@@ -84,7 +84,7 @@ NNBTNodes::Status NNBTLimiter::tick(Variant blackboard, float delta) {
 
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
 		NNBTNodes *btnode = _child_btnodes[i];
-		if (!btnode->get_is_active()) {
+		if (!btnode->get_is_enabled()) {
 			continue;
 		}
 		--_current_repeat_times;

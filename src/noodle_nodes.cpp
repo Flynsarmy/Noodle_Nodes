@@ -9,15 +9,15 @@ using namespace godot;
 // Method binds.
 
 void NoodleNodes::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("set_is_active", "is_active"), &NoodleNodes::set_is_active);
-	ClassDB::bind_method(D_METHOD("get_is_active"), &NoodleNodes::get_is_active);
-	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_active", PROPERTY_HINT_NONE), "set_is_active", "get_is_active");
+	ClassDB::bind_method(D_METHOD("set_is_enabled", "is_enabled"), &NoodleNodes::set_is_enabled);
+	ClassDB::bind_method(D_METHOD("get_is_enabled"), &NoodleNodes::get_is_enabled);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_enabled", PROPERTY_HINT_NONE), "set_is_enabled", "get_is_enabled");
 }
 
 // Constructor and destructor.
 
 NoodleNodes::NoodleNodes() {
-	_is_active = true;
+	_is_enabled = true;
 }
 
 NoodleNodes::~NoodleNodes() {
@@ -27,10 +27,10 @@ NoodleNodes::~NoodleNodes() {
 
 // Getters and Setters.
 
-void NoodleNodes::set_is_active(bool is_active) {
-	_is_active = is_active;
+void NoodleNodes::set_is_enabled(bool is_enabled) {
+	_is_enabled = is_enabled;
 }
 
-bool NoodleNodes::get_is_active() const {
-	return _is_active;
+bool NoodleNodes::get_is_enabled() const {
+	return _is_enabled;
 }

@@ -83,7 +83,7 @@ bool NNSTRoot::try_transition(NNSTNodes *transition_target_node, Variant blackbo
 #endif
 		return false;
 	}
-	if (!get_is_active()) {
+	if (!get_is_enabled()) {
 #ifdef DEBUG_ENABLED
 		_total_transition_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
 		NNPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_state_trees_usec(_total_transition_usec);
@@ -156,7 +156,7 @@ void NNSTRoot::tick(Variant blackboard, float delta) {
 	for (unsigned int i = 0; i < _num_child_sensors; i++) {
 		NNSensors *sensor = godot::Object::cast_to<NNSensors>(_child_sensors[i]);
 		// NNSensors *sensor = _child_sensors[i];
-		if (!sensor->get_is_active()) {
+		if (!sensor->get_is_enabled()) {
 			continue;
 		}
 		sensor->evaluate_sensor_value();

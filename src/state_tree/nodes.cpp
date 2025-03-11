@@ -142,7 +142,7 @@ Dictionary NNSTNodes::get_child_nodes_as_dictionary(NNSTNodes* tree_root_node ) 
 // Handling methods.
 
 float NNSTNodes::evaluate() {
-//if( !get_is_active() ) return 0.0f;
+//if( !get_is_enabled() ) return 0.0f;
 //if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 #ifdef DEBUG_ENABLED
 	_last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
@@ -157,7 +157,7 @@ float NNSTNodes::evaluate() {
 		if (consideration_resource == nullptr) {
 			continue;
 		}
-		if (!consideration_resource->get_is_active()) {
+		if (!consideration_resource->get_is_enabled()) {
 			continue;
 		}
 		float score = consideration_resource->evaluate(has_vetoed, this);
@@ -182,7 +182,7 @@ float NNSTNodes::evaluate() {
 	//    if( considerationNode == nullptr ) continue;
 	for (unsigned int i = 0; i < _num_child_considerations; ++i) {
 		NNConsiderations *considerationNode = _child_considerations[i];
-		if (!considerationNode->get_is_active())
+		if (!considerationNode->get_is_enabled())
 			continue;
 		child_score = considerationNode->evaluate();
 		if (considerationNode->get_has_vetoed()) {
@@ -288,7 +288,7 @@ NNSTNodes *NNSTNodes::evaluate_state_activation(Variant blackboard, float delta)
 		//    if( NNSTNodes* stnode = godot::Object::cast_to<NNSTNodes>(get_child(i)) ) {
 		for (unsigned int i = 0; i < _num_child_states; ++i) {
 			NNSTNodes *stnode = _child_states[i];
-			if (!stnode->get_is_active()) {
+			if (!stnode->get_is_enabled()) {
 				continue;
 			}
 
@@ -311,7 +311,7 @@ NNSTNodes *NNSTNodes::evaluate_state_activation(Variant blackboard, float delta)
 		for (unsigned int i = 0; i < _num_child_states; ++i) {
 			NNSTNodes *stnode = _child_states[i];
 
-			if (!stnode->get_is_active()) {
+			if (!stnode->get_is_enabled()) {
 				continue;
 			}
 

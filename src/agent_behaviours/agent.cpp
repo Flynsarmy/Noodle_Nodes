@@ -122,7 +122,7 @@ void NNAgent::evaluate_options(float delta) {
 #ifdef DEBUG_ENABLED
 	_last_evaluated_timestamp = method_start_time_usec;
 #endif
-	if (!get_is_active())
+	if (!get_is_enabled())
 		return;
 	if (Engine::get_singleton()->is_editor_hint())
 		return;
@@ -171,7 +171,7 @@ void NNAgent::evaluate_options(float delta) {
 	// Evaluate the sensors.
 	for (unsigned int i = 0; i < _num_child_sensors; ++i) {
 		NNSensors *sensorNode = _child_sensors[i];
-		if (sensorNode->get_is_active()) {
+		if (sensorNode->get_is_enabled()) {
 			sensorNode->evaluate_sensor_value();
 		}
 	} //endfor child sensors.
@@ -179,7 +179,7 @@ void NNAgent::evaluate_options(float delta) {
 	//WARN_PRINT("Checking Behaviours...");
 	for (unsigned i = 0; i < _num_child_behaviours; ++i) {
 		NNBehaviours *behavioursNode = _child_behaviours[i];
-		if (!behavioursNode->get_is_active()) {
+		if (!behavioursNode->get_is_enabled()) {
 			continue;
 		}
 
@@ -224,7 +224,7 @@ void NNAgent::evaluate_options(float delta) {
 		// If it is a sensor, do an evaluation to update any groups.
 		NNSensors* sensorNode = godot::Object::cast_to<NNSensors>(node);
 		if( sensorNode != nullptr ) {
-			if( sensorNode->get_is_active() ) {
+			if( sensorNode->get_is_enabled() ) {
 				sensorNode->evaluate_sensor_value();
 			}
 			continue;
@@ -238,7 +238,7 @@ void NNAgent::evaluate_options(float delta) {
 					Node* bgiNode = behaviourGroupNode->get_child(bgi);
 					if(bgiNode == nullptr ) continue;
 					if( NNBehaviour* bgiBehaviourNode = godot::Object::cast_to<NNBehaviour>(bgiNode) ){
-						if( !bgiBehaviourNode->get_is_active()) continue;
+						if( !bgiBehaviourNode->get_is_enabled()) continue;
 						score = bgiBehaviourNode->evaluate();
 						if( bgiBehaviourNode == _current_behaviour_node ) {
 							score += _current_behaviour_bias;
@@ -255,7 +255,7 @@ void NNAgent::evaluate_options(float delta) {
 		// If it is a behaviour, evaluate it and place in to the top_n list.
 		NNBehaviour* behaviourNode = godot::Object::cast_to<NNBehaviour>(node);
 		if( behaviourNode == nullptr ) continue;
-		if( !behaviourNode->get_is_active()) continue;
+		if( !behaviourNode->get_is_enabled()) continue;
 
 		score = behaviourNode->evaluate();
 		if( behaviourNode == _current_behaviour_node ) {

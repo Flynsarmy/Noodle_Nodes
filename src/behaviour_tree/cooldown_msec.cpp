@@ -81,7 +81,7 @@ NNBTNodes::Status NNBTCooldownMsec::tick(Variant blackboard, float delta) {
 	for (int i = 0; i < get_child_count(); ++i) {
 		Node *node = get_child(i);
 		if (NNBTNodes *btnode = godot::Object::cast_to<NNBTNodes>(node)) {
-			if (!btnode->get_is_active()) {
+			if (!btnode->get_is_enabled()) {
 				continue;
 			}
 			Status result = btnode->tick(blackboard, delta);

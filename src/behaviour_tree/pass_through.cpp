@@ -68,7 +68,7 @@ NNBTNodes::Status NNBTPassThrough::tick(Variant blackboard, float delta) {
 	//    if( NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(node) ) {
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
 		NNBTNodes *btnode = _child_btnodes[i];
-		if (!btnode->get_is_active()) {
+		if (!btnode->get_is_enabled()) {
 			continue;
 		}
 

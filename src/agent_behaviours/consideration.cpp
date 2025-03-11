@@ -86,7 +86,7 @@ float NNConsideration::evaluate() {
 #ifdef DEBUG_ENABLED
 	_last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
 #endif
-	//if( !get_is_active() ) return 0.0;
+	//if( !get_is_enabled() ) return 0.0;
 	//if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 	if (get_has_vetoed())
 		return 0.0f;

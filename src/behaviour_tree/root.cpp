@@ -56,7 +56,7 @@ NNBTNodes::Status NNBTRoot::tick(Variant blackboard, float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
-	if (!get_is_active()) {
+	if (!get_is_enabled()) {
 #ifdef DEBUG_ENABLED
 		_total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
 		NNPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
@@ -88,7 +88,7 @@ NNBTNodes::Status NNBTRoot::tick(Variant blackboard, float delta) {
 	//}
 	for (unsigned int i = 0; i < _num_child_sensors; ++i) {
 		NNSensors *sensor = _child_sensors[i];
-		if (!sensor->get_is_active()) {
+		if (!sensor->get_is_enabled()) {
 			continue;
 		}
 		sensor->evaluate_sensor_value();
@@ -96,7 +96,7 @@ NNBTNodes::Status NNBTRoot::tick(Variant blackboard, float delta) {
 
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
 		NNBTNodes *btnode = _child_btnodes[i];
-		if (!btnode->get_is_active()) {
+		if (!btnode->get_is_enabled()) {
 			continue;
 		}
 		Status result = btnode->tick(blackboard, delta);
@@ -115,14 +115,14 @@ NNBTNodes::Status NNBTRoot::tick(Variant blackboard, float delta) {
 	for( int i = 0; i < get_child_count(); ++i ) {
 		Node* node = get_child(i);
 		if( NNSensors* sensor = godot::Object::cast_to<NNSensors>(node) ) {
-			if( !sensor-> get_is_active() ) {
+			if( !sensor-> get_is_enabled() ) {
 				continue;
 			}
 			sensor->evaluate_sensor_value();
 			continue;
 		}
 		if( NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(node) ) {
-			if( !btnode->get_is_active() ) {
+			if( !btnode->get_is_enabled() ) {
 				continue;
 			}
 			Status result = btnode->tick(blackboard, delta);

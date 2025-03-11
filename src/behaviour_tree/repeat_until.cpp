@@ -76,7 +76,7 @@ void NNBTRepeatUntil::reset_bt_node() {
 }
 
 NNBTNodes::Status NNBTRepeatUntil::tick(Variant blackboard, float delta) {
-	//if( !get_is_active() ) return Status::FAILURE;
+	//if( !get_is_enabled() ) return Status::FAILURE;
 	if (Engine::get_singleton()->is_editor_hint())
 		return Status::FAILURE;
 
@@ -100,7 +100,7 @@ NNBTNodes::Status NNBTRepeatUntil::tick(Variant blackboard, float delta) {
 	//    if( NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(get_child(i)) ) {
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
 		NNBTNodes *btnode = _child_btnodes[i];
-		if (!btnode->get_is_active()) {
+		if (!btnode->get_is_enabled()) {
 			continue;
 		}
 		if (_current_max_repeat_times > 0) {

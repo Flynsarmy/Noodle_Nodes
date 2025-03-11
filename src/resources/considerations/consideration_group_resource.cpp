@@ -68,7 +68,7 @@ float NNConsiderationGroupResource::evaluate(bool &has_vetoed, Node *parent_node
 		if (consideration == nullptr) {
 			continue;
 		}
-		if (!consideration->get_is_active()) {
+		if (!consideration->get_is_enabled()) {
 			continue;
 		}
 		bool child_has_vetoed = false;
@@ -142,7 +142,7 @@ float NNConsiderationGroupResource::evaluate(bool &has_vetoed, Node *parent_node
 		if( node == nullptr ) continue;
 		NNConsiderations* considerationNode = godot::Object::cast_to<NNConsiderations>(node);
 		if( considerationNode == nullptr ) continue;
-		if( !considerationNode->get_is_active() ) continue;
+		if( !considerationNode->get_is_enabled() ) continue;
 		child_score = considerationNode->evaluate(); //agent, delta);
 		if( considerationNode->get_has_vetoed()) {
 			_score = 0.0;

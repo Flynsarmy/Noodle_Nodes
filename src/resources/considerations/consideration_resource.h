@@ -11,7 +11,7 @@ class NNConsiderationResource : public NNConsiderationResources {
 	GDCLASS(NNConsiderationResource, NNConsiderationResources)
 
 private:
-	bool _is_active;
+	bool _is_enabled;
 	Ref<Curve> _activation_curve;
 	NNSensors *_input_sensor;
 	NodePath _input_sensor_nodepath; // Node pointer doesn't seem to get saved for a resource, so a node path needs to be used.

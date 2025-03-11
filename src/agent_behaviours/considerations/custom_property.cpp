@@ -111,7 +111,7 @@ void NNCustomPropertyConsideration::_evaluate_consideration() {
 float NNCustomPropertyConsideration::evaluate() {
 	if (Engine::get_singleton()->is_editor_hint())
 		return 0.0;
-	if (!get_is_active())
+	if (!get_is_enabled())
 		return 0.0;
 	if (_node_with_property == nullptr)
 		return 0.0;

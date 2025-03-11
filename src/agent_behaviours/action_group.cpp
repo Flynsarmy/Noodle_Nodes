@@ -145,12 +145,12 @@ Node *NNActionGroup::step_actions() {
 				call("eval");
 				if (_current_action_index > -1) {
 					if (NNAction *action_node = godot::Object::cast_to<NNAction>(get_child(_current_action_index))) {
-						if (action_node->get_is_active()) {
+						if (action_node->get_is_enabled()) {
 							action_node->start_action();
 							return action_node;
 						}
 					} else if (NNActionGroup *action_group = godot::Object::cast_to<NNActionGroup>(get_child(_current_action_index))) {
-						if (action_group->get_is_active()) {
+						if (action_group->get_is_enabled()) {
 							action_group->start_action();
 							action_node = godot::Object::cast_to<NNAction>(action_group->step_actions());
 							if (action_node != nullptr) {
@@ -168,12 +168,12 @@ Node *NNActionGroup::step_actions() {
 			++_current_action_index;
 			while (_current_action_index < get_child_count()) {
 				if (NNAction *action_node = godot::Object::cast_to<NNAction>(get_child(_current_action_index))) {
-					if (action_node->get_is_active()) {
+					if (action_node->get_is_enabled()) {
 						action_node->start_action();
 						return action_node;
 					}
 				} else if (NNActionGroup *action_group = godot::Object::cast_to<NNActionGroup>(get_child(_current_action_index))) {
-					if (action_group->get_is_active()) {
+					if (action_group->get_is_enabled()) {
 						action_group->start_action();
 						action_node = godot::Object::cast_to<NNAction>(action_group->step_actions());
 						if (action_node != nullptr) {

@@ -78,7 +78,7 @@ float NNBehaviourGroup::evaluate() {
 	_last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
 #endif
 
-	//if( !get_is_active() ) return false;
+	//if( !get_is_enabled() ) return false;
 	//if( Engine::get_singleton()->is_editor_hint() ) return false;
 	int num_children = get_child_count();
 	if (num_children < 1)
@@ -98,7 +98,7 @@ float NNBehaviourGroup::evaluate() {
 		if (consideration_resource == nullptr) {
 			continue;
 		}
-		if (!consideration_resource->get_is_active()) {
+		if (!consideration_resource->get_is_enabled()) {
 			continue;
 		}
 		float child_score = consideration_resource->evaluate(has_vetoed, this);
@@ -150,7 +150,7 @@ float NNBehaviourGroup::evaluate() {
 	//    if( considerationsNode == nullptr ) continue;
 	for (unsigned int i = 0; i < _num_child_considerations; ++i) {
 		NNConsiderations *considerationsNode = _child_considerations[i];
-		if (!considerationsNode->get_is_active())
+		if (!considerationsNode->get_is_enabled())
 			continue;
 		float child_score = considerationsNode->evaluate();
 		++num_consideration_nodes_handled;

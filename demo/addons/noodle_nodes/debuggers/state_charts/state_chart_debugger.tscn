@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsu4pkmjdarfe"]
+
+[ext_resource type="Script" uid="uid://0rwsfnfowm8m" path="res://addons/noodle_nodes/debuggers/state_charts/state_chart_debugger.gd" id="1_u3530"]
+
+[node name="StateChartDebugger" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_u3530")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Tree" type="Tree" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+scroll_horizontal_enabled = false
+scroll_vertical_enabled = false

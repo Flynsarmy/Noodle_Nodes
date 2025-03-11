@@ -84,7 +84,7 @@ void NNPointGrid2DSearchSpace::_bind_methods() {
 // Godot virtuals.
 
 void NNPointGrid2DSearchSpace::_ready() {
-	//if( !get_is_active() ) return;
+	//if( !get_is_enabled() ) return;
 	if (Engine::get_singleton()->is_editor_hint())
 		return;
 	initialize_search_space();

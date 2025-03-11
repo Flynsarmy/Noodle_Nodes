@@ -58,7 +58,7 @@ void NNBTScoreBasedPicker::reset_bt_node() {
 		//if( btnode == nullptr ) {
 		//    continue;
 		//}
-		if (!btnode->get_is_active()) {
+		if (!btnode->get_is_enabled()) {
 			continue;
 		}
 		// Evaluate the node to get its score.

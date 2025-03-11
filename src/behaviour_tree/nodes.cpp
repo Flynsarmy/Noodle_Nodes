@@ -202,7 +202,7 @@ void NNBTNodes::reset_for_looping() {
 /**/
 
 float NNBTNodes::evaluate() {
-//if( !get_is_active() ) return 0.0f;
+//if( !get_is_enabled() ) return 0.0f;
 //if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 #ifdef DEBUG_ENABLED
 	_last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
@@ -217,7 +217,7 @@ float NNBTNodes::evaluate() {
 		if (consideration_resource == nullptr) {
 			continue;
 		}
-		if (!consideration_resource->get_is_active()) {
+		if (!consideration_resource->get_is_enabled()) {
 			continue;
 		}
 		float score = consideration_resource->evaluate(has_vetoed, this);
@@ -243,7 +243,7 @@ float NNBTNodes::evaluate() {
 		//NNConsiderations* considerationNode = godot::Object::cast_to<NNConsiderations>(node);
 		//if( considerationNode == nullptr ) continue;
 		NNConsiderations *considerationNode = _child_considerations[i];
-		if (!considerationNode->get_is_active())
+		if (!considerationNode->get_is_enabled())
 			continue;
 		child_score = considerationNode->evaluate();
 		if (considerationNode->get_has_vetoed()) {

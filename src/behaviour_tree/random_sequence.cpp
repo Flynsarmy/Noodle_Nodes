@@ -52,7 +52,7 @@ void NNBTRandomSequence::reset_bt_node() {
 	//    if( btnode == nullptr ) continue;
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
 		NNBTNodes *btnode = _child_btnodes[i];
-		if (!btnode->get_is_active()) {
+		if (!btnode->get_is_enabled()) {
 			continue;
 		}
 		_child_node_order.push_back(i);
@@ -74,7 +74,7 @@ NNBTNodes::Status NNBTRandomSequence::tick(Variant blackboard, float delta) {
 	while (_current_child_index < _child_node_order.size()) {
 		//NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(get_child(_child_node_order[_current_child_index]));
 		//if( btnode != nullptr ) {
-		//if( !btnode->get_is_active() ) {
+		//if( !btnode->get_is_enabled() ) {
 		//    continue;
 		//}
 		NNBTNodes *btnode = _child_btnodes[(int)_child_node_order[_current_child_index]];

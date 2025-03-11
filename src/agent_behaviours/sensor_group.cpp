@@ -36,7 +36,7 @@ float NNSensorGroup::evaluate_sensor_value() {
 	_last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
 #endif
 
-	if (!get_is_active())
+	if (!get_is_enabled())
 		return 0.0f;
 	if (Engine::get_singleton()->is_editor_hint())
 		return 0.0f;
@@ -55,7 +55,7 @@ float NNSensorGroup::evaluate_sensor_value() {
 		NNSensors *sensorNode = godot::Object::cast_to<NNSensors>(node);
 		if (sensorNode == nullptr)
 			continue;
-		if (!sensorNode->get_is_active())
+		if (!sensorNode->get_is_enabled())
 			continue;
 		child_sensor_value = sensorNode->evaluate_sensor_value();
 

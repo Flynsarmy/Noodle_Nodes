@@ -161,7 +161,7 @@ void NNBehaviour::_notification(int p_what) {
 /**/
 
 void NNBehaviour::_ready() {
-	if (!get_is_active())
+	if (!get_is_enabled())
 		return;
 	if (Engine::get_singleton()->is_editor_hint())
 		return;
@@ -170,7 +170,7 @@ void NNBehaviour::_ready() {
 }
 
 void NNBehaviour::_process(double delta) {
-	if (!get_is_active())
+	if (!get_is_enabled())
 		return;
 	if (Engine::get_singleton()->is_editor_hint())
 		return;
@@ -205,7 +205,7 @@ float NNBehaviour::evaluate() {
 		if (consideration_resource == nullptr) {
 			continue;
 		}
-		if (!consideration_resource->get_is_active()) {
+		if (!consideration_resource->get_is_enabled()) {
 			continue;
 		}
 		float child_score = consideration_resource->evaluate(has_vetoed, this);
@@ -255,7 +255,7 @@ float NNBehaviour::evaluate() {
 	for (unsigned int i = 0; i < _num_child_considerations; ++i) {
 		NNConsiderations *considerationNode = _child_considerations[i];
 		//if( considerationNode == nullptr ) continue;
-		if (!considerationNode->get_is_active())
+		if (!considerationNode->get_is_enabled())
 			continue;
 		child_score = considerationNode->evaluate();
 		if (considerationNode->get_has_vetoed()) {
@@ -364,7 +364,7 @@ Node *NNBehaviour::step_actions() {
 		if (current_node != nullptr) {
 			if (NNAction *action_node = godot::Object::cast_to<NNAction>(current_node)) {
 				//WARN_PRINT("NNBehaviour::step_actions(): Found an action, starting the action...");
-				if (action_node->get_is_active()) {
+				if (action_node->get_is_enabled()) {
 					//_current_action_node = action_node;
 					bool action_start_result = action_node->start_action();
 					//if( !action_start_result ) return nullptr;
@@ -372,7 +372,7 @@ Node *NNBehaviour::step_actions() {
 					return action_node;
 				} //endif action is active
 			} else if (NNActionGroup *action_group = godot::Object::cast_to<NNActionGroup>(current_node)) {
-				if (action_group->get_is_active()) {
+				if (action_group->get_is_enabled()) {
 					//WARN_PRINT("NNBehaviour::step_actions(): Found an action group, starting the action group." + get_name());
 					bool action_group_start_result = action_group->start_action();
 					//if( !action_group_start_result ) return nullptr;
