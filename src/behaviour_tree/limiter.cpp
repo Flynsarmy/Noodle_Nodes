@@ -64,7 +64,7 @@ void NNBTLimiter::reset_bt_node() {
 }
 
 NNBTNodes::Status NNBTLimiter::tick(Variant blackboard, float delta) {
-	//if( !get_is_enabled() ) return BT_SKIP;
+	//if( !get_is_enabled() ) return Status::SKIP;
 	if (Engine::get_singleton()->is_editor_hint())
 		return Status::FAILURE;
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {

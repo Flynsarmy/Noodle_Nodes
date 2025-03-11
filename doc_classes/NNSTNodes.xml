@@ -93,6 +93,9 @@
 		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="4">
 			Defines how the considerations are aggregated. Can be one of the following: "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5".
 		</member>
+		<member name="internal_status" type="int" setter="set_internal_status" getter="get_internal_status" default="0">
+			The current internal status of the node, useful for debugging and seeing how the execution progresses. The following choices are possible: "Inactive:0,Active:1".
+		</member>
 		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
 		</member>
 	</members>

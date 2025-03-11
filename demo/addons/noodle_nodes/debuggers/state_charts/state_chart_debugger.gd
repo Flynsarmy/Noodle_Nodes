@@ -47,13 +47,13 @@ func _process(delta: float) -> void:
 	root.set_text(0, _root.name)
 
 	# walk over the state chart and find all active states
-	_collect_active_states(_root, root, _root.get_active_states())
+	_collect_active_states(_root, root)
 
-func _collect_active_states(root: NNSTNodes, parent: TreeItem, active_states: Array[NNSTNode]):
+func _collect_active_states(root: NNSTNodes, parent: TreeItem):
 	for child in root.get_children():
-		if child is NNSTNodes and child in active_states:
-			if child.is_enabled:
+		if child is NNSTNodes:
+			if child.internal_status == 1 and child.is_enabled:
 				var state_item: TreeItem = _tree.create_item(parent)
 				state_item.set_text(0, child.name)
 
-				_collect_active_states(child, state_item, active_states)
+				_collect_active_states(child, state_item)

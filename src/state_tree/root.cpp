@@ -118,6 +118,7 @@ bool NNSTRoot::try_transition(NNSTNodes *transition_target_node, Variant blackbo
 			NNSTNode *cur_active_state = godot::Object::cast_to<NNSTNode>(_active_states[i]);
 			if (!new_active_states.has(cur_active_state)) {
 				cur_active_state->on_exit_state(blackboard, delta);
+				cur_active_state->set_internal_status(ST_INTERNAL_STATUS_INACTIVE);
 			}
 		}
 
@@ -128,6 +129,7 @@ bool NNSTRoot::try_transition(NNSTNodes *transition_target_node, Variant blackbo
 				//NNSTNodes* cur_active_state = godot::Object::cast_to<NNSTNodes>(_active_states[i]);
 				//cur_active_state->on_enter_state(blackboard, delta);
 				_active_states_vector[i]->on_enter_state(blackboard, delta);
+				_active_states_vector[i]->set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
 			}
 		}
 		new_state_found = true;
@@ -143,6 +145,8 @@ void NNSTRoot::tick(Variant blackboard, float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
+
+	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
 
 	// No states, so try transition to the root.
 	if (_active_states_vector.size() == 0) {

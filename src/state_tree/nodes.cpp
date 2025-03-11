@@ -33,6 +33,10 @@ void NNSTNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_score"), &NNSTNodes::get_score);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE), "set_score", "get_score");
 
+	ClassDB::bind_method(D_METHOD("set_internal_status", "internal_status"), &NNSTNodes::set_internal_status);
+	ClassDB::bind_method(D_METHOD("get_internal_status"), &NNSTNodes::get_internal_status);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Inactive:0,Active:1"), "set_internal_status", "get_internal_status");
+
 	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "blackboard", "delta"), &NNSTNodes::transition_to);
 
 	GDVIRTUAL_BIND(on_enter_condition, "blackboard", "delta");
@@ -50,6 +54,7 @@ void NNSTNodes::_bind_methods() {
 // Constructor and destructor.
 
 NNSTNodes::NNSTNodes() {
+	_internal_status = ST_INTERNAL_STATUS_INACTIVE;
 	_score = 0.0;
 	_evaluation_method = NNSTNodesEvaluationMethod::Multiply;
 	_invert_score = false;
@@ -138,6 +143,21 @@ Dictionary NNSTNodes::get_child_nodes_as_dictionary(NNSTNodes* tree_root_node ) 
 	return results;
 }
 /**/
+
+void NNSTNodes::set_internal_status(int internal_status) {
+#ifdef DEBUG_ENABLED
+	_last_visited_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+#endif
+	if (internal_status != ST_INTERNAL_STATUS_ACTIVE && internal_status != ST_INTERNAL_STATUS_INACTIVE) {
+		internal_status = ST_INTERNAL_STATUS_INACTIVE;
+	}
+
+	_internal_status = internal_status;
+}
+
+int NNSTNodes::get_internal_status() const {
+	return _internal_status;
+}
 
 // Handling methods.
 

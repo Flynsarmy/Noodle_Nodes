@@ -2,6 +2,7 @@
 
 #include "../agent_behaviours/considerations.h"
 #include "../resources/considerations/consideration_resources.h"
+#include "definitions.h"
 #include "noodle_nodes.h"
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/core/gdvirtual.gen.inc>
@@ -12,6 +13,7 @@ class NNSTNodes : public NoodleNodes {
 	GDCLASS(NNSTNodes, NoodleNodes)
 
 private:
+	int _internal_status;
 	bool _is_on_entered_condition_true;
 	float _score;
 	int _evaluation_method;
@@ -72,6 +74,9 @@ public:
 
 	virtual void set_root_node(NNSTNodes *tree_root_node);
 	//Dictionary get_child_nodes_as_dictionary(NNSTNodes* tree_root_node );
+
+	void set_internal_status(int internal_status);
+	int get_internal_status() const;
 
 	//inline virtual bool get_is_leaf() const { return false; };
 
