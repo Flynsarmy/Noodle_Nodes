@@ -12,9 +12,9 @@
 	</tutorials>
 	<methods>
 		<method name="get_tree_root" qualifiers="const">
-			<return type="NNBTNodes" />
+			<return type="NodePath" />
 			<description>
-				Returns the highest direct [NNBTNodes] ancestor in the tree.
+				Returns a relative node path to the furthest direct [NNBTNodes] ancestor.
 			</description>
 		</method>
 	</methods>

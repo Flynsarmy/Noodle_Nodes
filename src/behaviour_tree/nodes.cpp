@@ -53,7 +53,8 @@ void NNBTNodes::_bind_methods() {
 // Constructor and destructor.
 
 NNBTNodes::NNBTNodes() {
-	_tree_root_node = nullptr;
+	_cached_tree_root_path = NodePath();
+	_is_tree_root_path_cached = false;
 	_score = 0.0;
 	_evaluation_method = NNBTNodesEvaluationMethod::Multiply;
 	_invert_score = false;
@@ -152,25 +153,25 @@ TypedArray<NNConsiderationResources> NNBTNodes::get_considerations() const {
 	return _considerations;
 }
 
-NNBTNodes *NNBTNodes::get_tree_root() const {
-	// if (_tree_root_node != nullptr) {
-	// 	return _tree_root_node;
-	// }
+NodePath NNBTNodes::get_tree_root() const {
+	if (_is_tree_root_path_cached) {
+		return _cached_tree_root_path;
+	}
 
-	NNBTNodes *furthest_ancestor = nullptr;
-	Node *current_node = const_cast<NNBTNodes *>(this); // Cast away const temporarily
+	Node *current_node = const_cast<NNBTNodes *>(this);
+	NodePath path;
 
 	while (current_node) {
-		if (NNBTNodes *node = Object::cast_to<NNBTNodes>(current_node)) {
-			furthest_ancestor = node; // Update with the current NNBTNodes node
-			current_node = current_node->get_parent();
-		} else {
+		path = this->get_path_to(current_node);
+		current_node = current_node->get_parent();
+		if (!Object::cast_to<NNBTNodes>(current_node)) {
 			break;
 		}
 	}
 
-	_tree_root_node = furthest_ancestor;
-	return furthest_ancestor;
+	_is_tree_root_path_cached = true;
+	_cached_tree_root_path = path;
+	return path;
 }
 
 // Handling methods.
@@ -318,6 +319,8 @@ void NNBTNodes::_notification(int p_what) {
 		// somehow. This caching of the pointers is done to avoid
 		// the expensive godot::Object::cast_to calls later.
 		update_child_vectors();
+
+		_is_tree_root_path_cached = false;
 	}
 }
 

@@ -77,13 +77,14 @@ public:
 
 	inline virtual bool has_completed() { return (_internal_status == BT_INTERNAL_STATUS_COMPLETED); };
 
-	mutable NNBTNodes *_tree_root_node;
-	NNBTNodes *get_tree_root() const;
+	NodePath get_tree_root() const;
 
 	// Godot virtuals.
 	virtual void _notification(int p_what);
 
 private:
+	mutable NodePath _cached_tree_root_path;
+	mutable bool _is_tree_root_path_cached;
 	float _score;
 	int _evaluation_method;
 	bool _invert_score;
