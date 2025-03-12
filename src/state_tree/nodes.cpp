@@ -39,11 +39,12 @@ void NNSTNodes::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "blackboard", "delta"), &NNSTNodes::transition_to);
 
+	GDVIRTUAL_BIND(on_input, "event");
 	GDVIRTUAL_BIND(on_enter_condition, "blackboard", "delta");
 	GDVIRTUAL_BIND(on_enter_state, "blackboard", "delta");
 	GDVIRTUAL_BIND(on_exit_state, "blackboard", "delta");
 	GDVIRTUAL_BIND(on_tick, "blackboard", "delta");
-	GDVIRTUAL_BIND(transition_to, "path_to_node", "blackboard", "delta");
+	// GDVIRTUAL_BIND(transition_to, "path_to_node", "blackboard", "delta");
 
 	ADD_SIGNAL(MethodInfo("state_check_enter_condition", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
 	ADD_SIGNAL(MethodInfo("state_entered", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
@@ -266,6 +267,24 @@ float NNSTNodes::evaluate() {
 	return _score;
 }
 
+void NNSTNodes::on_input(const Ref<InputEvent> &event) {
+	if (has_method("on_input")) {
+		call("on_input", event);
+	}
+}
+
+void NNSTNodes::on_unhandled_input(const Ref<InputEvent> &event) {
+	if (has_method("on_unhandled_input")) {
+		call("on_unhandled_input", event);
+	}
+}
+
+void NNSTNodes::on_unhandled_key_input(const Ref<InputEvent> &event) {
+	if (has_method("on_unhandled_key_input")) {
+		call("on_unhandled_key_input", event);
+	}
+}
+
 bool NNSTNodes::on_enter_condition(Variant blackboard, float delta) {
 	if (has_method("on_enter_condition")) {
 		return call("on_enter_condition", blackboard, delta);
@@ -356,6 +375,24 @@ NNSTNodes *NNSTNodes::evaluate_state_activation(Variant blackboard, float delta)
 		return nullptr;
 	}
 	return this; // This has no state tree children, so it is a leaf node.
+}
+
+void NNSTNodes::_input(const Ref<InputEvent> &p_event) {
+	if (get_internal_status() == 1) {
+		on_input(p_event);
+	}
+}
+
+void NNSTNodes::_unhandled_input(const Ref<InputEvent> &p_event) {
+	if (get_internal_status() == 1) {
+		on_unhandled_input(p_event);
+	}
+}
+
+void NNSTNodes::_unhandled_key_input(const Ref<InputEvent> &p_event) {
+	if (get_internal_status() == 1) {
+		on_unhandled_key_input(p_event);
+	}
 }
 
 void NNSTNodes::_notification(int p_what) {

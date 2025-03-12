@@ -4,6 +4,7 @@
 #include "../resources/considerations/consideration_resources.h"
 #include "definitions.h"
 #include "noodle_nodes.h"
+#include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/core/gdvirtual.gen.inc>
 
@@ -88,12 +89,18 @@ public:
 	// Handling functions.
 
 	virtual float evaluate();
+	virtual void on_input(const Ref<InputEvent> &event);
+	virtual void on_unhandled_input(const Ref<InputEvent> &event);
+	virtual void on_unhandled_key_input(const Ref<InputEvent> &event);
 	virtual bool on_enter_condition(Variant blackboard, float delta);
 	virtual void on_enter_state(Variant blackboard, float delta);
 	virtual void on_exit_state(Variant blackboard, float delta);
 	virtual void on_tick(Variant blackboard, float delta);
 	virtual void transition_to(NodePath path_to_node, Variant blackboard, float delta);
 
+	GDVIRTUAL1(on_input, Ref<InputEvent>);
+	GDVIRTUAL1(on_unhandled_input, Ref<InputEvent>);
+	GDVIRTUAL1(on_unhandled_key_input, Ref<InputEvent>);
 	GDVIRTUAL2R(bool, on_enter_condition, Variant, double);
 	GDVIRTUAL2(on_enter_state, Variant, double);
 	GDVIRTUAL2(on_exit_state, Variant, double);
@@ -105,6 +112,9 @@ public:
 	// Godot virtuals.
 
 	//void _enter_tree();
+	virtual void _input(const Ref<InputEvent> &p_event) override;
+	virtual void _unhandled_input(const Ref<InputEvent> &p_event) override;
+	virtual void _unhandled_key_input(const Ref<InputEvent> &p_event) override;
 	void _notification(int p_what);
 };
 

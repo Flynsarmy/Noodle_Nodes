@@ -20,6 +20,7 @@
 		<method name="get_on_entered_condition" qualifiers="const">
 			<return type="bool" />
 			<description>
+				Returns the value used to determine if the state may be entered. Change by calling [method set_on_entered_condition]
 			</description>
 		</method>
 		<method name="get_tree_root" qualifiers="const">
@@ -52,6 +53,13 @@
 				Logic to clean up before exiting. This will execute before the corrosponding signal.
 			</description>
 		</method>
+		<method name="on_input" qualifiers="virtual">
+			<return type="void" />
+			<param index="0" name="event" type="InputEvent" />
+			<description>
+				See [method Node._input]. The [member internal_status] property must also be set to `Active` for this function to fire.
+			</description>
+		</method>
 		<method name="on_tick" qualifiers="virtual">
 			<return type="void" />
 			<param index="0" name="blackboard" type="Variant" />
@@ -64,14 +72,7 @@
 			<return type="void" />
 			<param index="0" name="is_entered" type="bool" />
 			<description>
-			</description>
-		</method>
-		<method name="transition_to" qualifiers="virtual">
-			<return type="void" />
-			<param index="0" name="path_to_node" type="NodePath" />
-			<param index="1" name="blackboard" type="Variant" />
-			<param index="2" name="delta" type="float" />
-			<description>
+				If no [method on_enter_condition] method exists, this value will be used to determine if the state may be entered.
 			</description>
 		</method>
 		<method name="transition_to">
@@ -80,6 +81,7 @@
 			<param index="1" name="blackboard" type="Variant" />
 			<param index="2" name="delta" type="float" />
 			<description>
+				This method is used to transition between states in the Stae Tree. You must provide the [NodePath] (relative to the State Tree root node) for the target state and you can provide any Godot variant type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. `blackboard` and `delta` are passed to the [method on_enter_condition] method when selecting the active states.
 			</description>
 		</method>
 	</methods>
