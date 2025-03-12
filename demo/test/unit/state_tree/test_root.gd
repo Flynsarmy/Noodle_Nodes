@@ -70,8 +70,8 @@ func test_child_sensor_count() -> void:
 ## when the first child fails its _on_enter_condition() check, the second child should be entered
 func test_second_child_selected() -> void:
 	var _root: NNSTRoot = NNSTRoot.new()
-	var _child1 = load("res://test/unit/state_tree/node_example_2.gd").new()
-	var _child2 = load("res://test/unit/state_tree/node_example_1.gd").new()
+	var _child1 = load("res://test/unit/state_tree/node_enter_condition_fail.gd").new()
+	var _child2 = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
 	var blackboard: Dictionary = {
 		"on_enter_condition": 0,
 		"on_enter_state": 0,
