@@ -31,10 +31,6 @@ void NNBehaviour::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_cooldown_turns"), &NNBehaviour::get_cooldown_turns);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_turns", PROPERTY_HINT_RANGE, "0,64,or_greater,suffix:turns"), "set_cooldown_turns", "get_cooldown_turns");
 
-	ClassDB::bind_method(D_METHOD("set_considerations", "considerations"), &NNBehaviour::set_considerations);
-	ClassDB::bind_method(D_METHOD("get_considerations"), &NNBehaviour::get_considerations);
-	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "considerations", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "NNConsiderationResources")), "set_considerations", "get_considerations");
-
 	ADD_SUBGROUP("Debugging", "");
 
 	//ClassDB::bind_method(D_METHOD("set_score", "score"), &NNBehaviour::set_score);
@@ -123,16 +119,6 @@ int NNBehaviour::get_current_action_index() const {
 	return _current_action_index;
 }
 
-/**
-void NNBehaviour::set_considerations( TypedArray<NNConsiderationResources> considerations ) {
-	_considerations = considerations;
-}
-
-TypedArray<NNConsiderationResources> NNBehaviour::get_considerations() const {
-	return _considerations;
-}
-/**/
-
 // Godot virtuals.
 /**
 void NNBehaviour::_notification(int p_what) {
@@ -197,55 +183,6 @@ float NNBehaviour::evaluate() {
 	}
 
 	_score = 0.0f;
-	bool has_vetoed = false;
-	// Evaluate the consideration resources (if any).
-	int num_resources = _considerations.size();
-	for (int i = 0; i < num_resources; ++i) {
-		NNConsiderationResources *consideration_resource = godot::Object::cast_to<NNConsiderationResources>(_considerations[i]);
-		if (consideration_resource == nullptr) {
-			continue;
-		}
-		if (!consideration_resource->get_is_enabled()) {
-			continue;
-		}
-		float child_score = consideration_resource->evaluate(has_vetoed, this);
-		if (has_vetoed) {
-			return 0.0f; // A consideration vetoed.
-		}
-		switch (_evaluation_method) {
-			case NNConsiderationGroup::NNConsiderationGroupEvaluationMethod::Min: {
-				if (i == 0)
-					_score = child_score;
-				if (child_score < _score)
-					_score = child_score;
-			} break;
-			case NNConsiderationGroup::NNConsiderationGroupEvaluationMethod::Max: {
-				if (i == 0)
-					_score = child_score;
-				if (child_score > _score)
-					_score = child_score;
-			} break;
-			case NNConsiderationGroup::NNConsiderationGroupEvaluationMethod::Multiply: {
-				if (i == 0)
-					_score = child_score;
-				else
-					_score *= child_score;
-				// If after multiplication we are at 0.0, then none of the
-				// other considerations will ever change the result, so bail.
-				if (_score == 0.0) {
-					return 0.0;
-				}
-			} break;
-			case NNConsiderationGroup::NNConsiderationGroupEvaluationMethod::FirstNonZero: {
-				if (child_score > 0.0) {
-					_score = child_score;
-					return _score;
-				}
-			} break;
-			default:
-				_score += child_score;
-		} //end switch evaluation method
-	}
 
 	// Evaluate the child nodes.
 	//int num_children = get_child_count();

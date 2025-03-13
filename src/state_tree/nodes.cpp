@@ -17,10 +17,6 @@ void NNSTNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_evaluation_method"), &NNSTNodes::get_evaluation_method);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "evaluation_method", PROPERTY_HINT_ENUM, "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5"), "set_evaluation_method", "get_evaluation_method");
 
-	ClassDB::bind_method(D_METHOD("set_considerations", "considerations"), &NNSTNodes::set_considerations);
-	ClassDB::bind_method(D_METHOD("get_considerations"), &NNSTNodes::get_considerations);
-	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "considerations", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "NNConsiderationResources")), "set_considerations", "get_considerations");
-
 	ClassDB::bind_method(D_METHOD("set_on_entered_condition", "is_entered"), &NNSTNodes::set_is_on_entered_condition_true);
 	ClassDB::bind_method(D_METHOD("get_on_entered_condition"), &NNSTNodes::get_is_on_entered_condition_true);
 	//ADD_PROPERTY(PropertyInfo(Variant::INT, "child_state_selection_rule", PROPERTY_HINT_ENUM, "OnEnterConditionMethod:0,UtilityScoring:1" ), "set_child_state_selection_rule","get_child_state_selection_rule");
@@ -77,14 +73,6 @@ NNSTNodes::~NNSTNodes() {
 }
 
 // Getters and Setters.
-
-void NNSTNodes::set_considerations(TypedArray<NNConsiderationResources> considerations) {
-	_considerations = considerations;
-}
-
-TypedArray<NNConsiderationResources> NNSTNodes::get_considerations() const {
-	return _considerations;
-}
 
 void NNSTNodes::set_is_on_entered_condition_true(bool is_on_entered_condition_true) {
 	_is_on_entered_condition_true = is_on_entered_condition_true;
@@ -170,28 +158,9 @@ float NNSTNodes::evaluate() {
 #endif
 
 	_score = 0.0f;
-	bool has_vetoed = false;
-	// Evaluate the consideration resources (if any).
-	int num_resources = _considerations.size();
-	for (int i = 0; i < num_resources; ++i) {
-		NNConsiderationResources *consideration_resource = godot::Object::cast_to<NNConsiderationResources>(_considerations[i]);
-		if (consideration_resource == nullptr) {
-			continue;
-		}
-		if (!consideration_resource->get_is_enabled()) {
-			continue;
-		}
-		float score = consideration_resource->evaluate(has_vetoed, this);
-		if (has_vetoed) {
-			_score = 0.0f;
-			return 0.0f; // A consideration vetoed.
-		}
-		_score += score;
-	}
 
 	// Evaluate the children.
-	int num_children = get_child_count();
-	if (num_children < 1) {
+	if (_num_child_considerations == 0) {
 		return _score;
 	}
 	float child_score = 0.0;
@@ -257,7 +226,7 @@ float NNSTNodes::evaluate() {
 	} //endfor children
 
 	if (_evaluation_method == NNSTNodesEvaluationMethod::Mean) {
-		_score = _score / ((float)num_children);
+		_score = _score / ((float)_num_child_considerations);
 	}
 
 	if (_invert_score) {

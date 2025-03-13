@@ -2,6 +2,7 @@
 
 #include "node.h"
 #include "nodes.h"
+#include <agent_behaviours/sensors.h>
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/variant/dictionary.hpp>
 

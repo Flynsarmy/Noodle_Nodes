@@ -9,6 +9,7 @@
 #include "action.h"
 #include "behaviour.h"
 #include "behaviour_group.h"
+#include "sensors.h"
 
 #define UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS 16
 

@@ -38,11 +38,6 @@
 #include "agent_behaviours/considerations/boolean.h"
 #include "agent_behaviours/considerations/custom_property.h"
 
-// Resource-based considerations
-#include "resources/considerations/consideration_group_resource.h"
-#include "resources/considerations/consideration_resource.h"
-#include "resources/considerations/consideration_resources.h"
-
 // BEHAVIOUR TREE
 #include "behaviour_tree/nodes.h"
 #include "behaviour_tree/root.h"
@@ -175,11 +170,6 @@ void register_scene_classes() {
 	// Special considerations.
 	GDREGISTER_CLASS(NNBooleanConsideration);
 	GDREGISTER_CLASS(NNCustomPropertyConsideration);
-
-	// Resource-based considerations.
-	GDREGISTER_VIRTUAL_CLASS(NNConsiderationResources);
-	GDREGISTER_CLASS(NNConsiderationResource);
-	GDREGISTER_CLASS(NNConsiderationGroupResource);
 
 	// Behaviour tree.
 	GDREGISTER_VIRTUAL_CLASS(NNBTNodes);

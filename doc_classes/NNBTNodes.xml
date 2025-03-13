@@ -19,8 +19,6 @@
 		</method>
 	</methods>
 	<members>
-		<member name="considerations" type="NNConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
-		</member>
 		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="4">
 			Used with Utility-based Behaviour Tree nodes. This defines how the [NNConsideration] nodes (assigned as child nodes of the behaviour tree node) are evaluated to calculate the score for the node.
 		</member>

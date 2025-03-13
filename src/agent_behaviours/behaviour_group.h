@@ -3,7 +3,6 @@
 #include "behaviours.h"
 #include "considerations.h"
 #include "noodle_nodes.h"
-#include "resources/considerations/consideration_resources.h"
 #include <godot_cpp/classes/node.hpp>
 
 namespace godot {
@@ -14,7 +13,6 @@ class NNBehaviourGroup : public NNBehaviours {
 private:
 	//float  _score;
 	float _activation_score;
-	//TypedArray<NNConsiderationResources> _considerations;
 
 	//std::vector<NNConsiderations*> _child_considerations;
 	//unsigned int _num_child_considerations;
@@ -40,9 +38,6 @@ public:
 
 	//void  set_score( float score );
 	//float get_score() const;
-
-	void set_considerations(TypedArray<NNConsiderationResources> considerations);
-	TypedArray<NNConsiderationResources> get_considerations() const;
 
 	// Handling functions.
 

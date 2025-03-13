@@ -3,7 +3,6 @@
 #include "noodle_nodes.h"
 #include <godot_cpp/classes/node.hpp>
 
-#include "../resources/considerations/consideration_resources.h"
 #include "action.h"
 #include "action_group.h"
 #include "behaviours.h"
@@ -24,7 +23,6 @@ private:
 	int _current_action_index;
 
 	bool _can_be_interrupted;
-	//TypedArray<NNConsiderationResources> _considerations;
 
 	//std::vector<NNConsiderations*> _child_considerations;
 	//unsigned int _num_child_considerations;
@@ -63,9 +61,6 @@ public:
 
 	void set_current_action_index(int current_action_index);
 	int get_current_action_index() const;
-
-	//void set_considerations( TypedArray<NNConsiderationResources> considerations );
-	//TypedArray<NNConsiderationResources> get_considerations() const;
 
 	//NNAction* get_current_action_node() const { return _current_action_node;};
 

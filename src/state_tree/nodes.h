@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../agent_behaviours/considerations.h"
-#include "../resources/considerations/consideration_resources.h"
 #include "definitions.h"
 #include "noodle_nodes.h"
 #include <godot_cpp/classes/input_event.hpp>
@@ -21,7 +20,6 @@ private:
 	bool _invert_score;
 	int _child_state_selection_rule;
 	NNSTNodes *_tree_root_node;
-	TypedArray<NNConsiderationResources> _considerations;
 
 	std::vector<NNConsiderations *> _child_considerations;
 	unsigned int _num_child_considerations;
@@ -46,9 +44,6 @@ public:
 	inline uint64_t get_last_visited_timestamp() const { return _last_visited_timestamp; };
 	inline uint64_t get_last_evaluated_timestamp() const { return _last_evaluated_timestamp; };
 #endif
-
-	void set_considerations(TypedArray<NNConsiderationResources> considerations);
-	TypedArray<NNConsiderationResources> get_considerations() const;
 
 	void set_is_on_entered_condition_true(bool is_on_entered_condition_true);
 	bool get_is_on_entered_condition_true() const;

@@ -22,10 +22,6 @@ void NNBTNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_evaluation_method"), &NNBTNodes::get_evaluation_method);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "evaluation_method", PROPERTY_HINT_ENUM, "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5"), "set_evaluation_method", "get_evaluation_method");
 
-	ClassDB::bind_method(D_METHOD("set_considerations", "considerations"), &NNBTNodes::set_considerations);
-	ClassDB::bind_method(D_METHOD("get_considerations"), &NNBTNodes::get_considerations);
-	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "considerations", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "NNConsiderationResources")), "set_considerations", "get_considerations");
-
 	ClassDB::bind_method(D_METHOD("get_tree_root"), &NNBTNodes::get_tree_root);
 
 	ADD_SUBGROUP("Debugging", "");
@@ -145,14 +141,6 @@ int NNBTNodes::get_reset_rule() const {
 	return _reset_rule;
 }
 
-void NNBTNodes::set_considerations(TypedArray<NNConsiderationResources> considerations) {
-	_considerations = considerations;
-}
-
-TypedArray<NNConsiderationResources> NNBTNodes::get_considerations() const {
-	return _considerations;
-}
-
 NodePath NNBTNodes::get_tree_root() const {
 	if (_is_tree_root_path_cached) {
 		return _cached_tree_root_path;
@@ -209,24 +197,6 @@ float NNBTNodes::evaluate() {
 #endif
 
 	_score = 0.0f;
-	bool has_vetoed = false;
-	// Evaluate the consideration resources (if any).
-	int num_resources = _considerations.size();
-	for (int i = 0; i < num_resources; ++i) {
-		NNConsiderationResources *consideration_resource = godot::Object::cast_to<NNConsiderationResources>(_considerations[i]);
-		if (consideration_resource == nullptr) {
-			continue;
-		}
-		if (!consideration_resource->get_is_enabled()) {
-			continue;
-		}
-		float score = consideration_resource->evaluate(has_vetoed, this);
-		if (has_vetoed) {
-			_score = 0.0f;
-			return 0.0f; // A consideration vetoed.
-		}
-		_score += score;
-	}
 
 	// Evaluate the child considerations.
 	if (_num_child_considerations < 1) {

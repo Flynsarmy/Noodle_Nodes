@@ -2,7 +2,6 @@
 
 #include "../agent_behaviours/considerations.h"
 #include "../noodle_nodes.h"
-#include "../resources/considerations/consideration_resources.h"
 #include "definitions.h"
 #include <godot_cpp/classes/node.hpp>
 
@@ -21,9 +20,6 @@ public:
 	inline uint64_t get_last_visited_timestamp() const { return _last_visited_timestamp; };
 	inline uint64_t get_last_evaluated_timestamp() const { return _last_evaluated_timestamp; };
 #endif
-
-	void set_considerations(TypedArray<NNConsiderationResources> considerations);
-	TypedArray<NNConsiderationResources> get_considerations() const;
 
 	void set_evaluation_method(int evaluation_method);
 	int get_evaluation_method() const;
@@ -92,8 +88,6 @@ private:
 	int _internal_status;
 	int _reset_rule;
 	bool _has_reset_rule_changed;
-
-	TypedArray<NNConsiderationResources> _considerations;
 
 protected:
 	static void _bind_methods();

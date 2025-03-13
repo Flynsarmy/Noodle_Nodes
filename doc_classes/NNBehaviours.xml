@@ -7,19 +7,6 @@
 	</description>
 	<tutorials>
 	</tutorials>
-	<methods>
-		<method name="get_considerations" qualifiers="const">
-			<return type="NNConsiderationResources[]" />
-			<description>
-			</description>
-		</method>
-		<method name="set_considerations">
-			<return type="void" />
-			<param index="0" name="considerations" type="NNConsiderationResources[]" />
-			<description>
-			</description>
-		</method>
-	</methods>
 	<members>
 		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="0">
 		</member>

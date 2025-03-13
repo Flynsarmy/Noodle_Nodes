@@ -16,8 +16,6 @@
 		<member name="activation_score" type="float" setter="set_activation_score" getter="get_activation_score" default="0.0">
 			The score must be greater or equal to the activation score for the behaviour group to allow for evaluation of the behaviour nodes that are its children.
 		</member>
-		<member name="considerations" type="NNConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
-		</member>
 	</members>
 	<signals>
 		<signal name="behaviour_group_entered">
