@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNSTParallel" inherits="NNSTNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Runs all its children in parallel.
+	</brief_description>
+	<description>
+		When ticked, this node calls [method NNSTNodes.on_tick] on all its children
+	</description>
+	<tutorials>
+	</tutorials>
+</class>

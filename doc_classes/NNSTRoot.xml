@@ -10,7 +10,7 @@
 	</tutorials>
 	<methods>
 		<method name="get_active_states" qualifiers="const">
-			<return type="NNSTNode[]" />
+			<return type="NNSTNodes[]" />
 			<description>
 				Returns a list of currently active states. This number won't update until [method NNSTNodes.transition_to] is called.
 			</description>

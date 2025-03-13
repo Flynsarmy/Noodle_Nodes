@@ -6,7 +6,7 @@ extends GutTest
 ## Confirm on_* methods are called when they should be
 func test_on_method_state_calls() -> void:
 	var _root: NNSTRoot = NNSTRoot.new()
-	var _child = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
+	var _child: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
 	var blackboard: Dictionary = {
 		"on_enter_condition": 0,
 		"on_enter_state": 0,
@@ -32,7 +32,7 @@ func test_on_method_state_calls() -> void:
 ## No on_* methods should fire if on_enter_condition returns false
 func test_on_enter_condition_fail_checks() -> void:
 	var _root: NNSTRoot = NNSTRoot.new()
-	var _child = load("res://test/unit/state_tree/node_enter_condition_fail.gd").new()
+	var _child: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_fail.gd").new()
 	var blackboard: Dictionary = {
 		"on_enter_condition": 0,
 		"on_enter_state": 0,
@@ -56,8 +56,8 @@ func test_on_enter_condition_fail_checks() -> void:
 
 func test_grandchildren_on_method_calls() -> void:
 	var _root: NNSTRoot = NNSTRoot.new()
-	var _child = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
-	var _grandchild = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
+	var _child: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
+	var _grandchild: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
 	var blackboard: Dictionary = {
 		"on_enter_condition": 0,
 		"on_enter_state": 0,

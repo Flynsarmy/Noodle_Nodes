@@ -22,14 +22,15 @@ private:
 	int _child_state_selection_rule;
 	NNSTNodes *_tree_root_node;
 	TypedArray<NNConsiderationResources> _considerations;
-	std::vector<NNSTNodes *> _child_states;
-	unsigned int _num_child_states;
 
 	std::vector<NNConsiderations *> _child_considerations;
 	unsigned int _num_child_considerations;
 
 protected:
 	static void _bind_methods();
+
+	std::vector<NNSTNodes *> _child_states;
+	unsigned int _num_child_states;
 
 #ifdef DEBUG_ENABLED
 	uint64_t _last_evaluated_timestamp;
@@ -107,7 +108,8 @@ public:
 	GDVIRTUAL2(on_tick, Variant, double);
 	GDVIRTUAL3(transition_to, NodePath, Variant, double);
 
-	virtual NNSTNodes *evaluate_state_activation(Variant blackboard, float delta);
+	// virtual NNSTNodes *evaluate_state_activation(Variant blackboard, float delta);
+	virtual void evaluate_state_activations(TypedArray<NNSTNodes> *nodes, Variant blackboard, float delta);
 
 	// Godot virtuals.
 

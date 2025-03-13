@@ -318,35 +318,36 @@ void NNSTNodes::transition_to(NodePath path_to_node, Variant blackboard, float d
 	_tree_root_node->transition_to(path_to_node, blackboard, delta);
 }
 
-NNSTNodes *NNSTNodes::evaluate_state_activation(Variant blackboard, float delta) {
-	unsigned int num_state_tree_childs = 0;
-
+/**
+ * Recursively searches children for states to activate using the appropriate
+ * activation method based on the `get_child_state_selection_rule()` setting.
+ *
+ * Only activates up to 1 child for each node (CompoundState).
+ */
+void NNSTNodes::evaluate_state_activations(TypedArray<NNSTNodes> *nodes, Variant blackboard, float delta) {
 	if (get_child_state_selection_rule() == NNStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
-		//for( int i = 0; i < get_child_count(); ++i ) {
-		//    if( NNSTNodes* stnode = godot::Object::cast_to<NNSTNodes>(get_child(i)) ) {
 		for (unsigned int i = 0; i < _num_child_states; ++i) {
 			NNSTNodes *stnode = _child_states[i];
 			if (!stnode->get_is_enabled()) {
 				continue;
 			}
 
-			++num_state_tree_childs;
 			if (!stnode->on_enter_condition(blackboard, delta)) {
 				continue;
 			}
 
-			if (NNSTNodes *result = stnode->evaluate_state_activation(blackboard, delta)) {
-				return result;
-			} //endif result is not nullptr
-			//}//endif valid node type
-		} //endfor child nodes
-	} else {
+			// Activate the child and evaluate its children
+			nodes->push_back(stnode);
+			stnode->evaluate_state_activations(nodes, blackboard, delta);
+
+			// Only 1 child gets activated
+			break;
+		}
+	} else if (get_child_state_selection_rule() == NNStateTreeNodeChildStateSelectionRule::UTILITY_SCORING) {
 		// Childs are evaluated by using Utility-based scoring.
 		NNSTNodes *highest_scoring_state_to_activate = nullptr;
 		float highest_score = -9999999.9999;
-		//for( int i = 0; i < get_child_count(); ++i ) {
-		//if( NNSTNodes* stnode = godot::Object::cast_to<NNSTNodes>(get_child(i)) ) {
 		for (unsigned int i = 0; i < _num_child_states; ++i) {
 			NNSTNodes *stnode = _child_states[i];
 
@@ -354,27 +355,20 @@ NNSTNodes *NNSTNodes::evaluate_state_activation(Variant blackboard, float delta)
 				continue;
 			}
 
-			++num_state_tree_childs;
 			float score = stnode->evaluate();
 			if (score > highest_score) {
-				if (NNSTNodes *result = stnode->evaluate_state_activation(blackboard, delta)) {
-					highest_score = score;
-					highest_scoring_state_to_activate = result;
-				} //endif result is not nullptr
-			} //endif score is higher than current highest
+				highest_score = score;
+				highest_scoring_state_to_activate = stnode;
+			}
+		}
 
-			//}//endif valid node type
-		} //endfor child nodes
 		// Return the highest scoring state that can activate.
 		if (highest_scoring_state_to_activate != nullptr) {
-			return highest_scoring_state_to_activate;
+			// Activate the child and evaluate its children
+			nodes->push_back(highest_scoring_state_to_activate);
+			highest_scoring_state_to_activate->evaluate_state_activations(nodes, blackboard, delta);
 		}
-	} //endif state selection method
-
-	if (num_state_tree_childs > 0) {
-		return nullptr;
 	}
-	return this; // This has no state tree children, so it is a leaf node.
 }
 
 void NNSTNodes::_input(const Ref<InputEvent> &p_event) {

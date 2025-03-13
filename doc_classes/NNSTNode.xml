@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="NNSTNode" inherits="NNSTNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
-		Runs business for a [NNSTRoot].
+		Runs business logic for a state tree.
 	</brief_description>
 	<description>
 		This is the workhorse of the State Tree. It acts as all the other levels of the state tree other than the tree root. If a [NNSTNode] has no child nodes, it is considered a leaf node. If it has child nodes, it is considered like a selector in a behaviour tree: it will evaluate its child nodes to find a leaf node to activate.

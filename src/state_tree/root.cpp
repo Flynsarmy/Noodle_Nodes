@@ -57,7 +57,7 @@ uint64_t NNSTRoot::get_total_tick_usec() const {
 }
 #endif
 
-TypedArray<NNSTNode> NNSTRoot::get_active_states() const {
+TypedArray<NNSTNodes> NNSTRoot::get_active_states() const {
 	return _active_states;
 }
 
@@ -97,25 +97,31 @@ bool NNSTRoot::try_transition(NNSTNodes *transition_target_node, Variant blackbo
 #endif
 		return false;
 	}
-	bool new_state_found = false;
-	if (NNSTNodes *new_state = transition_target_node->evaluate_state_activation(blackboard, delta)) {
-		// We got a new leaf state. Get the new state list.
-		_active_states_vector.clear();
-		TypedArray<NNSTNode> new_active_states;
-		std::vector<bool> is_existing_state; // = new std::vector<bool>();
-		Node *cur_state = new_state;
-		while (cur_state != this) {
-			new_active_states.push_back(cur_state);
-			is_existing_state.push_back(_active_states.has(cur_state));
-			_active_states_vector.push_back(godot::Object::cast_to<NNSTNode>(cur_state));
 
-			cur_state = cur_state->get_parent();
+	TypedArray<NNSTNodes> new_active_states;
+	transition_target_node->evaluate_state_activations(&new_active_states, blackboard, delta);
+
+	if (new_active_states.size() == 0) {
+		// No new active states found, clear out our active state list
+		if (_active_states.size() > 0) {
+			for (int i = _active_states.size() - 1; i >= 0; i--) {
+				NNSTNodes *cur_active_state = godot::Object::cast_to<NNSTNodes>(_active_states[i]);
+				cur_active_state->on_exit_state(blackboard, delta);
+				cur_active_state->set_internal_status(ST_INTERNAL_STATUS_INACTIVE);
+			}
+
+			_active_states.clear();
+			_active_states_vector.clear();
 		}
+	} else {
+		NNSTNodes *cur_active_state;
+		_active_states_vector.clear();
 
-		// Now that we have the new states in the list, do on_exit to those that
-		// are leaving the list.
+		// do on_exit for any states no longer active
 		for (int i = 0; i < _active_states.size(); ++i) {
-			NNSTNode *cur_active_state = godot::Object::cast_to<NNSTNode>(_active_states[i]);
+			// for (int i = _active_states.size() - 1; i > 0; i--) {
+			cur_active_state = godot::Object::cast_to<NNSTNodes>(_active_states[i]);
+
 			if (!new_active_states.has(cur_active_state)) {
 				cur_active_state->on_exit_state(blackboard, delta);
 				cur_active_state->set_internal_status(ST_INTERNAL_STATUS_INACTIVE);
@@ -123,30 +129,36 @@ bool NNSTRoot::try_transition(NNSTNodes *transition_target_node, Variant blackbo
 		}
 
 		// And then enter the new states.
-		_active_states = new_active_states;
-		for (int i = _active_states_vector.size() - 1; i > -1; --i) {
-			if (!is_existing_state[i]) {
-				//NNSTNodes* cur_active_state = godot::Object::cast_to<NNSTNodes>(_active_states[i]);
-				//cur_active_state->on_enter_state(blackboard, delta);
-				_active_states_vector[i]->on_enter_state(blackboard, delta);
-				_active_states_vector[i]->set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
+		for (int i = 0; i < new_active_states.size(); ++i) {
+			cur_active_state = godot::Object::cast_to<NNSTNodes>(new_active_states[i]);
+
+			_active_states_vector.push_back(cur_active_state);
+
+			if (!_active_states.has(new_active_states[i])) {
+				cur_active_state->set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
+				cur_active_state->on_enter_state(blackboard, delta);
 			}
 		}
-		new_state_found = true;
-	} //endif new state found
+
+		_active_states = new_active_states;
+	}
+
+	transition_target_node->set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
+	transition_target_node->on_enter_state(blackboard, delta);
+
 #ifdef DEBUG_ENABLED
 	_total_transition_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
 	NNPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_state_trees_usec(_total_transition_usec);
 #endif
-	return new_state_found;
+
+	// return new_state_found;
+	return new_active_states.size() > 0;
 }
 
 void NNSTRoot::tick(Variant blackboard, float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
-
-	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
 
 	// No states, so try transition to the root.
 	if (_active_states_vector.size() == 0) {
@@ -172,7 +184,8 @@ void NNSTRoot::tick(Variant blackboard, float delta) {
 	// If there are active states, tick their custom method from the
 	// root to the active leaf.
 	if (_active_states_vector.size() > 0) {
-		for (int i = _active_states_vector.size() - 1; i > -1; --i) {
+		// for (int i = _active_states_vector.size() - 1; i > -1; --i) {
+		for (int i = 0; i < _active_states_vector.size(); i++) {
 			NNSTNodes *stnode = _active_states_vector[i];
 
 			//if( NNSTNodes* stnode = godot::Object::cast_to<NNSTNodes>(_active_states[i]) ) {

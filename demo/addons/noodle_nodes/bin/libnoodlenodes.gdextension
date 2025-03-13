@@ -86,4 +86,5 @@ NNBTLimiter = "res://addons/noodle_nodes/icons/NNDefault.svg"
 NNSTNodes = "res://addons/noodle_nodes/icons/NNSTNodes.svg"
 NNSTRoot = "res://addons/noodle_nodes/icons/NNSTNodes.svg"
 NNSTNode = "res://addons/noodle_nodes/icons/NNStateTreeNode.svg"
+NNSTParallel = "res://addons/noodle_nodes/icons/NNBTParallel.svg"
 
