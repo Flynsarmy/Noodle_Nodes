@@ -5,7 +5,7 @@ extends GutTest
 
 ## Confirm on_* methods are called when they should be
 func test_all_children_ticked() -> void:
-	var _root: NNSTRoot = NNSTRoot.new()
+	var _root: NNSTRoot = autofree(NNSTRoot.new())
 	var _parallel: NNSTParallel = NNSTParallel.new()
 	var _node1: NNSTNode = NNSTNode.new()
 	var _node2: NNSTNode = NNSTNode.new()
@@ -19,10 +19,8 @@ func test_all_children_ticked() -> void:
 	assert_eq(_node1.internal_status, 1)
 	assert_eq(_node2.internal_status, 1)
 
-	_root.free()
-
 func test_children_failing_condition_dont_tick() -> void:
-	var _root: NNSTRoot = NNSTRoot.new()
+	var _root: NNSTRoot = autofree(NNSTRoot.new())
 	var _parallel: NNSTParallel = NNSTParallel.new()
 	var _node1: NNSTNode = NNSTNode.new()
 	var _node2: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_fail.gd").new()
@@ -42,16 +40,20 @@ func test_children_failing_condition_dont_tick() -> void:
 	assert_eq(_node1.internal_status, 1)
 	assert_eq(_node2.internal_status, 0)
 
-	_root.free()
-
 func test_transitions_away_in_correct_order() -> void:
-	var _root: NNSTRoot = NNSTRoot.new()
+	var _root: NNSTRoot = autofree(NNSTRoot.new())
 	var _parallel: NNSTParallel = load("res://test/unit/state_tree/parallel_on_call_logger.gd").new()
 	var _grandchild1: NNSTNode = load("res://test/unit/state_tree/node_on_call_logger.gd").new()
 	var _grandchild2: NNSTNode = load("res://test/unit/state_tree/node_on_call_logger.gd").new()
 	var _node: NNSTNode = load("res://test/unit/state_tree/node_on_call_logger.gd").new()
 	var blackboard: Array[String] = []
 
+	# - root
+	#   - parallel
+	#     - child1
+	#       - grandchild11
+	#       - grandchild12
+	#   - node
 	_root.add_child(_parallel)
 	_parallel.add_child(_grandchild1)
 	_parallel.add_child(_grandchild2)
@@ -64,7 +66,7 @@ func test_transitions_away_in_correct_order() -> void:
 
 	_root.tick(blackboard, 0.1)
 	blackboard = []
-	_parallel.transition_to(_root.get_path_to(_node), blackboard, 0.1)
+	_parallel.transition_to(_parallel.get_path_to(_node), blackboard, 0.1)
 
 	assert_eq(_parallel.internal_status, 0)
 	assert_eq(_grandchild1.internal_status, 0)
@@ -77,4 +79,37 @@ func test_transitions_away_in_correct_order() -> void:
 		"_node on_enter_state"
 	])
 
-	_root.free()
+func test_parallel_branches_tick_correct_nodes() -> void:
+	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _parallel: NNSTParallel = NNSTParallel.new()
+	var _child1: NNSTNode = NNSTNode.new()
+	var _grandchild11: NNSTNode = NNSTNode.new()
+	var _grandchild12: NNSTNode = NNSTNode.new()
+	var _child2: NNSTNode = NNSTNode.new()
+	var _grandchild21: NNSTNode = NNSTNode.new()
+	var _grandchild22: NNSTNode = NNSTNode.new()
+
+	# - root
+	#   - parallel
+	#     - child1
+	#       - grandchild11
+	#       - grandchild12
+	#     - child2
+	#       - grandchild21
+	#       - grandchild22
+	_root.add_child(_parallel)
+	_parallel.add_child(_child1)
+	_child1.add_child(_grandchild11)
+	_child1.add_child(_grandchild12)
+	_parallel.add_child(_child2)
+	_child2.add_child(_grandchild21)
+	_child2.add_child(_grandchild22)
+
+	_root.tick(_root, 0.1)
+	assert_eq(_parallel.internal_status, 1)
+	assert_eq(_child1.internal_status, 1)
+	assert_eq(_grandchild11.internal_status, 1)
+	assert_eq(_grandchild12.internal_status, 0)
+	assert_eq(_child2.internal_status, 1)
+	assert_eq(_grandchild21.internal_status, 1)
+	assert_eq(_grandchild22.internal_status, 0)

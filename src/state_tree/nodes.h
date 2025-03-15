@@ -94,6 +94,13 @@ public:
 	virtual void on_tick(Variant blackboard, float delta);
 	virtual void transition_to(NodePath path_to_node, Variant blackboard, float delta);
 
+	TypedArray<NNSTNodes> _active_states;
+	virtual void _transition_out(Variant blackboard, float delta);
+	virtual void _transition_in(Variant blackboard, float delta);
+	virtual TypedArray<NNSTNodes> _evaluate_child_activations(Variant blackboard, float delta);
+	virtual void _handle_transition(NNSTNodes *from_state, NNSTNodes *to_state, Variant blackboard, float delta);
+	virtual bool _can_transition_to(NNSTNodes *from_state, NNSTNodes *to_state);
+
 	GDVIRTUAL1(on_input, Ref<InputEvent>);
 	GDVIRTUAL1(on_unhandled_input, Ref<InputEvent>);
 	GDVIRTUAL1(on_unhandled_key_input, Ref<InputEvent>);
@@ -104,7 +111,7 @@ public:
 	GDVIRTUAL3(transition_to, NodePath, Variant, double);
 
 	// virtual NNSTNodes *evaluate_state_activation(Variant blackboard, float delta);
-	virtual void evaluate_state_activations(TypedArray<NNSTNodes> *nodes, Variant blackboard, float delta);
+	// virtual void evaluate_state_activations(TypedArray<NNSTNodes> *nodes, Variant blackboard, float delta);
 
 	// Godot virtuals.
 

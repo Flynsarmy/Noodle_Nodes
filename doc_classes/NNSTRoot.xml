@@ -9,12 +9,6 @@
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="get_active_states" qualifiers="const">
-			<return type="NNSTNodes[]" />
-			<description>
-				Returns a list of currently active states. This number won't update until [method NNSTNodes.transition_to] is called.
-			</description>
-		</method>
 		<method name="get_child_sensors">
 			<return type="NNSensors[]" />
 			<description>

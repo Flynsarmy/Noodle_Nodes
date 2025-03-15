@@ -16,8 +16,8 @@ private:
 	uint64_t _total_tick_usec;
 	uint64_t _total_transition_usec;
 #endif
-	TypedArray<NNSTNodes> _active_states;
-	std::vector<NNSTNodes *> _active_states_vector;
+	// TypedArray<NNSTNodes> _active_states;
+	// std::vector<NNSTNodes *> _active_states_vector;
 	TypedArray<NNSensors> _child_sensors;
 	unsigned int _num_child_sensors;
 	bool _is_first_tick;
@@ -37,15 +37,8 @@ public:
 	void set_total_tick_usec(uint64_t total_tick_usec);
 #endif
 
-	TypedArray<NNSTNodes> get_active_states() const;
-
-	//NNSTNodes* get_active_state() const;
-	//_active_states
-
 	// Handling functions.
-	//virtual TypedArray<NNSTNodes> _tick( Variant blackboard, float delta) override;
 	virtual void transition_to(NodePath path_to_node, Variant blackboard, float delta) override;
-	bool try_transition(NNSTNodes *transition_target_node, Variant blackboard, float delta);
 
 	void tick(Variant blackboard, float delta);
 

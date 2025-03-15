@@ -51,6 +51,7 @@ void NNSTNodes::_bind_methods() {
 // Constructor and destructor.
 
 NNSTNodes::NNSTNodes() {
+	_active_states.clear();
 	_internal_status = ST_INTERNAL_STATUS_INACTIVE;
 	_score = 0.0;
 	_evaluation_method = NNSTNodesEvaluationMethod::Multiply;
@@ -275,25 +276,94 @@ void NNSTNodes::on_exit_state(Variant blackboard, float delta) {
 void NNSTNodes::on_tick(Variant blackboard, float delta) {
 	call("on_tick", blackboard, delta);
 	emit_signal("state_ticked", blackboard, delta);
+
+	for (unsigned int i = 0; i < _active_states.size(); i++) {
+		NNSTNodes *stnode = godot::Object::cast_to<NNSTNodes>(_active_states[i]);
+
+		stnode->on_tick(blackboard, delta);
+	}
+
 #ifdef DEBUG_ENABLED
 	_last_visited_timestamp = godot::Time::get_singleton()->get_ticks_usec();
 #endif
 }
 
 void NNSTNodes::transition_to(NodePath path_to_node, Variant blackboard, float delta) {
-	if (_tree_root_node == nullptr) {
+	// if (_tree_root_node == nullptr) {
+	// 	return;
+	// }
+	// _tree_root_node->transition_to(path_to_node, blackboard, delta);
+
+	NNSTNodes *parent = godot::Object::cast_to<NNSTNodes>(get_parent());
+	if (!parent) {
 		return;
 	}
-	_tree_root_node->transition_to(path_to_node, blackboard, delta);
+
+	NNSTNodes *to_state = get_node<NNSTNodes>(path_to_node);
+	if (to_state == nullptr) {
+		return;
+	}
+
+	parent->_handle_transition(this, to_state, blackboard, delta);
 }
 
+void NNSTNodes::_transition_out(Variant blackboard, float delta) {
+	if (_internal_status == 0) {
+		return;
+	}
+
+	for (int i = _active_states.size() - 1; i >= 0; i--) {
+		NNSTNodes *cur_active_state = godot::Object::cast_to<NNSTNodes>(_active_states[i]);
+		cur_active_state->_transition_out(blackboard, delta);
+	}
+
+	on_exit_state(blackboard, delta);
+	set_internal_status(ST_INTERNAL_STATUS_INACTIVE);
+	_active_states.clear();
+};
+
+void NNSTNodes::_transition_in(Variant blackboard, float delta) {
+	if (_active_states.size() > 0) {
+		return;
+	}
+
+	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
+	on_enter_state(blackboard, delta);
+
+	TypedArray<NNSTNodes> new_active_states = _evaluate_child_activations(blackboard, delta);
+
+	NNSTNodes *cur_active_state;
+
+	// do on_exit for any states no longer active
+	for (int i = 0; i < _active_states.size(); ++i) {
+		cur_active_state = godot::Object::cast_to<NNSTNodes>(_active_states[i]);
+
+		if (!new_active_states.has(cur_active_state)) {
+			cur_active_state->_transition_out(blackboard, delta);
+		}
+	}
+
+	// And then enter the new states.
+	for (int i = 0; i < new_active_states.size(); ++i) {
+		cur_active_state = godot::Object::cast_to<NNSTNodes>(new_active_states[i]);
+
+		if (!_active_states.has(new_active_states[i])) {
+			cur_active_state->_transition_in(blackboard, delta);
+		}
+	}
+
+	_active_states = new_active_states;
+};
+
 /**
- * Recursively searches children for states to activate using the appropriate
+ * Searches children for states to activate using the appropriate
  * activation method based on the `get_child_state_selection_rule()` setting.
  *
  * Only activates up to 1 child for each node (CompoundState).
  */
-void NNSTNodes::evaluate_state_activations(TypedArray<NNSTNodes> *nodes, Variant blackboard, float delta) {
+TypedArray<NNSTNodes> NNSTNodes::_evaluate_child_activations(Variant blackboard, float delta) {
+	TypedArray<NNSTNodes> nodes;
+
 	if (get_child_state_selection_rule() == NNStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
 		for (unsigned int i = 0; i < _num_child_states; ++i) {
@@ -307,8 +377,7 @@ void NNSTNodes::evaluate_state_activations(TypedArray<NNSTNodes> *nodes, Variant
 			}
 
 			// Activate the child and evaluate its children
-			nodes->push_back(stnode);
-			stnode->evaluate_state_activations(nodes, blackboard, delta);
+			nodes.push_back(stnode);
 
 			// Only 1 child gets activated
 			break;
@@ -334,10 +403,48 @@ void NNSTNodes::evaluate_state_activations(TypedArray<NNSTNodes> *nodes, Variant
 		// Return the highest scoring state that can activate.
 		if (highest_scoring_state_to_activate != nullptr) {
 			// Activate the child and evaluate its children
-			nodes->push_back(highest_scoring_state_to_activate);
-			highest_scoring_state_to_activate->evaluate_state_activations(nodes, blackboard, delta);
+			nodes.push_back(highest_scoring_state_to_activate);
 		}
 	}
+
+	return nodes;
+}
+
+/**
+ * Called by a child state's transition_to() method. Transitions out of the old state and into the new.
+ */
+void NNSTNodes::_handle_transition(NNSTNodes *from_state, NNSTNodes *to_state, Variant blackboard, float delta) {
+	if (!_can_transition_to(from_state, to_state)) {
+		return;
+	}
+
+	from_state->_transition_out(blackboard, delta);
+	// Remove the from_state from our list of active states
+	for (unsigned int i = 0; i < _active_states.size(); i++) {
+		if (Object::cast_to<NNSTNodes>(_active_states[i]) == from_state) {
+			_active_states.remove_at(i);
+			break;
+		}
+	}
+
+	to_state->_transition_in(blackboard, delta);
+	_active_states.push_back(to_state);
+}
+
+bool NNSTNodes::_can_transition_to(NNSTNodes *from_state, NNSTNodes *to_state) {
+	if (to_state == nullptr) {
+		return false;
+	}
+
+	if (from_state == to_state) {
+		return false;
+	}
+
+	if (from_state->is_ancestor_of(to_state)) {
+		return false;
+	}
+
+	return true;
 }
 
 void NNSTNodes::_input(const Ref<InputEvent> &p_event) {
