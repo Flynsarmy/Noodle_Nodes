@@ -1,9 +1,13 @@
 name: Builds
 
 on:
-  workflow_dispatch:
-  pull_request:
-  push:
+    workflow_dispatch:
+    pull_request:
+    push:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
     lint:
