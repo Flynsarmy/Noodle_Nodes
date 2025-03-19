@@ -68,6 +68,15 @@
 				Logic to run when a state is ticked. This will execute before the corrosponding signal.
 			</description>
 		</method>
+		<method name="send_event">
+			<return type="void" />
+			<param index="0" name="name" type="String" />
+			<param index="1" name="blackboard" type="Variant" />
+			<param index="2" name="delta" type="float" />
+			<description>
+				Sends an event to all active children of the current state in order, followed by their children and so on until the event is consumed. Events will trigger transitions and actions via emitted signals.
+			</description>
+		</method>
 		<method name="set_on_entered_condition">
 			<return type="void" />
 			<param index="0" name="is_entered" type="bool" />

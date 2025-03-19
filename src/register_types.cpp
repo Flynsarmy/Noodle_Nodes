@@ -75,6 +75,7 @@
 #include "state_tree/nodes.h"
 #include "state_tree/parallel.h"
 #include "state_tree/root.h"
+#include "state_tree/transition.h"
 
 // NODE QUERY SYSTEM
 #include "node_query_system/node_query_system.h"
@@ -204,6 +205,7 @@ void register_scene_classes() {
 	GDREGISTER_CLASS(NNSTRoot);
 	GDREGISTER_CLASS(NNSTNode);
 	GDREGISTER_CLASS(NNSTParallel);
+	GDREGISTER_CLASS(NNSTTransition);
 
 	// Node Query System.
 	GDREGISTER_CLASS(NNNodeQuerySystem);

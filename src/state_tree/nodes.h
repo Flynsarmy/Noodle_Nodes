@@ -9,6 +9,8 @@
 
 namespace godot {
 
+class NNSTTransition; // Forward declaration
+
 class NNSTNodes : public NoodleNodes {
 	GDCLASS(NNSTNodes, NoodleNodes)
 
@@ -29,6 +31,9 @@ protected:
 
 	std::vector<NNSTNodes *> _child_states;
 	unsigned int _num_child_states;
+
+	std::vector<NNSTTransition *> _child_transitions;
+	unsigned int _num_child_transitions;
 
 #ifdef DEBUG_ENABLED
 	uint64_t _last_evaluated_timestamp;
@@ -93,6 +98,7 @@ public:
 	virtual void on_exit_state(Variant blackboard, float delta);
 	virtual void on_tick(Variant blackboard, float delta);
 	virtual void transition_to(NodePath path_to_node, Variant blackboard, float delta);
+	virtual void send_event(String name, Variant blackboard, float delta);
 
 	TypedArray<NNSTNodes> _active_states;
 	virtual void _transition_out(Variant blackboard, float delta);

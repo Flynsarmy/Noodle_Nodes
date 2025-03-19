@@ -1,5 +1,6 @@
 #include "nodes.h"
 #include "../agent_behaviours/considerations.h"
+#include <state_tree/transition.h>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/time.hpp>
 #include <godot_cpp/core/class_db.hpp>
@@ -34,6 +35,7 @@ void NNSTNodes::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Inactive:0,Active:1"), "set_internal_status", "get_internal_status");
 
 	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "blackboard", "delta"), &NNSTNodes::transition_to);
+	ClassDB::bind_method(D_METHOD("send_event", "name", "blackboard", "delta"), &NNSTNodes::send_event);
 
 	GDVIRTUAL_BIND(on_input, "event");
 	GDVIRTUAL_BIND(on_enter_condition, "blackboard", "delta");
@@ -62,6 +64,7 @@ NNSTNodes::NNSTNodes() {
 
 	_num_child_states = 0;
 	_num_child_considerations = 0;
+	_num_child_transitions = 0;
 
 #ifdef DEBUG_ENABLED
 	_last_evaluated_timestamp = 0;
@@ -288,6 +291,21 @@ void NNSTNodes::on_tick(Variant blackboard, float delta) {
 #endif
 }
 
+void NNSTNodes::send_event(String name, Variant blackboard, float delta) {
+	for (unsigned int i = 0; i < _child_transitions.size(); i++) {
+		if (_child_transitions[i]->get_event_name() == name) {
+			transition_to(_child_transitions[i]->get_to().slice(1), blackboard, delta);
+			return;
+		}
+	}
+
+	for (unsigned int i = 0; i < _active_states.size(); i++) {
+		NNSTNodes *stnode = godot::Object::cast_to<NNSTNodes>(_active_states[i]);
+		print_line("Checking ", stnode->get_name());
+		stnode->send_event(name, blackboard, delta);
+	}
+}
+
 void NNSTNodes::transition_to(NodePath path_to_node, Variant blackboard, float delta) {
 	// if (_tree_root_node == nullptr) {
 	// 	return;
@@ -471,14 +489,16 @@ void NNSTNodes::_notification(int p_what) {
 		_child_considerations.clear();
 		int num_children = get_child_count();
 		for (int i = 0; i < num_children; ++i) {
-			if (NNSTNodes *stnode = godot::Object::cast_to<NNSTNodes>(get_child(i))) {
-				_child_states.push_back(stnode);
-			}
 			if (NNConsiderations *cons = godot::Object::cast_to<NNConsiderations>(get_child(i))) {
 				_child_considerations.push_back(cons);
+			} else if (NNSTTransition *tns = godot::Object::cast_to<NNSTTransition>(get_child(i))) {
+				_child_transitions.push_back(tns);
+			} else if (NNSTNodes *stnode = godot::Object::cast_to<NNSTNodes>(get_child(i))) {
+				_child_states.push_back(stnode);
 			}
 		} //endfor child nodes
 		_num_child_states = (unsigned int)_child_states.size();
 		_num_child_considerations = (unsigned int)_child_considerations.size();
+		_num_child_transitions = (unsigned int)_child_transitions.size();
 	}
 }
