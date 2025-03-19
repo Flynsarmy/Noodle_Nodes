@@ -7,7 +7,7 @@ using namespace godot;
 void NNSTTransition::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_to", "to"), &NNSTTransition::set_to);
 	ClassDB::bind_method(D_METHOD("get_to"), &NNSTTransition::get_to);
-	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "to", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "NNSTNodes"), "set_to", "get_to");
+	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "to", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "NNSTTaskNodes"), "set_to", "get_to");
 
 	ClassDB::bind_method(D_METHOD("set_event_name", "event_name"), &NNSTTransition::set_event_name);
 	ClassDB::bind_method(D_METHOD("get_event_name"), &NNSTTransition::get_event_name);
@@ -40,9 +40,5 @@ void NNSTTransition::set_event_name(const String &p_event_name) {
 }
 
 // Handling functions.
-
-void NNSTTransition::send_event(String name, Variant blackboard, float delta) {
-	ERR_PRINT("Transitions cannot send events.");
-}
 
 // Godot virtuals.

@@ -57,11 +57,6 @@ uint64_t NNSTRoot::get_total_tick_usec() const {
 }
 #endif
 
-void NNSTRoot::transition_to(NodePath path_to_node, Variant blackboard, float delta) {
-	ERR_PRINT("Root nodes cannot transition.");
-	return;
-}
-
 void NNSTRoot::tick(Variant blackboard, float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
@@ -84,8 +79,9 @@ void NNSTRoot::tick(Variant blackboard, float delta) {
 	// If there are active states, tick their custom method from the
 	// root to the active leaf.
 	for (unsigned int i = 0; i < _active_states.size(); i++) {
-		NNSTNodes *stnode = godot::Object::cast_to<NNSTNodes>(_active_states[i]);
+		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
 
+		stnode->set_root(this);
 		stnode->on_tick(blackboard, delta);
 	}
 #ifdef DEBUG_ENABLED
@@ -94,18 +90,62 @@ void NNSTRoot::tick(Variant blackboard, float delta) {
 #endif
 }
 
+void NNSTRoot::send_event(String name, Variant blackboard, float delta) {
+	for (unsigned int i = 0; i < _active_states.size(); i++) {
+		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
+		stnode->send_event(name, blackboard, delta);
+	}
+}
+
+void NNSTRoot::_transition_in(Variant blackboard, float delta) {
+	if (_active_states.size() > 0) {
+		return;
+	}
+
+	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
+
+	TypedArray<NNSTNode> new_active_states = _evaluate_child_activations(blackboard, delta);
+
+	NNSTNode *cur_active_state;
+
+	// do on_exit for any states no longer active
+	for (unsigned int i = 0; i < _active_states.size(); ++i) {
+		cur_active_state = godot::Object::cast_to<NNSTNode>(_active_states[i]);
+
+		if (!new_active_states.has(cur_active_state)) {
+			cur_active_state->_transition_out(blackboard, delta);
+		}
+	}
+
+	// And then enter the new states.
+	for (unsigned int i = 0; i < new_active_states.size(); ++i) {
+		cur_active_state = godot::Object::cast_to<NNSTNode>(new_active_states[i]);
+
+		if (!_active_states.has(new_active_states[i])) {
+			cur_active_state->_transition_in(blackboard, delta);
+		}
+	}
+
+	_active_states = new_active_states;
+};
+
 // Godot virtuals.
 
 void NNSTRoot::_notification(int p_what) {
-	NNSTNodes::_notification(p_what);
+	NNSTTaskNodes::_notification(p_what);
 
 	if (p_what == NOTIFICATION_READY || p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
 		if (Engine::get_singleton()->is_editor_hint())
 			return;
 
-		set_root_node(this);
+		for (unsigned int i = 0; i < get_child_count(); ++i) {
+			if (NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(get_child(i))) {
+				stnode->set_root(this);
+			}
+		}
+
 		_child_sensors.clear();
-		for (int i = 0; i < get_child_count(); ++i) {
+		for (unsigned int i = 0; i < get_child_count(); ++i) {
 			if (NNSensors *sensor = godot::Object::cast_to<NNSensors>(get_child(i))) {
 				_child_sensors.push_back(sensor);
 			}

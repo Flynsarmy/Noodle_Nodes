@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nodes.h"
+#include "task_nodes.h"
 
 namespace godot {
 
@@ -18,13 +18,14 @@ public:
 	NNSTTransition();
 	~NNSTTransition();
 
+	// Getters and setters for attributes.
 	NodePath get_to() const;
 	void set_to(const NodePath &p_to);
 
 	String get_event_name() const;
 	void set_event_name(const String &p_event_name);
 
-	virtual void send_event(String name, Variant blackboard, float delta) override;
+	// Handling functions.
 };
 
 } //namespace godot

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "nodes.h"
+#include "node.h"
 //#include <godot_cpp/classes/node.hpp>
 
 namespace godot {
 
-class NNSTParallel : public NNSTNodes {
-	GDCLASS(NNSTParallel, NNSTNodes)
+class NNSTParallel : public NNSTNode {
+	GDCLASS(NNSTParallel, NNSTNode)
 
 private:
 protected:
@@ -17,8 +17,8 @@ public:
 	~NNSTParallel();
 
 	// Handling functions.
-	// virtual void evaluate_state_activations(TypedArray<NNSTNodes> *nodes, Variant blackboard, float delta) override;
-	virtual TypedArray<NNSTNodes> _evaluate_child_activations(Variant blackboard, float delta) override;
+	// virtual void evaluate_state_activations(TypedArray<NNSTTaskNodes> *nodes, Variant blackboard, float delta) override;
+	virtual TypedArray<NNSTNode> _evaluate_child_activations(Variant blackboard, float delta) override;
 };
 
 } //namespace godot

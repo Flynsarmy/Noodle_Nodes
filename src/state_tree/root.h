@@ -1,15 +1,15 @@
 #pragma once
 
 #include "node.h"
-#include "nodes.h"
+#include "task_nodes.h"
 #include <agent_behaviours/sensors.h>
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/variant/dictionary.hpp>
 
 namespace godot {
 
-class NNSTRoot : public NNSTNodes {
-	GDCLASS(NNSTRoot, NNSTNodes)
+class NNSTRoot : public NNSTTaskNodes {
+	GDCLASS(NNSTRoot, NNSTTaskNodes)
 
 private:
 #ifdef DEBUG_ENABLED
@@ -38,7 +38,9 @@ public:
 #endif
 
 	// Handling functions.
-	virtual void transition_to(NodePath path_to_node, Variant blackboard, float delta) override;
+	virtual void send_event(String name, Variant blackboard, float delta) override;
+
+	virtual void _transition_in(Variant blackboard, float delta) override;
 
 	void tick(Variant blackboard, float delta);
 

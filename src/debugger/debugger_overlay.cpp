@@ -348,7 +348,7 @@ void NNDebuggerOverlay::tree_add_child_nodes(Tree *tree, TreeItem *parent_node, 
 			tick_timestamp = btnode->get_last_visited_timestamp();
 			eval_timestamp = btnode->get_last_evaluated_timestamp();
 			score = btnode->get_score();
-		} else if (NNSTNodes *stnode = godot::Object::cast_to<NNSTNodes>(next_ai_node)) {
+		} else if (NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(next_ai_node)) {
 			tick_timestamp = stnode->get_last_visited_timestamp();
 			eval_timestamp = stnode->get_last_evaluated_timestamp();
 			score = stnode->get_score();
@@ -405,7 +405,7 @@ void  NNDebuggerOverlay::tree_update_child_nodes( Tree* tree, TreeItem* parent_n
 			next_tree_item->set_custom_bg_color(0, Color(0.0f, 0.5f, 0.0f), false);
 
 			score = btnode->get_score();
-		}else if( NNSTNodes* stnode = godot::Object::cast_to<NNSTNodes>(next_ai_node) ) {
+		}else if( NNSTTaskNodes* stnode = godot::Object::cast_to<NNSTTaskNodes>(next_ai_node) ) {
 
 			next_tree_item->set_custom_bg_color(0, Color(0.0f, 0.5f, 0.0f), false);
 

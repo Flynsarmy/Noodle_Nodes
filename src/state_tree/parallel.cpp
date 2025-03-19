@@ -25,11 +25,11 @@ NNSTParallel::~NNSTParallel() {
  *
  * Only activates up to 1 child for each node (CompoundState).
  */
-// void NNSTParallel::evaluate_state_activations(TypedArray<NNSTNodes> *nodes, Variant blackboard, float delta) {
-// 	if (get_child_state_selection_rule() == NNStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
+// void NNSTParallel::evaluate_state_activations(TypedArray<NNSTTaskNodes> *nodes, Variant blackboard, float delta) {
+// 	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 // 		// Childs are evaluated by using the user-defined on_enter_condition method.
 // 		for (unsigned int i = 0; i < _num_child_states; ++i) {
-// 			NNSTNodes *stnode = _child_states[i];
+// 			NNSTTaskNodes *stnode = _child_states[i];
 // 			if (!stnode->get_is_enabled()) {
 // 				continue;
 // 			}
@@ -42,14 +42,14 @@ NNSTParallel::~NNSTParallel() {
 // 			nodes->push_back(stnode);
 // 			stnode->evaluate_state_activations(nodes, blackboard, delta);
 // 		}
-// 	} else if (get_child_state_selection_rule() == NNStateTreeNodeChildStateSelectionRule::UTILITY_SCORING) {
+// 	} else if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::UTILITY_SCORING) {
 // 		// @TODO run children in order of priority
 
 // 		// Childs are evaluated by using Utility-based scoring.
-// 		NNSTNodes *highest_scoring_state_to_activate = nullptr;
+// 		NNSTTaskNodes *highest_scoring_state_to_activate = nullptr;
 // 		float highest_score = -9999999.9999;
 // 		for (unsigned int i = 0; i < _num_child_states; ++i) {
-// 			NNSTNodes *stnode = _child_states[i];
+// 			NNSTTaskNodes *stnode = _child_states[i];
 
 // 			if (!stnode->get_is_enabled()) {
 // 				continue;
@@ -84,13 +84,13 @@ NNSTParallel::~NNSTParallel() {
  *
  * Only activates up to 1 child for each node (CompoundState).
  */
-TypedArray<NNSTNodes> NNSTParallel::_evaluate_child_activations(Variant blackboard, float delta) {
-	TypedArray<NNSTNodes> nodes;
+TypedArray<NNSTNode> NNSTParallel::_evaluate_child_activations(Variant blackboard, float delta) {
+	TypedArray<NNSTNode> nodes;
 
-	if (get_child_state_selection_rule() == NNStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
+	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
 		for (unsigned int i = 0; i < _num_child_states; ++i) {
-			NNSTNodes *stnode = _child_states[i];
+			NNSTNode *stnode = _child_states[i];
 			if (!stnode->get_is_enabled()) {
 				continue;
 			}
@@ -102,12 +102,12 @@ TypedArray<NNSTNodes> NNSTParallel::_evaluate_child_activations(Variant blackboa
 			// Activate the child and evaluate its children
 			nodes.push_back(stnode);
 		}
-	} else if (get_child_state_selection_rule() == NNStateTreeNodeChildStateSelectionRule::UTILITY_SCORING) {
+	} else if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::UTILITY_SCORING) {
 		// Childs are evaluated by using Utility-based scoring.
-		NNSTNodes *highest_scoring_state_to_activate = nullptr;
+		NNSTNode *highest_scoring_state_to_activate = nullptr;
 		float highest_score = -9999999.9999;
 		for (unsigned int i = 0; i < _num_child_states; ++i) {
-			NNSTNodes *stnode = _child_states[i];
+			NNSTNode *stnode = _child_states[i];
 
 			if (!stnode->get_is_enabled()) {
 				continue;

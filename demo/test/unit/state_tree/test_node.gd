@@ -75,3 +75,14 @@ func test_grandchildren_on_method_calls() -> void:
 	assert_eq(blackboard['on_tick'], 4)
 	assert_eq(blackboard['on_enter_state'], 2)
 	assert_eq(blackboard['on_exit_state'], 0)
+
+func test_get_root_works() -> void:
+	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _child: NNSTNode = NNSTNode.new()
+	var _grandchild: NNSTNode = NNSTNode.new()
+
+	_root.add_child(_child)
+	_child.add_child(_grandchild)
+
+	assert_eq(_child.get_root(), _root)
+	assert_eq(_grandchild.get_root(), _root)

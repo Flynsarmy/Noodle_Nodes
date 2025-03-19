@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNSTTaskNodes" inherits="NNSTNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Base class for all State Tree nodes.
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="on_input" qualifiers="virtual">
+			<return type="void" />
+			<param index="0" name="event" type="InputEvent" />
+			<description>
+				See [method Node._input]. The [member internal_status] property must also be set to `Active` for this function to fire.
+			</description>
+		</method>
+		<method name="send_event">
+			<return type="void" />
+			<param index="0" name="name" type="String" />
+			<param index="1" name="blackboard" type="Variant" />
+			<param index="2" name="delta" type="float" />
+			<description>
+				Sends an event to all active children of the current state in order, followed by their children and so on until the event is consumed. Events will trigger transitions and actions via emitted signals.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="child_state_selection_rule" type="int" setter="set_child_state_selection_rule" getter="get_child_state_selection_rule" default="0">
+			Defines how the child state is chosen. Can be one of the following: "OnEnterConditionMethod:0,UtilityScoring:1", where "OnEnterConditionMethod" means that the user-defined [method NNSTNode.on_enter_condition] method is called and if it returns [code]true[/code], the state is selected. "UtilityScoring" option uses the considerations set in the properties of the state and/or as child nodes. The highest-scoring state will be chosen.
+		</member>
+		<member name="internal_status" type="int" setter="set_internal_status" getter="get_internal_status" default="0">
+			The current internal status of the node, useful for debugging and seeing how the execution progresses. The following choices are possible: "Inactive:0,Active:1".
+		</member>
+	</members>
+	<signals>
+		<signal name="state_check_enter_condition">
+			<param index="0" name="blackboard" type="Object" />
+			<param index="1" name="delta" type="float" />
+			<description>
+				Emitted when the the [method NNSTNode.on_enter_condition] check needs to be done. The signal must call the [method set_on_entered_condition] method with either [code]true[/code] or [code]false[/code] as the parameter to indicate if the state should be entered or not.
+			</description>
+		</signal>
+		<signal name="state_entered">
+			<param index="0" name="blackboard" type="Object" />
+			<param index="1" name="delta" type="float" />
+			<description>
+				Emitted when the state is entered. Add any state initialization to this signal handler.
+			</description>
+		</signal>
+		<signal name="state_exited">
+			<param index="0" name="blackboard" type="Object" />
+			<param index="1" name="delta" type="float" />
+			<description>
+				Emitted when the state is exited. Add any state deinitialization to this signal handler.
+			</description>
+		</signal>
+		<signal name="state_ticked">
+			<param index="0" name="blackboard" type="Object" />
+			<param index="1" name="delta" type="float" />
+			<description>
+				Emitted when the state is ticked. Add state update logic to this signal handler.
+			</description>
+		</signal>
+	</signals>
+</class>
