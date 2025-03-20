@@ -9,24 +9,23 @@
 		[gdscript]
 		extends NNSTNode
 
-		func on_enter_condition(blackboard: Variant, delta: float) -&gt; bool:
+		func on_enter_condition() -&gt; bool:
 		    # Do your logic here to decide when this node should be activated.
 		    # Return true or false based on your logic.
 		    return true
 
-		func on_enter_state(blackboard: Variant, delta: float) -&gt; void:
+		func on_enter_state() -&gt; void:
 		    # Initialize your state here.
 		    pass
 
-		func on_exit_state(blackboard: Variant, delta: float) -&gt; void:
+		func on_exit_state() -&gt; void:
 		    # Clean up before exiting the state here.
 		    pass
 
-		func on_tick(blackboard: Variant, delta: float) -&gt; void:
+		func on_tick(delta: float) -&gt; void:
 		    # Do what ever the state needs to do here.
 		    pass
 		[/gdscript]
-		[b]Note:[/b] You can rename the [param blackboard] parameter what ever you want. Most common ones would be blackboard if you are using a dictionary to share variables between your states, and actor if you just pass the root node of your AI entity scene.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -45,32 +44,25 @@
 		</method>
 		<method name="on_enter_condition" qualifiers="virtual">
 			<return type="bool" />
-			<param index="0" name="blackboard" type="Variant" />
-			<param index="1" name="delta" type="float" />
 			<description>
 				Do your logic here to decide when this node should be activated. Return [code]true[/code] or [code]false[/code] based on your logic. If this method isn't implemented in your node and no event is defined, this will return [code]true[/code].  This will execute before the corrosponding signal.
 			</description>
 		</method>
 		<method name="on_enter_state" qualifiers="virtual">
 			<return type="void" />
-			<param index="0" name="blackboard" type="Variant" />
-			<param index="1" name="delta" type="float" />
 			<description>
 				Logic to initialize your state. This will execute before the corrosponding signal.
 			</description>
 		</method>
 		<method name="on_exit_state" qualifiers="virtual">
 			<return type="void" />
-			<param index="0" name="blackboard" type="Variant" />
-			<param index="1" name="delta" type="float" />
 			<description>
 				Logic to clean up before exiting. This will execute before the corrosponding signal.
 			</description>
 		</method>
 		<method name="on_tick" qualifiers="virtual">
 			<return type="void" />
-			<param index="0" name="blackboard" type="Variant" />
-			<param index="1" name="delta" type="float" />
+			<param index="0" name="delta" type="float" />
 			<description>
 				Logic to run when a state is ticked. This will execute before the corrosponding signal.
 			</description>
@@ -85,10 +77,8 @@
 		<method name="transition_to">
 			<return type="void" />
 			<param index="0" name="new_state_nodepath" type="NodePath" />
-			<param index="1" name="blackboard" type="Variant" />
-			<param index="2" name="delta" type="float" />
 			<description>
-				Transitions between states in the Stae Tree. Requires a [NodePath] (relative to the node calling this method) for the target state and you can provide any Godot variant type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. `blackboard` and `delta` are passed to the [method on_enter_condition] method when selecting the active states.
+				Transitions between states in the Stae Tree. Requires a [NodePath] (relative to the node calling this method) for the target state. During a transition, all active children of the *from* state will be exited and any children of the *to* state will be evaluated for entering.
 			</description>
 		</method>
 	</methods>
@@ -99,4 +89,27 @@
 		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
 		</member>
 	</members>
+	<signals>
+		<signal name="state_check_enter_condition">
+			<description>
+				Emitted when the the [method NNSTNode.on_enter_condition] check needs to be done. The signal must call the [method set_on_entered_condition] method with either [code]true[/code] or [code]false[/code] as the parameter to indicate if the state should be entered or not.
+			</description>
+		</signal>
+		<signal name="state_entered">
+			<description>
+				Emitted when the state is entered. Add any state initialization to this signal handler.
+			</description>
+		</signal>
+		<signal name="state_exited">
+			<description>
+				Emitted when the state is exited. Add any state deinitialization to this signal handler.
+			</description>
+		</signal>
+		<signal name="state_ticked">
+			<param index="0" name="delta" type="float" />
+			<description>
+				Emitted when the state is ticked. Add state update logic to this signal handler.
+			</description>
+		</signal>
+	</signals>
 </class>

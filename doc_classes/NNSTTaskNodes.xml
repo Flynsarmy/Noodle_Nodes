@@ -18,8 +18,6 @@
 		<method name="send_event">
 			<return type="void" />
 			<param index="0" name="name" type="String" />
-			<param index="1" name="blackboard" type="Variant" />
-			<param index="2" name="delta" type="float" />
 			<description>
 				Sends an event to all active children of the current state in order, followed by their children and so on until the event is consumed. Events will trigger transitions and actions via emitted signals.
 			</description>
@@ -33,34 +31,4 @@
 			The current internal status of the node, useful for debugging and seeing how the execution progresses. The following choices are possible: "Inactive:0,Active:1".
 		</member>
 	</members>
-	<signals>
-		<signal name="state_check_enter_condition">
-			<param index="0" name="blackboard" type="Object" />
-			<param index="1" name="delta" type="float" />
-			<description>
-				Emitted when the the [method NNSTNode.on_enter_condition] check needs to be done. The signal must call the [method set_on_entered_condition] method with either [code]true[/code] or [code]false[/code] as the parameter to indicate if the state should be entered or not.
-			</description>
-		</signal>
-		<signal name="state_entered">
-			<param index="0" name="blackboard" type="Object" />
-			<param index="1" name="delta" type="float" />
-			<description>
-				Emitted when the state is entered. Add any state initialization to this signal handler.
-			</description>
-		</signal>
-		<signal name="state_exited">
-			<param index="0" name="blackboard" type="Object" />
-			<param index="1" name="delta" type="float" />
-			<description>
-				Emitted when the state is exited. Add any state deinitialization to this signal handler.
-			</description>
-		</signal>
-		<signal name="state_ticked">
-			<param index="0" name="blackboard" type="Object" />
-			<param index="1" name="delta" type="float" />
-			<description>
-				Emitted when the state is ticked. Add state update logic to this signal handler.
-			</description>
-		</signal>
-	</signals>
 </class>

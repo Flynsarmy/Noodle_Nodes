@@ -67,13 +67,13 @@ public:
 	virtual void on_input(const Ref<InputEvent> &event);
 	virtual void on_unhandled_input(const Ref<InputEvent> &event);
 	virtual void on_unhandled_key_input(const Ref<InputEvent> &event);
-	virtual void send_event(String name, Variant blackboard, float delta) {};
+	virtual void send_event(String name) {};
 
 	TypedArray<NNSTNode> _active_states;
-	virtual void _transition_in(Variant blackboard, float delta) {};
-	virtual void _handle_transition(NNSTNode *from_state, NNSTNode *to_state, Variant blackboard, float delta);
+	virtual void _transition_in() {};
+	virtual void _handle_transition(NNSTNode *from_state, NNSTNode *to_state);
 	virtual bool _can_transition_to(NNSTNode *from_state, NNSTNode *to_state);
-	virtual TypedArray<NNSTNode> _evaluate_child_activations(Variant blackboard, float delta);
+	virtual TypedArray<NNSTNode> _evaluate_child_activations();
 
 	GDVIRTUAL1(on_input, Ref<InputEvent>);
 	GDVIRTUAL1(on_unhandled_input, Ref<InputEvent>);

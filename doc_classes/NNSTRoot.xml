@@ -17,14 +17,16 @@
 		</method>
 		<method name="tick">
 			<return type="void" />
-			<param index="0" name="blackboard" type="Variant" />
-			<param index="1" name="delta" type="float" />
+			<param index="0" name="delta" type="float" />
 			<description>
 				The [method tick] method is used to update the State Tree state. You can provide any Godot variant type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. [code]blackboard[/code] and [code]delta[/code] are passed to the [method NNSTNodes.on_enter_state], [method NNSTNodes.on_exit_state], [method NNSTNodes.on_tick] and [method NNSTNodes.on_enter_condition] methods of the child nodes.
 			</description>
 		</method>
 	</methods>
 	<members>
+		<member name="blackboard" type="Dictionary" setter="set_blackboard" getter="get_blackboard" default="{}">
+			A dictionary to use for optional state data.
+		</member>
 		<member name="total_tick_usec" type="int" setter="set_total_tick_usec" getter="get_total_tick_usec" default="0">
 			The time to complete a tick in usec.
 		</member>

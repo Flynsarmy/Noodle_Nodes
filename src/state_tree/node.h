@@ -51,26 +51,26 @@ public:
 	// Handling functions.
 
 	virtual float evaluate();
-	virtual void send_event(String name, Variant blackboard, float delta) override;
-	virtual void transition_to(NodePath path_to_node, Variant blackboard, float delta);
+	virtual void send_event(String name) override;
+	virtual void transition_to(NodePath path_to_node);
 
-	virtual void _transition_in(Variant blackboard, float delta) override;
-	virtual void _transition_out(Variant blackboard, float delta);
+	virtual void _transition_in() override;
+	virtual void _transition_out();
 
-	virtual bool on_enter_condition(Variant blackboard, float delta);
-	virtual void on_enter_state(Variant blackboard, float delta);
-	virtual void on_exit_state(Variant blackboard, float delta);
-	virtual void on_tick(Variant blackboard, float delta);
+	virtual bool on_enter_condition();
+	virtual void on_enter_state();
+	virtual void on_exit_state();
+	virtual void on_tick(float delta);
 
-	GDVIRTUAL2R(bool, on_enter_condition, Variant, double);
-	GDVIRTUAL2(on_enter_state, Variant, double);
-	GDVIRTUAL2(on_exit_state, Variant, double);
-	GDVIRTUAL2(on_tick, Variant, double);
-	GDVIRTUAL3(transition_to, NodePath, Variant, double);
+	GDVIRTUAL0R(bool, on_enter_condition);
+	GDVIRTUAL0(on_enter_state);
+	GDVIRTUAL0(on_exit_state);
+	GDVIRTUAL1(on_tick, double);
+	GDVIRTUAL1(transition_to, NodePath);
 
 	// Godot virtuals.
 
-	// void _notification(int p_what);
+	void _notification(int p_what);
 };
 
 } //namespace godot

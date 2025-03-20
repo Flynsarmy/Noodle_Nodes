@@ -23,12 +23,17 @@ void NNSTNode::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_on_entered_condition"), &NNSTNode::get_is_on_entered_condition_true);
 	//ADD_PROPERTY(PropertyInfo(Variant::INT, "child_state_selection_rule", PROPERTY_HINT_ENUM, "OnEnterConditionMethod:0,UtilityScoring:1" ), "set_child_state_selection_rule","get_child_state_selection_rule");
 
-	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "blackboard", "delta"), &NNSTNode::transition_to);
+	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath"), &NNSTNode::transition_to);
 
-	GDVIRTUAL_BIND(on_enter_condition, "blackboard", "delta");
-	GDVIRTUAL_BIND(on_enter_state, "blackboard", "delta");
-	GDVIRTUAL_BIND(on_exit_state, "blackboard", "delta");
-	GDVIRTUAL_BIND(on_tick, "blackboard", "delta");
+	GDVIRTUAL_BIND(on_enter_condition);
+	GDVIRTUAL_BIND(on_enter_state);
+	GDVIRTUAL_BIND(on_exit_state);
+	GDVIRTUAL_BIND(on_tick, "delta");
+
+	ADD_SIGNAL(MethodInfo("state_check_enter_condition"));
+	ADD_SIGNAL(MethodInfo("state_entered"));
+	ADD_SIGNAL(MethodInfo("state_ticked", PropertyInfo(Variant::FLOAT, "delta")));
+	ADD_SIGNAL(MethodInfo("state_exited"));
 }
 
 // Constructor and destructor.
@@ -38,6 +43,7 @@ NNSTNode::NNSTNode() {
 	_evaluation_method = NNSTNodeEvaluationMethod::Multiply;
 	_score = 0.0;
 	_invert_score = false;
+	_root = nullptr;
 }
 
 NNSTNode::~NNSTNode() {
@@ -87,10 +93,10 @@ bool NNSTNode::get_is_on_entered_condition_true() const {
 
 // Handling functions.
 
-void NNSTNode::send_event(String name, Variant blackboard, float delta) {
+void NNSTNode::send_event(String name) {
 	for (unsigned int i = 0; i < _child_transitions.size(); i++) {
 		if (_child_transitions[i]->get_event_name() == name) {
-			transition_to(_child_transitions[i]->get_to().slice(1), blackboard, delta);
+			transition_to(_child_transitions[i]->get_to().slice(1));
 			return;
 		}
 	}
@@ -98,7 +104,7 @@ void NNSTNode::send_event(String name, Variant blackboard, float delta) {
 	for (unsigned int i = 0; i < _active_states.size(); i++) {
 		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
 		print_line("Checking ", stnode->get_name());
-		stnode->send_event(name, blackboard, delta);
+		stnode->send_event(name);
 	}
 }
 
@@ -188,12 +194,7 @@ float NNSTNode::evaluate() {
 	return _score;
 }
 
-void NNSTNode::transition_to(NodePath path_to_node, Variant blackboard, float delta) {
-	// if (_tree_root_node == nullptr) {
-	// 	return;
-	// }
-	// _tree_root_node->transition_to(path_to_node, blackboard, delta);
-
+void NNSTNode::transition_to(NodePath path_to_node) {
 	NNSTTaskNodes *parent = godot::Object::cast_to<NNSTTaskNodes>(get_parent());
 	if (!parent) {
 		return;
@@ -204,18 +205,18 @@ void NNSTNode::transition_to(NodePath path_to_node, Variant blackboard, float de
 		return;
 	}
 
-	parent->_handle_transition(this, to_state, blackboard, delta);
+	parent->_handle_transition(this, to_state);
 }
 
-void NNSTNode::_transition_in(Variant blackboard, float delta) {
+void NNSTNode::_transition_in() {
 	if (_active_states.size() > 0) {
 		return;
 	}
 
 	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
-	on_enter_state(blackboard, delta);
+	on_enter_state();
 
-	TypedArray<NNSTNode> new_active_states = _evaluate_child_activations(blackboard, delta);
+	TypedArray<NNSTNode> new_active_states = _evaluate_child_activations();
 
 	NNSTNode *cur_active_state;
 
@@ -224,7 +225,7 @@ void NNSTNode::_transition_in(Variant blackboard, float delta) {
 		cur_active_state = godot::Object::cast_to<NNSTNode>(_active_states[i]);
 
 		if (!new_active_states.has(cur_active_state)) {
-			cur_active_state->_transition_out(blackboard, delta);
+			cur_active_state->_transition_out();
 		}
 	}
 
@@ -233,54 +234,54 @@ void NNSTNode::_transition_in(Variant blackboard, float delta) {
 		cur_active_state = godot::Object::cast_to<NNSTNode>(new_active_states[i]);
 
 		if (!_active_states.has(new_active_states[i])) {
-			cur_active_state->_transition_in(blackboard, delta);
+			cur_active_state->_transition_in();
 		}
 	}
 
 	_active_states = new_active_states;
 };
 
-void NNSTNode::_transition_out(Variant blackboard, float delta) {
+void NNSTNode::_transition_out() {
 	if (_internal_status == 0) {
 		return;
 	}
 
 	for (int i = _active_states.size() - 1; i >= 0; i--) {
 		NNSTNode *cur_active_state = godot::Object::cast_to<NNSTNode>(_active_states[i]);
-		cur_active_state->_transition_out(blackboard, delta);
+		cur_active_state->_transition_out();
 	}
 
-	on_exit_state(blackboard, delta);
+	on_exit_state();
 	set_internal_status(ST_INTERNAL_STATUS_INACTIVE);
 	_active_states.clear();
 };
 
-bool NNSTNode::on_enter_condition(Variant blackboard, float delta) {
+bool NNSTNode::on_enter_condition() {
 	if (has_method("on_enter_condition")) {
-		return call("on_enter_condition", blackboard, delta);
+		return call("on_enter_condition");
 	}
-	emit_signal("state_check_enter_condition", blackboard, delta);
+	emit_signal("state_check_enter_condition");
 	return _is_on_entered_condition_true;
 }
 
-void NNSTNode::on_enter_state(Variant blackboard, float delta) {
-	call("on_enter_state", blackboard, delta);
-	emit_signal("state_entered", blackboard, delta);
+void NNSTNode::on_enter_state() {
+	call("on_enter_state");
+	emit_signal("state_entered");
 }
 
-void NNSTNode::on_exit_state(Variant blackboard, float delta) {
-	call("on_exit_state", blackboard, delta);
-	emit_signal("state_exited", blackboard, delta);
+void NNSTNode::on_exit_state() {
+	call("on_exit_state");
+	emit_signal("state_exited");
 }
 
-void NNSTNode::on_tick(Variant blackboard, float delta) {
-	call("on_tick", blackboard, delta);
-	emit_signal("state_ticked", blackboard, delta);
+void NNSTNode::on_tick(float delta) {
+	call("on_tick", delta);
+	emit_signal("state_ticked", delta);
 
 	for (unsigned int i = 0; i < _active_states.size(); i++) {
 		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
 
-		stnode->on_tick(blackboard, delta);
+		stnode->on_tick(delta);
 	}
 
 #ifdef DEBUG_ENABLED
@@ -289,3 +290,15 @@ void NNSTNode::on_tick(Variant blackboard, float delta) {
 }
 
 // Godot virtuals.
+
+void NNSTNode::_notification(int p_what) {
+	if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
+		if (!Engine::get_singleton()->is_editor_hint()) {
+			for (unsigned int i = 0; i < get_child_count(); ++i) {
+				if (NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(get_child(i))) {
+					stnode->set_root(get_root());
+				}
+			}
+		}
+	}
+}

@@ -13,7 +13,7 @@ func test_all_children_ticked() -> void:
 	_root.add_child(_parallel)
 	_parallel.add_child(_node1)
 	_parallel.add_child(_node2)
-	_root.tick(_root, 0.1)
+	_root.tick(0.1)
 
 	assert_eq(_parallel.internal_status, 1)
 	assert_eq(_node1.internal_status, 1)
@@ -24,7 +24,7 @@ func test_children_failing_condition_dont_tick() -> void:
 	var _parallel: NNSTParallel = NNSTParallel.new()
 	var _node1: NNSTNode = NNSTNode.new()
 	var _node2: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_fail.gd").new()
-	var blackboard: Dictionary = {
+	_root.blackboard = {
 		"on_enter_condition": 0,
 		"on_enter_state": 0,
 		"on_tick": 0,
@@ -34,7 +34,7 @@ func test_children_failing_condition_dont_tick() -> void:
 	_root.add_child(_parallel)
 	_parallel.add_child(_node1)
 	_parallel.add_child(_node2)
-	_root.tick(blackboard, 0.1)
+	_root.tick(0.1)
 
 	assert_eq(_parallel.internal_status, 1)
 	assert_eq(_node1.internal_status, 1)
@@ -46,7 +46,7 @@ func test_transitions_away_in_correct_order() -> void:
 	var _grandchild1: NNSTNode = load("res://test/unit/state_tree/node_on_call_logger.gd").new()
 	var _grandchild2: NNSTNode = load("res://test/unit/state_tree/node_on_call_logger.gd").new()
 	var _node: NNSTNode = load("res://test/unit/state_tree/node_on_call_logger.gd").new()
-	var blackboard: Array[String] = []
+	_root.blackboard['log'] = []
 
 	# - root
 	#   - parallel
@@ -64,15 +64,15 @@ func test_transitions_away_in_correct_order() -> void:
 	_grandchild2.name = '_grandchild2'
 	_node.name = '_node';
 
-	_root.tick(blackboard, 0.1)
-	blackboard = []
-	_parallel.transition_to(_parallel.get_path_to(_node), blackboard, 0.1)
+	_root.tick(0.1)
+	_root.blackboard['log'] = []
+	_parallel.transition_to(_parallel.get_path_to(_node))
 
 	assert_eq(_parallel.internal_status, 0)
 	assert_eq(_grandchild1.internal_status, 0)
 	assert_eq(_grandchild2.internal_status, 0)
 	assert_eq(_node.internal_status, 1)
-	assert_eq(blackboard, [
+	assert_eq(_root.blackboard['log'], [
 		"_grandchild2 on_exit_state",
 		"_grandchild1 on_exit_state",
 		"_parallel on_exit_state",
@@ -105,7 +105,7 @@ func test_parallel_branches_tick_correct_nodes() -> void:
 	_child2.add_child(_grandchild21)
 	_child2.add_child(_grandchild22)
 
-	_root.tick(_root, 0.1)
+	_root.tick(0.1)
 	assert_eq(_parallel.internal_status, 1)
 	assert_eq(_child1.internal_status, 1)
 	assert_eq(_grandchild11.internal_status, 1)

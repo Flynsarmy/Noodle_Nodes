@@ -15,6 +15,10 @@ using namespace godot;
 // Method binds.
 
 void NNSTRoot::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("set_blackboard", "blackboard"), &NNSTRoot::set_blackboard);
+	ClassDB::bind_method(D_METHOD("get_blackboard"), &NNSTRoot::get_blackboard);
+	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "blackboard", PROPERTY_HINT_DICTIONARY_TYPE), "set_blackboard", "get_blackboard");
+
 #ifdef DEBUG_ENABLED
 	ADD_SUBGROUP("Debugging", "");
 
@@ -23,7 +27,7 @@ void NNSTRoot::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "total_tick_usec", PROPERTY_HINT_NONE), "set_total_tick_usec", "get_total_tick_usec");
 #endif
 
-	ClassDB::bind_method(D_METHOD("tick", "blackboard", "delta"), &NNSTRoot::tick);
+	ClassDB::bind_method(D_METHOD("tick", "delta"), &NNSTRoot::tick);
 
 	// ClassDB::bind_method(D_METHOD("get_active_states"), &NNSTRoot::get_active_states);
 
@@ -40,6 +44,8 @@ NNSTRoot::NNSTRoot() {
 
 	_child_sensors.clear();
 	_num_child_sensors = 0;
+
+	_blackboard = Dictionary();
 }
 
 NNSTRoot::~NNSTRoot() {
@@ -57,13 +63,22 @@ uint64_t NNSTRoot::get_total_tick_usec() const {
 }
 #endif
 
-void NNSTRoot::tick(Variant blackboard, float delta) {
+void NNSTRoot::set_blackboard(Dictionary blackboard) {
+	_blackboard = blackboard;
+};
+Dictionary NNSTRoot::get_blackboard() const {
+	return _blackboard;
+};
+
+// Handling methods
+
+void NNSTRoot::tick(float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
 
 	if (_active_states.size() == 0) {
-		_transition_in(blackboard, delta);
+		_transition_in();
 	}
 
 	// Update the sensors.
@@ -82,7 +97,7 @@ void NNSTRoot::tick(Variant blackboard, float delta) {
 		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
 
 		stnode->set_root(this);
-		stnode->on_tick(blackboard, delta);
+		stnode->on_tick(delta);
 	}
 #ifdef DEBUG_ENABLED
 	_total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
@@ -90,21 +105,21 @@ void NNSTRoot::tick(Variant blackboard, float delta) {
 #endif
 }
 
-void NNSTRoot::send_event(String name, Variant blackboard, float delta) {
+void NNSTRoot::send_event(String name) {
 	for (unsigned int i = 0; i < _active_states.size(); i++) {
 		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
-		stnode->send_event(name, blackboard, delta);
+		stnode->send_event(name);
 	}
 }
 
-void NNSTRoot::_transition_in(Variant blackboard, float delta) {
+void NNSTRoot::_transition_in() {
 	if (_active_states.size() > 0) {
 		return;
 	}
 
 	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
 
-	TypedArray<NNSTNode> new_active_states = _evaluate_child_activations(blackboard, delta);
+	TypedArray<NNSTNode> new_active_states = _evaluate_child_activations();
 
 	NNSTNode *cur_active_state;
 
@@ -113,7 +128,7 @@ void NNSTRoot::_transition_in(Variant blackboard, float delta) {
 		cur_active_state = godot::Object::cast_to<NNSTNode>(_active_states[i]);
 
 		if (!new_active_states.has(cur_active_state)) {
-			cur_active_state->_transition_out(blackboard, delta);
+			cur_active_state->_transition_out();
 		}
 	}
 
@@ -122,7 +137,7 @@ void NNSTRoot::_transition_in(Variant blackboard, float delta) {
 		cur_active_state = godot::Object::cast_to<NNSTNode>(new_active_states[i]);
 
 		if (!_active_states.has(new_active_states[i])) {
-			cur_active_state->_transition_in(blackboard, delta);
+			cur_active_state->_transition_in();
 		}
 	}
 

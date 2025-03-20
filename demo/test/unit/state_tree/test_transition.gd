@@ -16,8 +16,8 @@ func test_state_transitions_successfully() -> void:
 	_transition.event_name = 'test'
 	_transition.to = _transition.get_path_to(_node2)
 
-	_root.tick(_root, 0.1)
-	_root.send_event('test', _root, 0.1)
+	_root.tick(0.1)
+	_root.send_event('test')
 
 	assert_eq(_node1.internal_status, 0)
 	assert_eq(_node2.internal_status, 1)
@@ -36,8 +36,8 @@ func test_events_are_case_sensitive() -> void:
 	_transition.event_name = 'test'
 	_transition.to = _transition.get_path_to(_node2)
 
-	_root.tick(_root, 0.1)
-	_root.send_event('Test', _root, 0.1)
+	_root.tick(0.1)
+	_root.send_event('Test')
 
 	assert_eq(_node1.internal_status, 1)
 	assert_eq(_node2.internal_status, 0)
@@ -55,8 +55,8 @@ func test_non_existant_event_does_nothing() -> void:
 	_transition.event_name = 'foo'
 	_transition.to = _transition.get_path_to(_node2)
 
-	_root.tick(_root, 0.1)
-	_root.send_event('test', _root, 0.1)
+	_root.tick(0.1)
+	_root.send_event('test')
 
 	assert_eq(_node1.internal_status, 1)
 	assert_eq(_node2.internal_status, 0)

@@ -17,8 +17,7 @@ public:
 	~NNSTParallel();
 
 	// Handling functions.
-	// virtual void evaluate_state_activations(TypedArray<NNSTTaskNodes> *nodes, Variant blackboard, float delta) override;
-	virtual TypedArray<NNSTNode> _evaluate_child_activations(Variant blackboard, float delta) override;
+	virtual TypedArray<NNSTNode> _evaluate_child_activations() override;
 };
 
 } //namespace godot

@@ -23,6 +23,7 @@ private:
 	bool _is_first_tick;
 
 	Variant _ai_context;
+	Dictionary _blackboard;
 
 protected:
 	static void _bind_methods();
@@ -31,18 +32,22 @@ public:
 	NNSTRoot();
 	~NNSTRoot();
 
-// Getters and setters for attributes.
+	// Getters and setters for attributes.
+
+	void set_blackboard(Dictionary blackboard);
+	Dictionary get_blackboard() const;
+
 #ifdef DEBUG_ENABLED
 	uint64_t get_total_tick_usec() const;
 	void set_total_tick_usec(uint64_t total_tick_usec);
 #endif
 
 	// Handling functions.
-	virtual void send_event(String name, Variant blackboard, float delta) override;
+	virtual void send_event(String name) override;
 
-	virtual void _transition_in(Variant blackboard, float delta) override;
+	virtual void _transition_in() override;
 
-	void tick(Variant blackboard, float delta);
+	void tick(float delta);
 
 	TypedArray<NNSensors> get_child_sensors() { return _child_sensors; };
 

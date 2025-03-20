@@ -21,15 +21,9 @@ void NNSTTaskNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_internal_status"), &NNSTTaskNodes::get_internal_status);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Inactive:0,Active:1"), "set_internal_status", "get_internal_status");
 
-	ClassDB::bind_method(D_METHOD("send_event", "name", "blackboard", "delta"), &NNSTTaskNodes::send_event);
+	ClassDB::bind_method(D_METHOD("send_event", "name"), &NNSTTaskNodes::send_event);
 
 	GDVIRTUAL_BIND(on_input, "event");
-	// GDVIRTUAL_BIND(transition_to, "path_to_node", "blackboard", "delta");
-
-	ADD_SIGNAL(MethodInfo("state_check_enter_condition", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
-	ADD_SIGNAL(MethodInfo("state_entered", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
-	ADD_SIGNAL(MethodInfo("state_ticked", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
-	ADD_SIGNAL(MethodInfo("state_exited", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
 }
 
 // Constructor and destructor.
@@ -114,12 +108,12 @@ void NNSTTaskNodes::on_unhandled_key_input(const Ref<InputEvent> &event) {
 /**
  * Called by a child state's transition_to() method. Transitions out of the old state and into the new.
  */
-void NNSTTaskNodes::_handle_transition(NNSTNode *from_state, NNSTNode *to_state, Variant blackboard, float delta) {
+void NNSTTaskNodes::_handle_transition(NNSTNode *from_state, NNSTNode *to_state) {
 	if (!_can_transition_to(from_state, to_state)) {
 		return;
 	}
 
-	from_state->_transition_out(blackboard, delta);
+	from_state->_transition_out();
 	// Remove the from_state from our list of active states
 	for (unsigned int i = 0; i < _active_states.size(); i++) {
 		if (Object::cast_to<NNSTNode>(_active_states[i]) == from_state) {
@@ -128,7 +122,7 @@ void NNSTTaskNodes::_handle_transition(NNSTNode *from_state, NNSTNode *to_state,
 		}
 	}
 
-	to_state->_transition_in(blackboard, delta);
+	to_state->_transition_in();
 	_active_states.push_back(to_state);
 }
 
@@ -154,7 +148,7 @@ bool NNSTTaskNodes::_can_transition_to(NNSTNode *from_state, NNSTNode *to_state)
  *
  * Only activates up to 1 child for each node (CompoundState).
  */
-TypedArray<NNSTNode> NNSTTaskNodes::_evaluate_child_activations(Variant blackboard, float delta) {
+TypedArray<NNSTNode> NNSTTaskNodes::_evaluate_child_activations() {
 	TypedArray<NNSTNode> nodes;
 
 	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
@@ -165,7 +159,7 @@ TypedArray<NNSTNode> NNSTTaskNodes::_evaluate_child_activations(Variant blackboa
 				continue;
 			}
 
-			if (!stnode->on_enter_condition(blackboard, delta)) {
+			if (!stnode->on_enter_condition()) {
 				continue;
 			}
 
