@@ -169,14 +169,13 @@ void NNSTRoot::_notification(int p_what) {
 		if (Engine::get_singleton()->is_editor_hint())
 			return;
 
-		for (unsigned int i = 0; i < get_child_count(); ++i) {
-			if (NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(get_child(i))) {
-				stnode->set_root(this);
-			}
+		for (unsigned int i = 0; i < _num_child_states; i++) {
+			NNSTNode *stnode = _child_states[i];
+			stnode->set_root(this);
 		}
 
 		_child_sensors.clear();
-		for (unsigned int i = 0; i < get_child_count(); ++i) {
+		for (unsigned int i = 0; i < get_child_count(); i++) {
 			if (NNSensors *sensor = godot::Object::cast_to<NNSensors>(get_child(i))) {
 				_child_sensors.push_back(sensor);
 			}

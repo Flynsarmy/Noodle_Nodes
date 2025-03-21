@@ -55,10 +55,9 @@ void NNSTNode::set_root(NNSTRoot *p_root) {
 	_root = p_root;
 
 	if (!Engine::get_singleton()->is_editor_hint()) {
-		for (unsigned int i = 0; i < get_child_count(); ++i) {
-			if (NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(get_child(i))) {
-				stnode->set_root(p_root);
-			}
+		for (unsigned int i = 0; i < _num_child_states; ++i) {
+			NNSTNode *stnode = _child_states[i];
+			stnode->set_root(p_root);
 		}
 	}
 }

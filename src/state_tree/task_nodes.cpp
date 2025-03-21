@@ -59,20 +59,6 @@ int NNSTTaskNodes::get_child_state_selection_rule() const {
 	return _child_state_selection_rule;
 }
 
-/**
-Dictionary NNSTTaskNodes::get_child_nodes_as_dictionary(NNSTTaskNodes* tree_root_node ) {
-	_tree_root_node = tree_root_node;
-	Dictionary results;
-	for( int i = 0; i < get_child_count(); ++i ) {
-		if( NNSTTaskNodes* stnode = godot::Object::cast_to<NNSTTaskNodes>(get_child(i)) ) {
-			results[stnode->get_name()] = stnode;
-			results.merge( stnode->get_child_nodes_as_dictionary(tree_root_node) );
-		}
-	}
-	return results;
-}
-/**/
-
 void NNSTTaskNodes::set_internal_status(int internal_status) {
 #ifdef DEBUG_ENABLED
 	_last_visited_timestamp = godot::Time::get_singleton()->get_ticks_usec();
