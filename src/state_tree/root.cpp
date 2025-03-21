@@ -77,7 +77,7 @@ void NNSTRoot::tick(float delta) {
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
 
-	if (_active_states.size() == 0) {
+	if (_num_active_states == 0) {
 		_transition_in();
 	}
 
@@ -93,8 +93,8 @@ void NNSTRoot::tick(float delta) {
 
 	// If there are active states, tick their custom method from the
 	// root to the active leaf.
-	for (unsigned int i = 0; i < _active_states.size(); i++) {
-		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
+	for (unsigned int i = 0; i < _num_active_states; i++) {
+		NNSTNode *stnode = _active_states[i];
 
 		stnode->set_root(this);
 		stnode->on_tick(delta);
@@ -106,42 +106,58 @@ void NNSTRoot::tick(float delta) {
 }
 
 void NNSTRoot::send_event(String name) {
-	for (unsigned int i = 0; i < _active_states.size(); i++) {
-		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
+	for (unsigned int i = 0; i < _num_active_states; i++) {
+		NNSTNode *stnode = _active_states[i];
 		stnode->send_event(name);
 	}
 }
 
 void NNSTRoot::_transition_in() {
-	if (_active_states.size() > 0) {
+	if (_num_active_states > 0) {
 		return;
 	}
 
 	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
 
-	TypedArray<NNSTNode> new_active_states = _evaluate_child_activations();
+	std::vector<NNSTNode *> new_active_states;
+	_evaluate_child_activations(new_active_states);
 
 	NNSTNode *cur_active_state;
 
 	// do on_exit for any states no longer active
-	for (unsigned int i = 0; i < _active_states.size(); ++i) {
-		cur_active_state = godot::Object::cast_to<NNSTNode>(_active_states[i]);
+	for (unsigned int i = 0; i < _num_active_states; ++i) {
+		cur_active_state = _active_states[i];
 
-		if (!new_active_states.has(cur_active_state)) {
+		bool found = false;
+		for (unsigned int j = 0; j < new_active_states.size(); ++j) {
+			if (new_active_states[j] == cur_active_state) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
 			cur_active_state->_transition_out();
 		}
 	}
 
 	// And then enter the new states.
 	for (unsigned int i = 0; i < new_active_states.size(); ++i) {
-		cur_active_state = godot::Object::cast_to<NNSTNode>(new_active_states[i]);
+		cur_active_state = new_active_states[i];
 
-		if (!_active_states.has(new_active_states[i])) {
+		bool found = false;
+		for (unsigned int j = 0; j < _num_active_states; ++j) {
+			if (_active_states[j] == cur_active_state) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
 			cur_active_state->_transition_in();
 		}
 	}
 
 	_active_states = new_active_states;
+	_num_active_states = _active_states.size();
 };
 
 // Godot virtuals.

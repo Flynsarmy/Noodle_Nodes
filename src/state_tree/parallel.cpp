@@ -25,8 +25,8 @@ NNSTParallel::~NNSTParallel() {
  *
  * Only activates up to 1 child for each node (CompoundState).
  */
-TypedArray<NNSTNode> NNSTParallel::_evaluate_child_activations() {
-	TypedArray<NNSTNode> nodes;
+void NNSTParallel::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) {
+	// std::vector<NNSTNode *> nodes;
 
 	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
@@ -68,7 +68,7 @@ TypedArray<NNSTNode> NNSTParallel::_evaluate_child_activations() {
 		}
 	}
 
-	return nodes;
+	// return nodes;
 }
 
 // Godot virtuals.

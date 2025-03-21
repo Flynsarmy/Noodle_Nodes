@@ -103,7 +103,6 @@ void NNSTNode::send_event(String name) {
 
 	for (unsigned int i = 0; i < _active_states.size(); i++) {
 		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
-		print_line("Checking ", stnode->get_name());
 		stnode->send_event(name);
 	}
 }
@@ -209,36 +208,52 @@ void NNSTNode::transition_to(NodePath path_to_node) {
 }
 
 void NNSTNode::_transition_in() {
-	if (_active_states.size() > 0) {
+	if (_num_active_states > 0) {
 		return;
 	}
 
 	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
 	on_enter_state();
 
-	TypedArray<NNSTNode> new_active_states = _evaluate_child_activations();
+	std::vector<NNSTNode *> new_active_states;
+	_evaluate_child_activations(new_active_states);
 
 	NNSTNode *cur_active_state;
 
 	// do on_exit for any states no longer active
-	for (unsigned int i = 0; i < _active_states.size(); ++i) {
-		cur_active_state = godot::Object::cast_to<NNSTNode>(_active_states[i]);
+	for (unsigned int i = 0; i < _num_active_states; ++i) {
+		cur_active_state = _active_states[i];
 
-		if (!new_active_states.has(cur_active_state)) {
+		bool found = false;
+		for (unsigned int j = 0; j < new_active_states.size(); ++j) {
+			if (new_active_states[j] == cur_active_state) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
 			cur_active_state->_transition_out();
 		}
 	}
 
 	// And then enter the new states.
 	for (unsigned int i = 0; i < new_active_states.size(); ++i) {
-		cur_active_state = godot::Object::cast_to<NNSTNode>(new_active_states[i]);
+		cur_active_state = new_active_states[i];
 
-		if (!_active_states.has(new_active_states[i])) {
+		bool found = false;
+		for (unsigned int j = 0; j < _num_active_states; ++j) {
+			if (_active_states[j] == cur_active_state) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
 			cur_active_state->_transition_in();
 		}
 	}
 
 	_active_states = new_active_states;
+	_num_active_states = _active_states.size();
 };
 
 void NNSTNode::_transition_out() {
@@ -246,8 +261,8 @@ void NNSTNode::_transition_out() {
 		return;
 	}
 
-	for (int i = _active_states.size() - 1; i >= 0; i--) {
-		NNSTNode *cur_active_state = godot::Object::cast_to<NNSTNode>(_active_states[i]);
+	for (int i = _num_active_states - 1; i >= 0; i--) {
+		NNSTNode *cur_active_state = _active_states[i];
 		cur_active_state->_transition_out();
 	}
 
@@ -278,8 +293,8 @@ void NNSTNode::on_tick(float delta) {
 	call("on_tick", delta);
 	emit_signal("state_ticked", delta);
 
-	for (unsigned int i = 0; i < _active_states.size(); i++) {
-		NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(_active_states[i]);
+	for (unsigned int i = 0; i < _num_active_states; i++) {
+		NNSTNode *stnode = _active_states[i];
 
 		stnode->on_tick(delta);
 	}
@@ -294,10 +309,9 @@ void NNSTNode::on_tick(float delta) {
 void NNSTNode::_notification(int p_what) {
 	if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
 		if (!Engine::get_singleton()->is_editor_hint()) {
-			for (unsigned int i = 0; i < get_child_count(); ++i) {
-				if (NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(get_child(i))) {
-					stnode->set_root(get_root());
-				}
+			for (unsigned int i = 0; i < _num_child_states; ++i) {
+				NNSTNode *stnode = _child_states[i];
+				stnode->set_root(get_root());
 			}
 		}
 	}

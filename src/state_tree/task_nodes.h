@@ -31,6 +31,9 @@ protected:
 	std::vector<NNSTTransition *> _child_transitions;
 	unsigned int _num_child_transitions;
 
+	std::vector<NNSTNode *> _active_states;
+	unsigned int _num_active_states;
+
 #ifdef DEBUG_ENABLED
 	uint64_t _last_evaluated_timestamp;
 	uint64_t _last_visited_timestamp;
@@ -55,6 +58,8 @@ public:
 	void set_internal_status(int internal_status);
 	int get_internal_status() const;
 
+	int get_num_active_child_states() const { return _num_active_states; };
+
 	//inline virtual bool get_is_leaf() const { return false; };
 
 	enum NNSTNodeChildStateSelectionRule {
@@ -69,11 +74,10 @@ public:
 	virtual void on_unhandled_key_input(const Ref<InputEvent> &event);
 	virtual void send_event(String name) {};
 
-	TypedArray<NNSTNode> _active_states;
 	virtual void _transition_in() {};
 	virtual void _handle_transition(NNSTNode *from_state, NNSTNode *to_state);
 	virtual bool _can_transition_to(NNSTNode *from_state, NNSTNode *to_state);
-	virtual TypedArray<NNSTNode> _evaluate_child_activations();
+	virtual void _evaluate_child_activations(std::vector<NNSTNode *> &nodes);
 
 	GDVIRTUAL1(on_input, Ref<InputEvent>);
 	GDVIRTUAL1(on_unhandled_input, Ref<InputEvent>);

@@ -15,6 +15,8 @@ void NNSTTaskNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_child_state_selection_rule"), &NNSTTaskNodes::get_child_state_selection_rule);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "child_state_selection_rule", PROPERTY_HINT_ENUM, "OnEnterConditionMethod:0,UtilityScoring:1"), "set_child_state_selection_rule", "get_child_state_selection_rule");
 
+	ClassDB::bind_method(D_METHOD("get_num_active_child_states"), &NNSTTaskNodes::get_num_active_child_states);
+
 	ADD_SUBGROUP("Debugging", "");
 
 	ClassDB::bind_method(D_METHOD("set_internal_status", "internal_status"), &NNSTTaskNodes::set_internal_status);
@@ -36,6 +38,7 @@ NNSTTaskNodes::NNSTTaskNodes() {
 	_num_child_states = 0;
 	_num_child_considerations = 0;
 	_num_child_transitions = 0;
+	_num_active_states = 0;
 
 #ifdef DEBUG_ENABLED
 	_last_evaluated_timestamp = 0;
@@ -115,15 +118,17 @@ void NNSTTaskNodes::_handle_transition(NNSTNode *from_state, NNSTNode *to_state)
 
 	from_state->_transition_out();
 	// Remove the from_state from our list of active states
-	for (unsigned int i = 0; i < _active_states.size(); i++) {
-		if (Object::cast_to<NNSTNode>(_active_states[i]) == from_state) {
-			_active_states.remove_at(i);
+	for (unsigned int i = 0; i < _num_active_states; i++) {
+		if (_active_states[i] == from_state) {
+			_active_states.erase(_active_states.begin() + i);
+			_num_active_states--;
 			break;
 		}
 	}
 
 	to_state->_transition_in();
 	_active_states.push_back(to_state);
+	_num_active_states++;
 }
 
 bool NNSTTaskNodes::_can_transition_to(NNSTNode *from_state, NNSTNode *to_state) {
@@ -148,8 +153,8 @@ bool NNSTTaskNodes::_can_transition_to(NNSTNode *from_state, NNSTNode *to_state)
  *
  * Only activates up to 1 child for each node (CompoundState).
  */
-TypedArray<NNSTNode> NNSTTaskNodes::_evaluate_child_activations() {
-	TypedArray<NNSTNode> nodes;
+void NNSTTaskNodes::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) {
+	// std::vector<NNSTNode *> nodes;
 
 	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
@@ -194,7 +199,7 @@ TypedArray<NNSTNode> NNSTTaskNodes::_evaluate_child_activations() {
 		}
 	}
 
-	return nodes;
+	// return nodes;
 }
 
 void NNSTTaskNodes::_input(const Ref<InputEvent> &p_event) {
