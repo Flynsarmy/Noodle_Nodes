@@ -58,8 +58,6 @@ public:
 	void set_internal_status(int internal_status);
 	int get_internal_status() const;
 
-	int get_num_active_child_states() const { return _num_active_states; };
-
 	//inline virtual bool get_is_leaf() const { return false; };
 
 	enum NNSTNodeChildStateSelectionRule {

@@ -15,6 +15,20 @@
 				See [method Node._input]. The [member internal_status] property must also be set to `Active` for this function to fire.
 			</description>
 		</method>
+		<method name="on_unhandled_input" qualifiers="virtual">
+			<return type="void" />
+			<param index="0" name="event" type="InputEvent" />
+			<description>
+				See [method Node._unhandled_input]. The [member internal_status] property must also be set to `Active` for this function to fire.
+			</description>
+		</method>
+		<method name="on_unhandled_key_input" qualifiers="virtual">
+			<return type="void" />
+			<param index="0" name="event" type="InputEvent" />
+			<description>
+				See [method Node._unhandled_key_input]. The [member internal_status] property must also be set to `Active` for this function to fire.
+			</description>
+		</method>
 		<method name="send_event">
 			<return type="void" />
 			<param index="0" name="name" type="String" />

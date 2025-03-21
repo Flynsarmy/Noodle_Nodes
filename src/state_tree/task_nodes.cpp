@@ -15,8 +15,6 @@ void NNSTTaskNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_child_state_selection_rule"), &NNSTTaskNodes::get_child_state_selection_rule);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "child_state_selection_rule", PROPERTY_HINT_ENUM, "OnEnterConditionMethod:0,UtilityScoring:1"), "set_child_state_selection_rule", "get_child_state_selection_rule");
 
-	ClassDB::bind_method(D_METHOD("get_num_active_child_states"), &NNSTTaskNodes::get_num_active_child_states);
-
 	ADD_SUBGROUP("Debugging", "");
 
 	ClassDB::bind_method(D_METHOD("set_internal_status", "internal_status"), &NNSTTaskNodes::set_internal_status);
@@ -26,6 +24,8 @@ void NNSTTaskNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("send_event", "name"), &NNSTTaskNodes::send_event);
 
 	GDVIRTUAL_BIND(on_input, "event");
+	GDVIRTUAL_BIND(on_unhandled_input, "event")
+	GDVIRTUAL_BIND(on_unhandled_key_input, "event")
 }
 
 // Constructor and destructor.
