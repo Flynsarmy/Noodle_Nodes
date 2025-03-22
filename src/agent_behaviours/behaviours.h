@@ -32,6 +32,7 @@ public:
 	NNBehaviours() {
 		_score = 0.0f;
 		_evaluation_method = 0;
+		_evaluation_method = 4;
 #ifdef DEBUG_ENABLED
 		_last_evaluated_timestamp = 0;
 		_last_visited_timestamp = 0;
