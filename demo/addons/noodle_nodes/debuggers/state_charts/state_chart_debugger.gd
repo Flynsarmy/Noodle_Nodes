@@ -51,7 +51,7 @@ func _process(delta: float) -> void:
 
 func _collect_active_states(root: NNSTNodes, parent: TreeItem):
 	for child in root.get_children():
-		if child is NNSTNodes:
+		if child is NNSTTaskNodes:
 			if child.internal_status == 1 and child.is_enabled:
 				var state_item: TreeItem = _tree.create_item(parent)
 				state_item.set_text(0, child.name)
