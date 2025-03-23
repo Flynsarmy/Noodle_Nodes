@@ -5,7 +5,7 @@ extends GutTest
 
 ## Confirm on_* methods are called when they should be
 func test_all_children_ticked() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _parallel: NNSTParallel = NNSTParallel.new()
 	var _node1: NNSTNode = NNSTNode.new()
 	var _node2: NNSTNode = NNSTNode.new()
@@ -20,7 +20,7 @@ func test_all_children_ticked() -> void:
 	assert_eq(_node2.internal_status, 1)
 
 func test_children_failing_condition_dont_tick() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _parallel: NNSTParallel = NNSTParallel.new()
 	var _node1: NNSTNode = NNSTNode.new()
 	var _node2: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_fail.gd").new()
@@ -41,7 +41,7 @@ func test_children_failing_condition_dont_tick() -> void:
 	assert_eq(_node2.internal_status, 0)
 
 func test_transitions_away_in_correct_order() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _parallel: NNSTParallel = load("res://test/unit/state_tree/parallel_on_call_logger.gd").new()
 	var _grandchild1: NNSTNode = load("res://test/unit/state_tree/node_on_call_logger.gd").new()
 	var _grandchild2: NNSTNode = load("res://test/unit/state_tree/node_on_call_logger.gd").new()
@@ -80,7 +80,7 @@ func test_transitions_away_in_correct_order() -> void:
 	])
 
 func test_parallel_branches_tick_correct_nodes() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _parallel: NNSTParallel = NNSTParallel.new()
 	var _child1: NNSTNode = NNSTNode.new()
 	var _grandchild11: NNSTNode = NNSTNode.new()

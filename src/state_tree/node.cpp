@@ -55,7 +55,7 @@ void NNSTNode::set_root(NNSTRoot *p_root) {
 	_root = p_root;
 
 	if (!Engine::get_singleton()->is_editor_hint()) {
-		for (unsigned int i = 0; i < _num_child_states; ++i) {
+		for (unsigned int i = 0; i < _num_child_states; i++) {
 			NNSTNode *stnode = _child_states[i];
 			stnode->set_root(p_root);
 		}
@@ -121,12 +121,12 @@ float NNSTNode::evaluate() {
 	}
 	float child_score = 0.0;
 
-	//for( int i = 0; i < num_children; ++i ) {
+	//for( int i = 0; i < num_children; i++ ) {
 	//    Node* node = get_child(i);
 	//    if( node == nullptr ) continue;
 	//    NNConsiderations* considerationNode = godot::Object::cast_to<NNConsiderations>(node);
 	//    if( considerationNode == nullptr ) continue;
-	for (unsigned int i = 0; i < _num_child_considerations; ++i) {
+	for (unsigned int i = 0; i < _num_child_considerations; i++) {
 		NNConsiderations *considerationNode = _child_considerations[i];
 		if (!considerationNode->get_is_enabled())
 			continue;
@@ -211,8 +211,13 @@ void NNSTNode::_transition_in() {
 		return;
 	}
 
-	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
-	on_enter_state();
+	// This method is called when the child list changes. If we were already
+	// active but had no active children, we don't want to run on_enter_state()
+	// again.
+	if (_internal_status != ST_INTERNAL_STATUS_ACTIVE) {
+		set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
+		on_enter_state();
+	}
 
 	std::vector<NNSTNode *> new_active_states;
 	_evaluate_child_activations(new_active_states);
@@ -220,11 +225,11 @@ void NNSTNode::_transition_in() {
 	NNSTNode *cur_active_state;
 
 	// do on_exit for any states no longer active
-	for (unsigned int i = 0; i < _num_active_states; ++i) {
+	for (unsigned int i = 0; i < _num_active_states; i++) {
 		cur_active_state = _active_states[i];
 
 		bool found = false;
-		for (unsigned int j = 0; j < new_active_states.size(); ++j) {
+		for (unsigned int j = 0; j < new_active_states.size(); j++) {
 			if (new_active_states[j] == cur_active_state) {
 				found = true;
 				break;
@@ -236,17 +241,18 @@ void NNSTNode::_transition_in() {
 	}
 
 	// And then enter the new states.
-	for (unsigned int i = 0; i < new_active_states.size(); ++i) {
+	for (unsigned int i = 0; i < new_active_states.size(); i++) {
 		cur_active_state = new_active_states[i];
 
 		bool found = false;
-		for (unsigned int j = 0; j < _num_active_states; ++j) {
+		for (unsigned int j = 0; j < _num_active_states; j++) {
 			if (_active_states[j] == cur_active_state) {
 				found = true;
 				break;
 			}
 		}
 		if (!found) {
+			cur_active_state->set_root(get_root());
 			cur_active_state->_transition_in();
 		}
 	}
@@ -306,12 +312,23 @@ void NNSTNode::on_tick(float delta) {
 // Godot virtuals.
 
 void NNSTNode::_notification(int p_what) {
-	if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
-		if (!Engine::get_singleton()->is_editor_hint()) {
-			for (unsigned int i = 0; i < _num_child_states; ++i) {
-				NNSTNode *stnode = _child_states[i];
-				stnode->set_root(get_root());
-			}
+	NNSTTaskNodes::_notification(p_what);
+
+	if (p_what == NOTIFICATION_READY || p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
+		if (Engine::get_singleton()->is_editor_hint()) {
+			return;
+		}
+
+		for (unsigned int i = 0; i < _num_child_states; i++) {
+			NNSTNode *stnode = _child_states[i];
+			stnode->set_root(get_root());
+		}
+
+		// This will do nothing if we already have an active child. We want to
+		// call it on child order changed incase the root has no active children
+		// when another child gets added.
+		if (_internal_status == ST_INTERNAL_STATUS_ACTIVE) {
+			_transition_in();
 		}
 	}
 }

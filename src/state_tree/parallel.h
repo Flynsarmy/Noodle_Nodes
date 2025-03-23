@@ -17,6 +17,7 @@ public:
 	~NNSTParallel();
 
 	// Handling functions.
+	virtual void _transition_in() override;
 	virtual void _evaluate_child_activations(std::vector<NNSTNode *> &nodes) override;
 };
 

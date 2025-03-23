@@ -125,7 +125,7 @@ void NNSTRoot::_transition_in() {
 	NNSTNode *cur_active_state;
 
 	// do on_exit for any states no longer active
-	for (unsigned int i = 0; i < _num_active_states; ++i) {
+	for (unsigned int i = 0; i < _num_active_states; i++) {
 		cur_active_state = _active_states[i];
 
 		bool found = false;
@@ -141,17 +141,18 @@ void NNSTRoot::_transition_in() {
 	}
 
 	// And then enter the new states.
-	for (unsigned int i = 0; i < new_active_states.size(); ++i) {
+	for (unsigned int i = 0; i < new_active_states.size(); i++) {
 		cur_active_state = new_active_states[i];
 
 		bool found = false;
-		for (unsigned int j = 0; j < _num_active_states; ++j) {
+		for (unsigned int j = 0; j < _num_active_states; j++) {
 			if (_active_states[j] == cur_active_state) {
 				found = true;
 				break;
 			}
 		}
 		if (!found) {
+			cur_active_state->set_root(this);
 			cur_active_state->_transition_in();
 		}
 	}
@@ -185,6 +186,11 @@ void NNSTRoot::_notification(int p_what) {
 #ifdef DEBUG_ENABLED
 		NNDebuggerOverlay::get_singleton()->register_state_tree(this->get_instance_id());
 #endif
+
+		// This will do nothing if we already have an active child. We want to
+		// call it on child order changed incase the root has no active children
+		// when another child gets added.
+		_transition_in();
 
 		return;
 	}

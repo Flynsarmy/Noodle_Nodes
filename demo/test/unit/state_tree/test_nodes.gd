@@ -3,16 +3,29 @@ extends GutTest
 @warning_ignore('unused_parameter')
 @warning_ignore('return_value_discarded')
 
-func test_internal_status_inactive_before_tick() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+## Confirms a child's state is set to active before tick() when the
+## root is added to the tree with child already included.
+func test_internal_state_active_before_tick() -> void:
+	var _root: NNSTRoot = NNSTRoot.new()
 	var _child: NNSTNode = NNSTNode.new()
 	_root.add_child(_child)
 
-	assert_eq(_root.internal_status, 0)
-	assert_eq(_child.internal_status, 0)
+	add_child_autofree(_root)
+	assert_eq(_root.internal_status, 1)
+	assert_eq(_child.internal_status, 1)
+
+## Confirms a child's state is set to active before tick() when the
+## child is added after root is already in the tree.
+func test_child_internal_status_active_before_tick_with_root_in_tree() -> void:
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
+	var _child: NNSTNode = NNSTNode.new()
+	_root.add_child(_child)
+
+	assert_eq(_root.internal_status, 1)
+	assert_eq(_child.internal_status, 1)
 
 func test_internal_status_active_after_tick() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = NNSTNode.new()
 	_root.add_child(_child)
 
@@ -21,7 +34,7 @@ func test_internal_status_active_after_tick() -> void:
 	assert_eq(_child.internal_status, 1)
 
 func test_internal_status_inactive_on_enter_condition_fail() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_fail.gd").new()
 	_root.blackboard = {
 		"on_enter_condition": 0,
@@ -36,7 +49,7 @@ func test_internal_status_inactive_on_enter_condition_fail() -> void:
 	assert_eq(_child.internal_status, 0)
 
 func test_internal_status_active_only_on_first_child_of_non_parallel_state() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child1: NNSTNode = NNSTNode.new()
 	var _child2: NNSTNode = NNSTNode.new()
 
@@ -49,7 +62,7 @@ func test_internal_status_active_only_on_first_child_of_non_parallel_state() -> 
 	assert_eq(_child2.internal_status, 0)
 
 func test_internal_status_updates_on_transition() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child1: NNSTNode = NNSTNode.new()
 	var _child2: NNSTNode = NNSTNode.new()
 
@@ -63,7 +76,7 @@ func test_internal_status_updates_on_transition() -> void:
 	assert_eq(_child2.internal_status, 1)
 
 func test_internal_status_active_on_grandchild() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = NNSTNode.new()
 	var _grandchild: NNSTNode = NNSTNode.new()
 
@@ -76,13 +89,12 @@ func test_internal_status_active_on_grandchild() -> void:
 	assert_eq(_grandchild.internal_status, 1)
 
 func test_node_methods_called_in_correct_order() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
-	var _node: NNSTNode = autofree(load("res://test/unit/state_tree/node_on_call_logger.gd").new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	_root.blackboard['log'] = []
 
-	var _child1: NNSTNode = _node.duplicate()
-	var _child2: NNSTNode = _node.duplicate()
-	var _grandchild: NNSTNode = _node.duplicate()
+	var _child1: NNSTNode = autofree(load("res://test/unit/state_tree/node_on_call_logger.gd").new())
+	var _child2: NNSTNode = autofree(load("res://test/unit/state_tree/node_on_call_logger.gd").new())
+	var _grandchild: NNSTNode = autofree(load("res://test/unit/state_tree/node_on_call_logger.gd").new())
 	_child1.name = '_child1'
 	_child2.name = '_child2'
 	_grandchild.name = '_grandchild'
@@ -92,6 +104,7 @@ func test_node_methods_called_in_correct_order() -> void:
 
 	# Activation order
 	_root.tick(0.1)
+
 	assert_eq(_root.blackboard['log'], [
 		"_child1 on_enter_condition",
 		"_child1 on_enter_state",

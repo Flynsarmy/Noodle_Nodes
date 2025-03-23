@@ -5,7 +5,7 @@ extends GutTest
 
 ## Confirm on_* methods are called when they should be
 func test_on_method_state_calls() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
 	_root.blackboard = {
 		"on_enter_condition": 0,
@@ -29,7 +29,7 @@ func test_on_method_state_calls() -> void:
 
 ## No on_* methods should fire if on_enter_condition returns false
 func test_on_enter_condition_fail_checks() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_fail.gd").new()
 	_root.blackboard = {
 		"on_enter_condition": 0,
@@ -40,19 +40,20 @@ func test_on_enter_condition_fail_checks() -> void:
 
 	_root.add_child(_child)
 	_root.tick(0.1)
-	assert_eq(_root.blackboard['on_enter_condition'], 1)
-	assert_eq(_root.blackboard['on_tick'], 0)
-	assert_eq(_root.blackboard['on_enter_state'], 0)
-	assert_eq(_root.blackboard['on_exit_state'], 0)
-
-	_root.tick(0.1)
+	# root will have tried entering on ready. tick tries again.
 	assert_eq(_root.blackboard['on_enter_condition'], 2)
 	assert_eq(_root.blackboard['on_tick'], 0)
 	assert_eq(_root.blackboard['on_enter_state'], 0)
 	assert_eq(_root.blackboard['on_exit_state'], 0)
 
+	_root.tick(0.1)
+	assert_eq(_root.blackboard['on_enter_condition'], 3)
+	assert_eq(_root.blackboard['on_tick'], 0)
+	assert_eq(_root.blackboard['on_enter_state'], 0)
+	assert_eq(_root.blackboard['on_exit_state'], 0)
+
 func test_grandchildren_on_method_calls() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
 	var _grandchild: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_success.gd").new()
 	_root.blackboard = {
@@ -77,7 +78,7 @@ func test_grandchildren_on_method_calls() -> void:
 	assert_eq(_root.blackboard['on_exit_state'], 0)
 
 func test_get_root_works_when_child_changed() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = NNSTNode.new()
 	var _grandchild: NNSTNode = NNSTNode.new()
 
@@ -88,7 +89,7 @@ func test_get_root_works_when_child_changed() -> void:
 	assert_eq(_grandchild.get_root(), _root)
 
 func test_get_root_works_when_grandchild_changed() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = NNSTNode.new()
 	var _grandchild: NNSTNode = NNSTNode.new()
 

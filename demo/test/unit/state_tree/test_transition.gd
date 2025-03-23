@@ -4,7 +4,7 @@ extends GutTest
 @warning_ignore('return_value_discarded')
 
 func test_state_transitions_successfully() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _node1: NNSTNode = NNSTNode.new()
 	var _node2: NNSTNode = NNSTNode.new()
 	var _transition: NNSTTransition = NNSTTransition.new()
@@ -24,7 +24,7 @@ func test_state_transitions_successfully() -> void:
 
 
 func test_events_are_case_sensitive() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _node1: NNSTNode = NNSTNode.new()
 	var _node2: NNSTNode = NNSTNode.new()
 	var _transition: NNSTTransition = NNSTTransition.new()
@@ -43,7 +43,7 @@ func test_events_are_case_sensitive() -> void:
 	assert_eq(_node2.internal_status, 0)
 
 func test_non_existant_event_does_nothing() -> void:
-	var _root: NNSTRoot = autofree(NNSTRoot.new())
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _node1: NNSTNode = NNSTNode.new()
 	var _node2: NNSTNode = NNSTNode.new()
 	var _transition: NNSTTransition = NNSTTransition.new()
