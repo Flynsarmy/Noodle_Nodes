@@ -8,7 +8,7 @@
 	<tutorials>
 	</tutorials>
 	<members>
-		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="0">
+		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="4">
 		</member>
 		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
 			The score for the behaviour after the behaviour has evaluated its considerations.

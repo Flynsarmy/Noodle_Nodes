@@ -1,15 +1,15 @@
 #pragma once
 
+#include "branch_nodes.h"
 #include "node.h"
-#include "task_nodes.h"
 #include <agent_behaviours/sensors.h>
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/variant/dictionary.hpp>
 
 namespace godot {
 
-class NNSTRoot : public NNSTTaskNodes {
-	GDCLASS(NNSTRoot, NNSTTaskNodes)
+class NNSTRoot : public NNSTBranchNodes {
+	GDCLASS(NNSTRoot, NNSTBranchNodes)
 
 private:
 #ifdef DEBUG_ENABLED

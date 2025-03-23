@@ -71,10 +71,12 @@
 // STATE TREE
 
 //#include "state_tree/leaf.h"
+#include "state_tree/branch_nodes.h"
 #include "state_tree/node.h"
 #include "state_tree/nodes.h"
 #include "state_tree/parallel.h"
 #include "state_tree/root.h"
+#include "state_tree/ticked_nodes.h"
 #include "state_tree/transition.h"
 
 // NODE QUERY SYSTEM
@@ -202,7 +204,8 @@ void register_scene_classes() {
 
 	// State tree.
 	GDREGISTER_VIRTUAL_CLASS(NNSTNodes);
-	GDREGISTER_VIRTUAL_CLASS(NNSTTaskNodes);
+	GDREGISTER_VIRTUAL_CLASS(NNSTBranchNodes);
+	GDREGISTER_VIRTUAL_CLASS(NNSTTickedNodes);
 	GDREGISTER_CLASS(NNSTRoot);
 	GDREGISTER_CLASS(NNSTNode);
 	GDREGISTER_CLASS(NNSTParallel);

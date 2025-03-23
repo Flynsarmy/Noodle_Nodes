@@ -10,10 +10,10 @@
 namespace godot {
 
 class NNSTTransition; // Forward declaration
-class NNSTNode; // Forward declaration
+class NNSTTickedNodes; // Forward declaration
 
-class NNSTTaskNodes : public NNSTNodes {
-	GDCLASS(NNSTTaskNodes, NNSTNodes)
+class NNSTBranchNodes : public NNSTNodes {
+	GDCLASS(NNSTBranchNodes, NNSTNodes)
 
 private:
 protected:
@@ -25,13 +25,13 @@ protected:
 	std::vector<NNConsiderations *> _child_considerations;
 	unsigned int _num_child_considerations;
 
-	std::vector<NNSTNode *> _child_states;
+	std::vector<NNSTTickedNodes *> _child_states;
 	unsigned int _num_child_states;
 
 	std::vector<NNSTTransition *> _child_transitions;
 	unsigned int _num_child_transitions;
 
-	std::vector<NNSTNode *> _active_states;
+	std::vector<NNSTTickedNodes *> _active_states;
 	unsigned int _num_active_states;
 
 #ifdef DEBUG_ENABLED
@@ -40,8 +40,8 @@ protected:
 #endif
 
 public:
-	NNSTTaskNodes();
-	~NNSTTaskNodes();
+	NNSTBranchNodes();
+	~NNSTBranchNodes();
 
 	// Getters and setters for attributes.
 
@@ -53,7 +53,7 @@ public:
 	void set_child_state_selection_rule(int child_state_selection_rule);
 	int get_child_state_selection_rule() const;
 
-	//Dictionary get_child_nodes_as_dictionary(NNSTTaskNodes* tree_root_node );
+	//Dictionary get_child_nodes_as_dictionary(NNSTBranchNodes* tree_root_node );
 
 	void set_internal_status(int internal_status);
 	int get_internal_status() const;
@@ -73,16 +73,16 @@ public:
 	virtual void send_event(String name) {};
 
 	virtual void _transition_in() {};
-	virtual void _handle_transition(NNSTNode *from_state, NNSTNode *to_state);
-	virtual bool _can_transition_to(NNSTNode *from_state, NNSTNode *to_state);
-	virtual void _evaluate_child_activations(std::vector<NNSTNode *> &nodes);
+	virtual void _handle_transition(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state);
+	virtual bool _can_transition_to(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state);
+	virtual void _evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes);
 
 	GDVIRTUAL1(on_input, Ref<InputEvent>);
 	GDVIRTUAL1(on_unhandled_input, Ref<InputEvent>);
 	GDVIRTUAL1(on_unhandled_key_input, Ref<InputEvent>);
 
-	// virtual NNSTTaskNodes *evaluate_state_activation(Variant blackboard, float delta);
-	// virtual void evaluate_state_activations(TypedArray<NNSTTaskNodes> *nodes, Variant blackboard, float delta);
+	// virtual NNSTBranchNodes *evaluate_state_activation(Variant blackboard, float delta);
+	// virtual void evaluate_state_activations(TypedArray<NNSTBranchNodes> *nodes, Variant blackboard, float delta);
 
 	// Godot virtuals.
 

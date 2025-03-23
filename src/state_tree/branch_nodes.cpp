@@ -1,4 +1,4 @@
-#include "task_nodes.h"
+#include "branch_nodes.h"
 #include "../agent_behaviours/considerations.h"
 #include <state_tree/node.h>
 #include <state_tree/transition.h>
@@ -10,18 +10,18 @@ using namespace godot;
 
 // Method binds.
 
-void NNSTTaskNodes::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("set_child_state_selection_rule", "child_state_selection_rule"), &NNSTTaskNodes::set_child_state_selection_rule);
-	ClassDB::bind_method(D_METHOD("get_child_state_selection_rule"), &NNSTTaskNodes::get_child_state_selection_rule);
+void NNSTBranchNodes::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("set_child_state_selection_rule", "child_state_selection_rule"), &NNSTBranchNodes::set_child_state_selection_rule);
+	ClassDB::bind_method(D_METHOD("get_child_state_selection_rule"), &NNSTBranchNodes::get_child_state_selection_rule);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "child_state_selection_rule", PROPERTY_HINT_ENUM, "OnEnterConditionMethod:0,UtilityScoring:1"), "set_child_state_selection_rule", "get_child_state_selection_rule");
 
 	ADD_SUBGROUP("Debugging", "");
 
-	ClassDB::bind_method(D_METHOD("set_internal_status", "internal_status"), &NNSTTaskNodes::set_internal_status);
-	ClassDB::bind_method(D_METHOD("get_internal_status"), &NNSTTaskNodes::get_internal_status);
+	ClassDB::bind_method(D_METHOD("set_internal_status", "internal_status"), &NNSTBranchNodes::set_internal_status);
+	ClassDB::bind_method(D_METHOD("get_internal_status"), &NNSTBranchNodes::get_internal_status);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Inactive:0,Active:1"), "set_internal_status", "get_internal_status");
 
-	ClassDB::bind_method(D_METHOD("send_event", "name"), &NNSTTaskNodes::send_event);
+	ClassDB::bind_method(D_METHOD("send_event", "name"), &NNSTBranchNodes::send_event);
 
 	GDVIRTUAL_BIND(on_input, "event");
 	GDVIRTUAL_BIND(on_unhandled_input, "event")
@@ -30,7 +30,7 @@ void NNSTTaskNodes::_bind_methods() {
 
 // Constructor and destructor.
 
-NNSTTaskNodes::NNSTTaskNodes() {
+NNSTBranchNodes::NNSTBranchNodes() {
 	_active_states.clear();
 	_internal_status = ST_INTERNAL_STATUS_INACTIVE;
 	_child_state_selection_rule = NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD;
@@ -46,20 +46,20 @@ NNSTTaskNodes::NNSTTaskNodes() {
 #endif
 }
 
-NNSTTaskNodes::~NNSTTaskNodes() {
+NNSTBranchNodes::~NNSTBranchNodes() {
 }
 
 // Getters and Setters.
 
-void NNSTTaskNodes::set_child_state_selection_rule(int child_state_selection_rule) {
+void NNSTBranchNodes::set_child_state_selection_rule(int child_state_selection_rule) {
 	_child_state_selection_rule = child_state_selection_rule;
 }
 
-int NNSTTaskNodes::get_child_state_selection_rule() const {
+int NNSTBranchNodes::get_child_state_selection_rule() const {
 	return _child_state_selection_rule;
 }
 
-void NNSTTaskNodes::set_internal_status(int internal_status) {
+void NNSTBranchNodes::set_internal_status(int internal_status) {
 #ifdef DEBUG_ENABLED
 	_last_visited_timestamp = godot::Time::get_singleton()->get_ticks_usec();
 #endif
@@ -70,25 +70,25 @@ void NNSTTaskNodes::set_internal_status(int internal_status) {
 	_internal_status = internal_status;
 }
 
-int NNSTTaskNodes::get_internal_status() const {
+int NNSTBranchNodes::get_internal_status() const {
 	return _internal_status;
 }
 
 // Handling methods.
 
-void NNSTTaskNodes::on_input(const Ref<InputEvent> &event) {
+void NNSTBranchNodes::on_input(const Ref<InputEvent> &event) {
 	if (has_method("on_input")) {
 		call("on_input", event);
 	}
 }
 
-void NNSTTaskNodes::on_unhandled_input(const Ref<InputEvent> &event) {
+void NNSTBranchNodes::on_unhandled_input(const Ref<InputEvent> &event) {
 	if (has_method("on_unhandled_input")) {
 		call("on_unhandled_input", event);
 	}
 }
 
-void NNSTTaskNodes::on_unhandled_key_input(const Ref<InputEvent> &event) {
+void NNSTBranchNodes::on_unhandled_key_input(const Ref<InputEvent> &event) {
 	if (has_method("on_unhandled_key_input")) {
 		call("on_unhandled_key_input", event);
 	}
@@ -97,7 +97,7 @@ void NNSTTaskNodes::on_unhandled_key_input(const Ref<InputEvent> &event) {
 /**
  * Called by a child state's transition_to() method. Transitions out of the old state and into the new.
  */
-void NNSTTaskNodes::_handle_transition(NNSTNode *from_state, NNSTNode *to_state) {
+void NNSTBranchNodes::_handle_transition(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state) {
 	if (!_can_transition_to(from_state, to_state)) {
 		return;
 	}
@@ -117,7 +117,7 @@ void NNSTTaskNodes::_handle_transition(NNSTNode *from_state, NNSTNode *to_state)
 	_num_active_states++;
 }
 
-bool NNSTTaskNodes::_can_transition_to(NNSTNode *from_state, NNSTNode *to_state) {
+bool NNSTBranchNodes::_can_transition_to(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state) {
 	if (to_state == nullptr) {
 		return false;
 	}
@@ -139,13 +139,13 @@ bool NNSTTaskNodes::_can_transition_to(NNSTNode *from_state, NNSTNode *to_state)
  *
  * Only activates up to 1 child for each node (CompoundState).
  */
-void NNSTTaskNodes::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) {
+void NNSTBranchNodes::_evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes) {
 	// std::vector<NNSTNode *> nodes;
 
 	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
 		for (unsigned int i = 0; i < _num_child_states; i++) {
-			NNSTNode *stnode = _child_states[i];
+			NNSTTickedNodes *stnode = _child_states[i];
 			if (!stnode->get_is_enabled()) {
 				continue;
 			}
@@ -162,10 +162,10 @@ void NNSTTaskNodes::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) 
 		}
 	} else if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::UTILITY_SCORING) {
 		// Childs are evaluated by using Utility-based scoring.
-		NNSTNode *highest_scoring_state_to_activate = nullptr;
+		NNSTTickedNodes *highest_scoring_state_to_activate = nullptr;
 		float highest_score = -9999999.9999;
 		for (unsigned int i = 0; i < _num_child_states; i++) {
-			NNSTNode *stnode = _child_states[i];
+			NNSTTickedNodes *stnode = _child_states[i];
 
 			if (!stnode->get_is_enabled()) {
 				continue;
@@ -188,25 +188,25 @@ void NNSTTaskNodes::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) 
 	// return nodes;
 }
 
-void NNSTTaskNodes::_input(const Ref<InputEvent> &p_event) {
+void NNSTBranchNodes::_input(const Ref<InputEvent> &p_event) {
 	if (get_internal_status() == 1) {
 		on_input(p_event);
 	}
 }
 
-void NNSTTaskNodes::_unhandled_input(const Ref<InputEvent> &p_event) {
+void NNSTBranchNodes::_unhandled_input(const Ref<InputEvent> &p_event) {
 	if (get_internal_status() == 1) {
 		on_unhandled_input(p_event);
 	}
 }
 
-void NNSTTaskNodes::_unhandled_key_input(const Ref<InputEvent> &p_event) {
+void NNSTBranchNodes::_unhandled_key_input(const Ref<InputEvent> &p_event) {
 	if (get_internal_status() == 1) {
 		on_unhandled_key_input(p_event);
 	}
 }
 
-void NNSTTaskNodes::_notification(int p_what) {
+void NNSTBranchNodes::_notification(int p_what) {
 	if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
 		_child_states.clear();
 		_child_considerations.clear();
@@ -216,7 +216,7 @@ void NNSTTaskNodes::_notification(int p_what) {
 				_child_considerations.push_back(cons);
 			} else if (NNSTTransition *tns = godot::Object::cast_to<NNSTTransition>(get_child(i))) {
 				_child_transitions.push_back(tns);
-			} else if (NNSTNode *stnode = godot::Object::cast_to<NNSTNode>(get_child(i))) {
+			} else if (NNSTTickedNodes *stnode = godot::Object::cast_to<NNSTTickedNodes>(get_child(i))) {
 				_child_states.push_back(stnode);
 			}
 		} //endfor child nodes

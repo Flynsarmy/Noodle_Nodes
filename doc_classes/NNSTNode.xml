@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="NNSTNode" inherits="NNSTTaskNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+<class name="NNSTNode" inherits="NNSTTickedNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
 		Runs business logic for a state tree.
 	</brief_description>
@@ -29,87 +29,4 @@
 	</description>
 	<tutorials>
 	</tutorials>
-	<methods>
-		<method name="get_on_entered_condition" qualifiers="const">
-			<return type="bool" />
-			<description>
-				Returns the value used to determine if the state may be entered. Change by calling [method set_on_entered_condition]
-			</description>
-		</method>
-		<method name="get_root" qualifiers="const">
-			<return type="NNSTRoot" />
-			<description>
-				Returns the [NNSTRoot] root node of the state tree.
-			</description>
-		</method>
-		<method name="on_enter_condition" qualifiers="virtual">
-			<return type="bool" />
-			<description>
-				Do your logic here to decide when this node should be activated. Return [code]true[/code] or [code]false[/code] based on your logic. If this method isn't implemented in your node and no event is defined, this will return [code]true[/code].  This will execute before the corrosponding signal.
-			</description>
-		</method>
-		<method name="on_enter_state" qualifiers="virtual">
-			<return type="void" />
-			<description>
-				Logic to initialize your state. This will execute before the corrosponding signal.
-			</description>
-		</method>
-		<method name="on_exit_state" qualifiers="virtual">
-			<return type="void" />
-			<description>
-				Logic to clean up before exiting. This will execute before the corrosponding signal.
-			</description>
-		</method>
-		<method name="on_tick" qualifiers="virtual">
-			<return type="void" />
-			<param index="0" name="delta" type="float" />
-			<description>
-				Logic to run when a state is ticked. This will execute before the corrosponding signal.
-			</description>
-		</method>
-		<method name="set_on_entered_condition">
-			<return type="void" />
-			<param index="0" name="is_entered" type="bool" />
-			<description>
-				If no [method on_enter_condition] method exists, this value will be used to determine if the state may be entered.
-			</description>
-		</method>
-		<method name="transition_to">
-			<return type="void" />
-			<param index="0" name="new_state_nodepath" type="NodePath" />
-			<description>
-				Transitions between states in the Stae Tree. Requires a [NodePath] (relative to the node calling this method) for the target state. During a transition, all active children of the *from* state will be exited and any children of the *to* state will be evaluated for entering.
-			</description>
-		</method>
-	</methods>
-	<members>
-		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="4">
-			Defines how the considerations are aggregated. Can be one of the following: `Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5`.
-		</member>
-		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
-		</member>
-	</members>
-	<signals>
-		<signal name="state_check_enter_condition">
-			<description>
-				Emitted when the the [method NNSTNode.on_enter_condition] check needs to be done. The signal must call the [method set_on_entered_condition] method with either [code]true[/code] or [code]false[/code] as the parameter to indicate if the state should be entered or not.
-			</description>
-		</signal>
-		<signal name="state_entered">
-			<description>
-				Emitted when the state is entered. Add any state initialization to this signal handler.
-			</description>
-		</signal>
-		<signal name="state_exited">
-			<description>
-				Emitted when the state is exited. Add any state deinitialization to this signal handler.
-			</description>
-		</signal>
-		<signal name="state_ticked">
-			<param index="0" name="delta" type="float" />
-			<description>
-				Emitted when the state is ticked. Add state update logic to this signal handler.
-			</description>
-		</signal>
-	</signals>
 </class>

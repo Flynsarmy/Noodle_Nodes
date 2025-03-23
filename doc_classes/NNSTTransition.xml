@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="NNSTTransition" inherits="NNSTNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
-		Transition between active states through [method NNSTTaskNodes.send_event].
+		Transition between active states through [method NNSTBranchNodes.send_event].
 	</brief_description>
 	<description>
-		Provides [member event_name] and [member to] [NodePath] export variables to be consumed by [method NNSTTaskNodes.send_event]. The transition is performed on the parent of this node.
+		Provides [member event_name] and [member to] [NodePath] export variables to be consumed by [method NNSTBranchNodes.send_event]. The transition is performed on the parent of this node.
 	</description>
 	<tutorials>
 	</tutorials>

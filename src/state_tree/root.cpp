@@ -94,7 +94,7 @@ void NNSTRoot::tick(float delta) {
 	// If there are active states, tick their custom method from the
 	// root to the active leaf.
 	for (unsigned int i = 0; i < _num_active_states; i++) {
-		NNSTNode *stnode = _active_states[i];
+		NNSTTickedNodes *stnode = _active_states[i];
 
 		stnode->set_root(this);
 		stnode->on_tick(delta);
@@ -107,7 +107,7 @@ void NNSTRoot::tick(float delta) {
 
 void NNSTRoot::send_event(String name) {
 	for (unsigned int i = 0; i < _num_active_states; i++) {
-		NNSTNode *stnode = _active_states[i];
+		NNSTTickedNodes *stnode = _active_states[i];
 		stnode->send_event(name);
 	}
 }
@@ -119,10 +119,10 @@ void NNSTRoot::_transition_in() {
 
 	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
 
-	std::vector<NNSTNode *> new_active_states;
+	std::vector<NNSTTickedNodes *> new_active_states;
 	_evaluate_child_activations(new_active_states);
 
-	NNSTNode *cur_active_state;
+	NNSTTickedNodes *cur_active_state;
 
 	// do on_exit for any states no longer active
 	for (unsigned int i = 0; i < _num_active_states; i++) {
@@ -164,14 +164,14 @@ void NNSTRoot::_transition_in() {
 // Godot virtuals.
 
 void NNSTRoot::_notification(int p_what) {
-	NNSTTaskNodes::_notification(p_what);
+	NNSTBranchNodes::_notification(p_what);
 
 	if (p_what == NOTIFICATION_READY || p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
 		if (Engine::get_singleton()->is_editor_hint())
 			return;
 
 		for (unsigned int i = 0; i < _num_child_states; i++) {
-			NNSTNode *stnode = _child_states[i];
+			NNSTTickedNodes *stnode = _child_states[i];
 			stnode->set_root(this);
 		}
 

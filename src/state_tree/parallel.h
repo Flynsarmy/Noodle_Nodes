@@ -1,12 +1,12 @@
 #pragma once
 
-#include "node.h"
+#include "ticked_nodes.h"
 //#include <godot_cpp/classes/node.hpp>
 
 namespace godot {
 
-class NNSTParallel : public NNSTNode {
-	GDCLASS(NNSTParallel, NNSTNode)
+class NNSTParallel : public NNSTTickedNodes {
+	GDCLASS(NNSTParallel, NNSTTickedNodes)
 
 private:
 protected:
@@ -18,7 +18,7 @@ public:
 
 	// Handling functions.
 	virtual void _transition_in() override;
-	virtual void _evaluate_child_activations(std::vector<NNSTNode *> &nodes) override;
+	virtual void _evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes) override;
 };
 
 } //namespace godot

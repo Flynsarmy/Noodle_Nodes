@@ -28,10 +28,10 @@ void NNSTParallel::_transition_in() {
 		on_enter_state();
 	}
 
-	std::vector<NNSTNode *> new_active_states;
+	std::vector<NNSTTickedNodes *> new_active_states;
 	_evaluate_child_activations(new_active_states);
 
-	NNSTNode *cur_active_state;
+	NNSTTickedNodes *cur_active_state;
 
 	// do on_exit for any states no longer active
 	for (unsigned int i = 0; i < _num_active_states; i++) {
@@ -76,13 +76,13 @@ void NNSTParallel::_transition_in() {
  *
  * Only activates up to 1 child for each node (CompoundState).
  */
-void NNSTParallel::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) {
-	// std::vector<NNSTNode *> nodes;
+void NNSTParallel::_evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes) {
+	// std::vector<NNSTTickedNodes *> nodes;
 
 	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
 		for (unsigned int i = 0; i < _num_child_states; i++) {
-			NNSTNode *stnode = _child_states[i];
+			NNSTTickedNodes *stnode = _child_states[i];
 			if (!stnode->get_is_enabled()) {
 				continue;
 			}
@@ -96,10 +96,10 @@ void NNSTParallel::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) {
 		}
 	} else if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::UTILITY_SCORING) {
 		// Childs are evaluated by using Utility-based scoring.
-		NNSTNode *highest_scoring_state_to_activate = nullptr;
+		NNSTTickedNodes *highest_scoring_state_to_activate = nullptr;
 		float highest_score = -9999999.9999;
 		for (unsigned int i = 0; i < _num_child_states; i++) {
-			NNSTNode *stnode = _child_states[i];
+			NNSTTickedNodes *stnode = _child_states[i];
 
 			if (!stnode->get_is_enabled()) {
 				continue;
