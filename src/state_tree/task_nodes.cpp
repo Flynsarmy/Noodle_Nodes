@@ -144,7 +144,7 @@ void NNSTTaskNodes::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) 
 
 	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
-		for (unsigned int i = 0; i < _num_child_states; ++i) {
+		for (unsigned int i = 0; i < _num_child_states; i++) {
 			NNSTNode *stnode = _child_states[i];
 			if (!stnode->get_is_enabled()) {
 				continue;
@@ -164,7 +164,7 @@ void NNSTTaskNodes::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) 
 		// Childs are evaluated by using Utility-based scoring.
 		NNSTNode *highest_scoring_state_to_activate = nullptr;
 		float highest_score = -9999999.9999;
-		for (unsigned int i = 0; i < _num_child_states; ++i) {
+		for (unsigned int i = 0; i < _num_child_states; i++) {
 			NNSTNode *stnode = _child_states[i];
 
 			if (!stnode->get_is_enabled()) {
@@ -211,7 +211,7 @@ void NNSTTaskNodes::_notification(int p_what) {
 		_child_states.clear();
 		_child_considerations.clear();
 		int num_children = get_child_count();
-		for (int i = 0; i < num_children; ++i) {
+		for (int i = 0; i < num_children; i++) {
 			if (NNConsiderations *cons = godot::Object::cast_to<NNConsiderations>(get_child(i))) {
 				_child_considerations.push_back(cons);
 			} else if (NNSTTransition *tns = godot::Object::cast_to<NNSTTransition>(get_child(i))) {

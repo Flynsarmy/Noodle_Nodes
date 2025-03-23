@@ -258,7 +258,7 @@ float NNArea2DVisibilitySensor::evaluate_sensor_value() {
 	_squared_distances_to_unoccluded_bodies.clear();
 	_squared_distances_to_intersecting_areas.clear();
 	_squared_distances_to_intersecting_bodies.clear();
-	for (int i = 0; i < _intersecting_areas.size(); ++i) {
+	for (int i = 0; i < _intersecting_areas.size(); i++) {
 		Area2D *area = godot::Object::cast_to<Area2D>(_intersecting_areas[i]);
 		if (area == nullptr) {
 			continue;
@@ -308,7 +308,7 @@ float NNArea2DVisibilitySensor::evaluate_sensor_value() {
 			++_num_entities_found;
 		}
 	} //endfor entered areas.
-	for (int i = 0; i < _intersecting_bodies.size(); ++i) {
+	for (int i = 0; i < _intersecting_bodies.size(); i++) {
 		Node2D *body = godot::Object::cast_to<Node2D>(_intersecting_bodies[i]);
 		if (body == nullptr) {
 			continue;

@@ -47,10 +47,10 @@ void NNBTRandomSequence::reset_bt_node() {
 	_current_child_index = 0;
 	// Create a random order.
 	_child_node_order.clear();
-	//for( int i = 0; i < get_child_count(); ++i ) {
+	//for( int i = 0; i < get_child_count(); i++ ) {
 	//    NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(get_child(i));
 	//    if( btnode == nullptr ) continue;
-	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+	for (unsigned int i = 0; i < _num_child_btnodes; i++) {
 		NNBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_enabled()) {
 			continue;

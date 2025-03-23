@@ -86,7 +86,7 @@ NNBTNodes::Status NNBTRoot::tick(Variant blackboard, float delta) {
 	//    _is_first_tick = false;
 	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
-	for (unsigned int i = 0; i < _num_child_sensors; ++i) {
+	for (unsigned int i = 0; i < _num_child_sensors; i++) {
 		NNSensors *sensor = _child_sensors[i];
 		if (!sensor->get_is_enabled()) {
 			continue;
@@ -94,7 +94,7 @@ NNBTNodes::Status NNBTRoot::tick(Variant blackboard, float delta) {
 		sensor->evaluate_sensor_value();
 	} //endfor sensors
 
-	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+	for (unsigned int i = 0; i < _num_child_btnodes; i++) {
 		NNBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_enabled()) {
 			continue;
@@ -112,7 +112,7 @@ NNBTNodes::Status NNBTRoot::tick(Variant blackboard, float delta) {
 		return result;
 	} //endfor btnodes
 	/**
-	for( int i = 0; i < get_child_count(); ++i ) {
+	for( int i = 0; i < get_child_count(); i++ ) {
 		Node* node = get_child(i);
 		if( NNSensors* sensor = godot::Object::cast_to<NNSensors>(node) ) {
 			if( !sensor-> get_is_enabled() ) {
@@ -159,7 +159,7 @@ void NNBTRoot::_notification(int p_what) {
 		NNDebuggerOverlay::get_singleton()->register_behaviour_tree(this->get_instance_id());
 #endif
 		_child_sensors.clear();
-		for (int i = 0; i < get_child_count(); ++i) {
+		for (int i = 0; i < get_child_count(); i++) {
 			if (NNSensors *sensor = godot::Object::cast_to<NNSensors>(get_child(i))) {
 				_child_sensors.push_back(sensor);
 			}

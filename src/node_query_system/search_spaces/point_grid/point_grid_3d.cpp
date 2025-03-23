@@ -20,7 +20,7 @@ NNPointGrid3DSearchSpace::NNPointGrid3DSearchSpace() {
 }
 
 NNPointGrid3DSearchSpace::~NNPointGrid3DSearchSpace() {
-	for (int i = 0; i < _point_grid.size(); ++i) {
+	for (int i = 0; i < _point_grid.size(); i++) {
 		Node3D *node = godot::Object::cast_to<Node3D>(_point_grid[i]);
 		memfree(node);
 		_point_grid[i] = nullptr;
@@ -219,7 +219,7 @@ void NNPointGrid3DSearchSpace::create_point_grid() {
 	// If there is a debug child under the search space node, make duplicates of it
 	// under the search space parent node.
 	Node3D *template_node = nullptr;
-	for (int i = 0; i < get_child_count(); ++i) {
+	for (int i = 0; i < get_child_count(); i++) {
 		if (Node3D *dbnode = godot::Object::cast_to<Node3D>(get_child(i))) {
 			if (dbnode->get_name() == StringName("DEBUG")) {
 				template_node = dbnode;
@@ -245,7 +245,7 @@ void NNPointGrid3DSearchSpace::create_point_grid() {
 }
 
 void NNPointGrid3DSearchSpace::create_point_grid_nodes(Node3D *template_node) {
-	for (int i = 0; i < _point_grid_default_positions.size(); ++i) {
+	for (int i = 0; i < _point_grid_default_positions.size(); i++) {
 		Node3D *new_node = godot::Object::cast_to<Node3D>(template_node->duplicate(15));
 		if (new_node == nullptr) {
 			ERR_FAIL_MSG("NNPointGrid3DSearchSpace::create_point_grid_nodes(): Error, could not duplicate template node. Out of memory?");

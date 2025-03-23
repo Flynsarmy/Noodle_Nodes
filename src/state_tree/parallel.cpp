@@ -81,7 +81,7 @@ void NNSTParallel::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) {
 
 	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
-		for (unsigned int i = 0; i < _num_child_states; ++i) {
+		for (unsigned int i = 0; i < _num_child_states; i++) {
 			NNSTNode *stnode = _child_states[i];
 			if (!stnode->get_is_enabled()) {
 				continue;
@@ -98,7 +98,7 @@ void NNSTParallel::_evaluate_child_activations(std::vector<NNSTNode *> &nodes) {
 		// Childs are evaluated by using Utility-based scoring.
 		NNSTNode *highest_scoring_state_to_activate = nullptr;
 		float highest_score = -9999999.9999;
-		for (unsigned int i = 0; i < _num_child_states; ++i) {
+		for (unsigned int i = 0; i < _num_child_states; i++) {
 			NNSTNode *stnode = _child_states[i];
 
 			if (!stnode->get_is_enabled()) {

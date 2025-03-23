@@ -44,7 +44,7 @@ NNBTNodes::Status NNBTFixedResult::tick(Variant blackboard, float delta) {
 	//}
 
 	set_tick_result(_fixed_result);
-	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+	for (unsigned int i = 0; i < _num_child_btnodes; i++) {
 		NNBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_enabled()) {
 			continue;

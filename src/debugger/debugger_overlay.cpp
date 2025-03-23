@@ -144,7 +144,7 @@ void NNDebuggerOverlay::on_type_item_selected(int item) {
 	//WARN_PRINT(String("Got: ") + String(item));
 	switch (item) {
 		case 1: { // Agent behaviours.
-			for (int i = 0; i < _agents.size(); ++i) {
+			for (int i = 0; i < _agents.size(); i++) {
 				ObjectID helper = ObjectID();
 				helper = _agents[i];
 				if (!helper.is_valid()) {
@@ -159,7 +159,7 @@ void NNDebuggerOverlay::on_type_item_selected(int item) {
 			//WARN_PRINT("--6");
 		} break;
 		case 2: { // Behaviour trees.
-			for (int i = 0; i < _behaviour_trees.size(); ++i) {
+			for (int i = 0; i < _behaviour_trees.size(); i++) {
 				ObjectID helper = ObjectID();
 				helper = _behaviour_trees[i];
 				if (!helper.is_valid()) {
@@ -174,7 +174,7 @@ void NNDebuggerOverlay::on_type_item_selected(int item) {
 			//WARN_PRINT("--4");
 		} break;
 		case 3: { // State trees.
-			for (int i = 0; i < _state_trees.size(); ++i) {
+			for (int i = 0; i < _state_trees.size(); i++) {
 				ObjectID helper = ObjectID();
 				helper = _state_trees[i];
 				if (!helper.is_valid()) {
@@ -297,7 +297,7 @@ void NNDebuggerOverlay::tree_add_child_nodes(Tree *tree, TreeItem *parent_node, 
 	}
 	uint64_t current_timestamp = godot::Time::get_singleton()->get_ticks_usec();
 
-	for (int i = 0; i < parent_ai_node->get_child_count(); ++i) {
+	for (int i = 0; i < parent_ai_node->get_child_count(); i++) {
 		Node *next_ai_node = parent_ai_node->get_child(i);
 		if (!next_ai_node)
 			continue;
@@ -385,7 +385,7 @@ void  NNDebuggerOverlay::tree_update_child_nodes( Tree* tree, TreeItem* parent_n
 		return;
 	}
 
-	for( int i = 0; i < parent_ai_node->get_child_count(); ++i ) {
+	for( int i = 0; i < parent_ai_node->get_child_count(); i++ ) {
 		Node* next_ai_node = parent_ai_node->get_child(i);
 		TreeItem* next_tree_item = parent_node->get_child(i);
 		if( !next_ai_node || !next_tree_item) break;

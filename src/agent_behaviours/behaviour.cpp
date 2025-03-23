@@ -126,7 +126,7 @@ void NNBehaviour::_notification(int p_what) {
 	if( p_what == NOTIFICATION_CHILD_ORDER_CHANGED ) {
 		_child_considerations.clear();
 		int num_children = get_child_count();
-		for( int i = 0; i < num_children; ++i ) {
+		for( int i = 0; i < num_children; i++ ) {
 			if( NNConsiderations* cons = godot::Object::cast_to<NNConsiderations>(get_child(i))) {
 				_child_considerations.push_back(cons);
 			}
@@ -186,10 +186,10 @@ float NNBehaviour::evaluate() {
 
 	// Evaluate the child nodes.
 	//int num_children = get_child_count();
-	//for( int i = 0; i < num_children; ++i ) {
+	//for( int i = 0; i < num_children; i++ ) {
 	//NNConsiderations* considerationNode = godot::Object::cast_to<NNConsiderations>(get_child(i));
 	float child_score = 0.0f;
-	for (unsigned int i = 0; i < _num_child_considerations; ++i) {
+	for (unsigned int i = 0; i < _num_child_considerations; i++) {
 		NNConsiderations *considerationNode = _child_considerations[i];
 		//if( considerationNode == nullptr ) continue;
 		if (!considerationNode->get_is_enabled())

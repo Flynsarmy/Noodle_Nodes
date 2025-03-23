@@ -48,7 +48,7 @@ float NNSensorGroup::evaluate_sensor_value() {
 	if (num_children < 1)
 		return 0.0f;
 	float child_sensor_value = 0.0f;
-	for (int i = 0; i < num_children; ++i) {
+	for (int i = 0; i < num_children; i++) {
 		Node *node = get_child(i);
 		if (node == nullptr)
 			continue;

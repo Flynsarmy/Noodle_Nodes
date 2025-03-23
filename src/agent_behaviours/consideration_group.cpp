@@ -64,7 +64,7 @@ float NNConsiderationGroup::evaluate() {
 	if (num_children < 1)
 		return 0.0f;
 	float child_score = 0.0f;
-	for (int i = 0; i < num_children; ++i) {
+	for (int i = 0; i < num_children; i++) {
 		Node *node = get_child(i);
 		if (node == nullptr)
 			continue;

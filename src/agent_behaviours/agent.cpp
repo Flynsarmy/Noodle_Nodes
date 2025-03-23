@@ -82,7 +82,7 @@ NNAgent::NNAgent() {
 	_current_behaviour_node = nullptr;
 	_num_behaviours_to_select = 1;
 	_num_possible_behaviours = 0;
-	for (int i = 0; i < UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS; ++i) {
+	for (int i = 0; i < UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS; i++) {
 		//_top_scoring_behaviours[i] = -1;
 		_top_scoring_behaviours_score[i] = 0.0f;
 		_top_scoring_behaviours_nodes[i] = nullptr;
@@ -110,7 +110,7 @@ NNAgent::NNAgent() {
 NNAgent::~NNAgent() {
 	_current_behaviour_node = nullptr;
 	_current_action_node = nullptr;
-	for (int i = 0; i < UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS; ++i) {
+	for (int i = 0; i < UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS; i++) {
 		_top_scoring_behaviours_nodes[i] = nullptr;
 	}
 }
@@ -169,7 +169,7 @@ void NNAgent::evaluate_options(float delta) {
 	}
 	//WARN_PRINT("Checking sensors...");
 	// Evaluate the sensors.
-	for (unsigned int i = 0; i < _num_child_sensors; ++i) {
+	for (unsigned int i = 0; i < _num_child_sensors; i++) {
 		NNSensors *sensorNode = _child_sensors[i];
 		if (sensorNode->get_is_enabled()) {
 			sensorNode->evaluate_sensor_value();
@@ -177,7 +177,7 @@ void NNAgent::evaluate_options(float delta) {
 	} //endfor child sensors.
 	//WARN_PRINT("DONE!");
 	//WARN_PRINT("Checking Behaviours...");
-	for (unsigned i = 0; i < _num_child_behaviours; ++i) {
+	for (unsigned i = 0; i < _num_child_behaviours; i++) {
 		NNBehaviours *behavioursNode = _child_behaviours[i];
 		if (!behavioursNode->get_is_enabled()) {
 			continue;
@@ -217,7 +217,7 @@ void NNAgent::evaluate_options(float delta) {
 	//WARN_PRINT("DONE!");
 	// Evaluate the children.
 	/**
-	for( int i = 0; i < num_children; ++i ) {
+	for( int i = 0; i < num_children; i++ ) {
 		Node* node = get_child(i);
 		if( node == nullptr ) continue;
 
@@ -597,7 +597,7 @@ void NNAgent::_ready() {
 #ifdef DEBUG_ENABLED
 	NNDebuggerOverlay::get_singleton()->register_ai_agent(this->get_instance_id());
 #endif
-	for (int i = 0; i < get_child_count(); ++i) {
+	for (int i = 0; i < get_child_count(); i++) {
 		if (NNBehaviours *beh = godot::Object::cast_to<NNBehaviours>(get_child(i))) {
 			_child_behaviours.push_back(beh);
 		} else if (NNSensors *sensor = godot::Object::cast_to<NNSensors>(get_child(i))) {

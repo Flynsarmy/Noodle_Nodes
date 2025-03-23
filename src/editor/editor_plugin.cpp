@@ -80,7 +80,7 @@ void NNEditorPlugin::_on_selection_changed() {
 	TypedArray<Node> nodes = _editor_selection->get_selected_nodes();
 	_node_tree->clear();
 	TreeItem *root_item = _node_tree->create_item();
-	for (int i = 0; i < nodes.size(); ++i) {
+	for (int i = 0; i < nodes.size(); i++) {
 		if (NNBTRoot *btroot = godot::Object::cast_to<NNBTRoot>(nodes[i])) {
 			root_item->set_text(0, btroot->get_name());
 			btree_add_child_nodes(_node_tree, root_item, btroot);
@@ -100,7 +100,7 @@ void NNEditorPlugin::btree_add_child_nodes(Tree *tree, TreeItem *parent_node, NN
 		return;
 	}
 
-	for (int i = 0; i < parent_ai_node->get_child_count(); ++i) {
+	for (int i = 0; i < parent_ai_node->get_child_count(); i++) {
 		if (NNBTNodes *btnode = godot::Object::cast_to<NNBTNodes>(parent_ai_node->get_child(i))) {
 			TreeItem *child_item = tree->create_item(parent_node);
 			if (child_item == nullptr)

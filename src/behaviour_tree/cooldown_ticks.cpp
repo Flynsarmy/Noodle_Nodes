@@ -76,7 +76,7 @@ NNBTNodes::Status NNBTCooldownTicks::tick(Variant blackboard, float delta) {
 		return _cooldown_return_value;
 	}
 	//emit_signal("btnode_ticked", blackboard, delta);
-	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+	for (unsigned int i = 0; i < _num_child_btnodes; i++) {
 		NNBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_enabled()) {
 			continue;

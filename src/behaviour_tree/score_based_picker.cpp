@@ -51,9 +51,9 @@ void NNBTScoreBasedPicker::reset_bt_node() {
 	// score to run.
 	_current_child_index = -1;
 	float current_highest_score = -99999999.9999;
-	//for( int i = 0; i < get_child_count(); ++i ) {
+	//for( int i = 0; i < get_child_count(); i++ ) {
 	//    NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(get_child(i));
-	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+	for (unsigned int i = 0; i < _num_child_btnodes; i++) {
 		NNBTNodes *btnode = _child_btnodes[i];
 		//if( btnode == nullptr ) {
 		//    continue;

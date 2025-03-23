@@ -95,7 +95,7 @@ void NNNQSSearchSpaces::_ready() {
 	// Get all the criterias to a vector to avoid slow type casting
 	// during runtime.
 	_filtering_criteria.clear();
-	for (int i = 0; i < get_child_count(); ++i) {
+	for (int i = 0; i < get_child_count(); i++) {
 		if (NNNQSSearchCriteria *criterion = godot::Object::cast_to<NNNQSSearchCriteria>(get_child(i))) {
 			_filtering_criteria.push_back(criterion);
 		}
@@ -485,7 +485,7 @@ void NNNQSSearchSpaces::apply_criterion( NNNQSSearchCriteria* criterion, TypedAr
 	bool filter_out = false;
 	float score = 0.0;
 	_current_node_index = 0;
-	for( int i = 0; i < search_space.size(); ++i ) {
+	for( int i = 0; i < search_space.size(); i++ ) {
 		Node* node = godot::Object::cast_to<Node>(search_space[i]);
 		if( node == nullptr ) continue;
 		float previous_score = 1.0;
@@ -518,7 +518,7 @@ void NNNQSSearchSpaces::place_to_query_results_based_on_score(Node *node, float 
 
 	int i = 0; //_current_query_result_scores.bsearch(score);
 	while (i < num_entries && _current_query_result_scores[i] >= score) {
-		++i;
+		i++;
 	}
 
 	if (i < num_entries) {

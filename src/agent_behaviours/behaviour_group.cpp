@@ -79,12 +79,12 @@ float NNBehaviourGroup::evaluate() {
 	int num_consideration_nodes_handled = 0;
 
 	// Evaluate the children.
-	//for( int i = 0; i < num_children; ++i ) {
+	//for( int i = 0; i < num_children; i++ ) {
 	//    Node* node = get_child(i);
 	//    if( node == nullptr ) continue;
 	//    NNConsiderations* considerationsNode = godot::Object::cast_to<NNConsiderations>(node);
 	//    if( considerationsNode == nullptr ) continue;
-	for (unsigned int i = 0; i < _num_child_considerations; ++i) {
+	for (unsigned int i = 0; i < _num_child_considerations; i++) {
 		NNConsiderations *considerationsNode = _child_considerations[i];
 		if (!considerationsNode->get_is_enabled())
 			continue;

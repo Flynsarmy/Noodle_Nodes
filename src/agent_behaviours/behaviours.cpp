@@ -19,7 +19,7 @@ void NNBehaviours::_notification(int p_what) {
 		_child_considerations.clear();
 		_child_behaviours.clear();
 		int num_children = get_child_count();
-		for (int i = 0; i < num_children; ++i) {
+		for (int i = 0; i < num_children; i++) {
 			if (NNConsiderations *cons = godot::Object::cast_to<NNConsiderations>(get_child(i))) {
 				_child_considerations.push_back(cons);
 			} else if (NNBehaviours *beh = godot::Object::cast_to<NNBehaviours>(get_child(i))) {

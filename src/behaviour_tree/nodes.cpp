@@ -166,11 +166,11 @@ NodePath NNBTNodes::get_tree_root() const {
 
 void NNBTNodes::reset() {
 	_internal_status = BT_INTERNAL_STATUS_UNTICKED;
-	for (int i = 0; i < _num_child_btnodes; ++i) {
+	for (int i = 0; i < _num_child_btnodes; i++) {
 		_child_btnodes[i]->reset();
 	}
 	/**
-	for( int i = 0; i < get_child_count(); ++i ) {
+	for( int i = 0; i < get_child_count(); i++ ) {
 		if( NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(get_child(i)) ) {
 			btnode->reset();
 		}
@@ -181,7 +181,7 @@ void NNBTNodes::reset() {
 /**
 void NNBTNodes::reset_for_looping() {
 	_internal_status = BT_INTERNAL_STATUS_UNTICKED;
-	for( int i = 0; i < get_child_count(); ++i ) {
+	for( int i = 0; i < get_child_count(); i++ ) {
 		if( NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(get_child(i)) ) {
 			btnode->reset_for_looping();
 		}
@@ -207,7 +207,7 @@ float NNBTNodes::evaluate() {
 	//    return _score;
 	//}
 	float child_score = 0.0f;
-	for (unsigned int i = 0; i < _num_child_considerations; ++i) {
+	for (unsigned int i = 0; i < _num_child_considerations; i++) {
 		//Node* node = get_child(i);
 		//if( node == nullptr ) continue;
 		//NNConsiderations* considerationNode = godot::Object::cast_to<NNConsiderations>(node);
@@ -297,7 +297,7 @@ void NNBTNodes::_notification(int p_what) {
 void NNBTNodes::update_child_vectors() {
 	_child_btnodes.clear();
 	_child_considerations.clear();
-	for (int i = 0; i < get_child_count(); ++i) {
+	for (int i = 0; i < get_child_count(); i++) {
 		if (NNBTNodes *btnode = godot::Object::cast_to<NNBTNodes>(get_child(i))) {
 			_child_btnodes.push_back(btnode);
 		} else if (NNConsiderations *consideration = godot::Object::cast_to<NNConsiderations>(get_child(i))) {

@@ -129,7 +129,7 @@ void NNSTRoot::_transition_in() {
 		cur_active_state = _active_states[i];
 
 		bool found = false;
-		for (unsigned int j = 0; j < new_active_states.size(); ++j) {
+		for (unsigned int j = 0; j < new_active_states.size(); j++) {
 			if (new_active_states[j] == cur_active_state) {
 				found = true;
 				break;

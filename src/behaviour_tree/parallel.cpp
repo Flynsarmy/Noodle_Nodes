@@ -51,7 +51,7 @@ NNBTNodes::Status NNBTParallel::tick(Variant blackboard, float delta) {
 	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	Status parallelresult = Status::SUCCESS;
-	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+	for (unsigned int i = 0; i < _num_child_btnodes; i++) {
 		NNBTNodes *btnode = _child_btnodes[i];
 		//if( btnode != nullptr ) {
 		if (!btnode->get_is_enabled()) {

@@ -102,9 +102,9 @@ NNBTNodes::Status NNBTRepeater::tick(Variant blackboard, float delta) {
 	Status result = Status::FAILURE;
 
 	//emit_signal("btnode_ticked",blackboard, delta);
-	//for( int i = 0; i < get_child_count(); ++i ) {
+	//for( int i = 0; i < get_child_count(); i++ ) {
 	//    if( NNBTNodes* btnode = godot::Object::cast_to<NNBTNodes>(get_child(i)) ) {
-	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+	for (unsigned int i = 0; i < _num_child_btnodes; i++) {
 		NNBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_enabled()) {
 			continue;

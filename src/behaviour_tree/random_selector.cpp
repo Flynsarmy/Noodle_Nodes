@@ -25,7 +25,7 @@ void NNBTRandomSelector::reset_bt_node() {
 	_current_child_index = 0;
 	// Create a random order.
 	_child_node_order.clear();
-	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+	for (unsigned int i = 0; i < _num_child_btnodes; i++) {
 		NNBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_enabled()) {
 			continue;
