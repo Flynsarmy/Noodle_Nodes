@@ -98,3 +98,34 @@ func test_get_root_works_when_grandchild_changed() -> void:
 
 	assert_eq(_child.get_root(), _root)
 	assert_eq(_grandchild.get_root(), _root)
+
+func test_initial_state_works() -> void:
+	var _root: NNSTRoot = NNSTRoot.new()
+	var _child: NNSTNode = NNSTNode.new()
+	var _grandchild: NNSTNode = NNSTNode.new()
+	var _grandchild2: NNSTNode = NNSTNode.new()
+
+	_grandchild2.name = '_grandchild2'
+	_child.initial_state = NodePath('_grandchild2')
+
+	# Hierarchy needs to be set up with initial_state property before
+	# root is added to the tree.
+	_root.add_child(_child)
+	_child.add_child(_grandchild)
+	_child.add_child(_grandchild2)
+	add_child_autofree(_root)
+
+	assert_eq(_grandchild.internal_status, 0)
+	assert_eq(_grandchild2.internal_status, 1)
+
+func test_initial_state_only_accepts_immediate_children() -> void:
+	var _node: NNSTNode = autofree(NNSTNode.new())
+
+	_node.initial_state = NodePath('foo')
+	assert_eq(_node.initial_state, NodePath('foo'))
+
+	_node.initial_state = NodePath('foo/bar')
+	assert_eq(_node.initial_state, NodePath(''))
+
+	_node.initial_state = NodePath('.')
+	assert_eq(_node.initial_state, NodePath(''))

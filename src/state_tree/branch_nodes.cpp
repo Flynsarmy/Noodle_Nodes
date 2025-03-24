@@ -140,52 +140,7 @@ bool NNSTBranchNodes::_can_transition_to(NNSTTickedNodes *from_state, NNSTTicked
  * Only activates up to 1 child for each node (CompoundState).
  */
 void NNSTBranchNodes::_evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes) {
-	// std::vector<NNSTNode *> nodes;
-
-	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
-		// Childs are evaluated by using the user-defined on_enter_condition method.
-		for (unsigned int i = 0; i < _num_child_states; i++) {
-			NNSTTickedNodes *stnode = _child_states[i];
-			if (!stnode->get_is_enabled()) {
-				continue;
-			}
-
-			if (!stnode->on_enter_condition()) {
-				continue;
-			}
-
-			// Activate the child and evaluate its children
-			nodes.push_back(stnode);
-
-			// Only 1 child gets activated
-			break;
-		}
-	} else if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::UTILITY_SCORING) {
-		// Childs are evaluated by using Utility-based scoring.
-		NNSTTickedNodes *highest_scoring_state_to_activate = nullptr;
-		float highest_score = -9999999.9999;
-		for (unsigned int i = 0; i < _num_child_states; i++) {
-			NNSTTickedNodes *stnode = _child_states[i];
-
-			if (!stnode->get_is_enabled()) {
-				continue;
-			}
-
-			float score = stnode->evaluate();
-			if (score > highest_score) {
-				highest_score = score;
-				highest_scoring_state_to_activate = stnode;
-			}
-		}
-
-		// Return the highest scoring state that can activate.
-		if (highest_scoring_state_to_activate != nullptr) {
-			// Activate the child and evaluate its children
-			nodes.push_back(highest_scoring_state_to_activate);
-		}
-	}
-
-	// return nodes;
+	// Implemented on child nodes
 }
 
 void NNSTBranchNodes::_input(const Ref<InputEvent> &p_event) {
@@ -207,7 +162,16 @@ void NNSTBranchNodes::_unhandled_key_input(const Ref<InputEvent> &p_event) {
 }
 
 void NNSTBranchNodes::_notification(int p_what) {
-	if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
+	if (p_what == NOTIFICATION_READY || p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
+		if (Engine::get_singleton()->is_editor_hint()) {
+			return;
+		}
+
+		// Wait for _ready first before doing child order change updates
+		if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED && _internal_status != ST_INTERNAL_STATUS_ACTIVE) {
+			return;
+		}
+
 		_child_states.clear();
 		_child_considerations.clear();
 		int num_children = get_child_count();

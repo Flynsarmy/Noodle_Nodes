@@ -112,6 +112,61 @@ void NNSTRoot::send_event(String name) {
 	}
 }
 
+/**
+ * Searches children for states to activate using the appropriate
+ * activation method based on the `get_child_state_selection_rule()` setting.
+ *
+ * Only activates up to 1 child for each node (CompoundState).
+ */
+void NNSTRoot::_evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes) {
+	// std::vector<NNSTNode *> nodes;
+
+	if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
+		// Childs are evaluated by using the user-defined on_enter_condition method.
+		for (unsigned int i = 0; i < _num_child_states; i++) {
+			NNSTTickedNodes *stnode = _child_states[i];
+			if (!stnode->get_is_enabled()) {
+				continue;
+			}
+
+			if (!stnode->on_enter_condition()) {
+				continue;
+			}
+
+			// Activate the child and evaluate its children
+			nodes.push_back(stnode);
+
+			// Only 1 child gets activated
+			break;
+		}
+	} else if (get_child_state_selection_rule() == NNSTNodeChildStateSelectionRule::UTILITY_SCORING) {
+		// Childs are evaluated by using Utility-based scoring.
+		NNSTTickedNodes *highest_scoring_state_to_activate = nullptr;
+		float highest_score = -9999999.9999;
+		for (unsigned int i = 0; i < _num_child_states; i++) {
+			NNSTTickedNodes *stnode = _child_states[i];
+
+			if (!stnode->get_is_enabled()) {
+				continue;
+			}
+
+			float score = stnode->evaluate();
+			if (score > highest_score) {
+				highest_score = score;
+				highest_scoring_state_to_activate = stnode;
+			}
+		}
+
+		// Return the highest scoring state that can activate.
+		if (highest_scoring_state_to_activate != nullptr) {
+			// Activate the child and evaluate its children
+			nodes.push_back(highest_scoring_state_to_activate);
+		}
+	}
+
+	// return nodes;
+}
+
 void NNSTRoot::_transition_in() {
 	if (_num_active_states > 0) {
 		return;
@@ -167,8 +222,14 @@ void NNSTRoot::_notification(int p_what) {
 	NNSTBranchNodes::_notification(p_what);
 
 	if (p_what == NOTIFICATION_READY || p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
-		if (Engine::get_singleton()->is_editor_hint())
+		if (Engine::get_singleton()->is_editor_hint()) {
 			return;
+		}
+
+		// Wait for _ready first before doing child order change updates
+		if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED && _internal_status != ST_INTERNAL_STATUS_ACTIVE) {
+			return;
+		}
 
 		for (unsigned int i = 0; i < _num_child_states; i++) {
 			NNSTTickedNodes *stnode = _child_states[i];

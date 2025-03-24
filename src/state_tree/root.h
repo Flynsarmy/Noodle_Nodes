@@ -46,6 +46,7 @@ public:
 	virtual void send_event(String name) override;
 
 	virtual void _transition_in() override;
+	virtual void _evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes) override;
 
 	void tick(float delta);
 
