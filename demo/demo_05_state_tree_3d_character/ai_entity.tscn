@@ -1,0 +1,231 @@
+[gd_scene load_steps=34 format=3 uid="uid://digtgw0djj7ag"]
+
+[ext_resource type="PackedScene" uid="uid://b63nj6ojftrm7" path="res://demo_05_state_tree_3d_character/visuals/gobot.tscn" id="1_ha2aq"]
+[ext_resource type="Script" uid="uid://c846lrlm3g82d" path="res://demo_05_state_tree_3d_character/ai_entity.gd" id="1_x4txl"]
+[ext_resource type="Script" uid="uid://dflw0y5ybqpk4" path="res://demo_05_state_tree_3d_character/camera_arm.gd" id="2_83p2l"]
+[ext_resource type="Script" uid="uid://ceni7beafkbis" path="res://demo_05_state_tree_3d_character/states/root.gd" id="3_twn2d"]
+[ext_resource type="Script" uid="uid://cdydr4r08ng8y" path="res://demo_05_state_tree_3d_character/states/forces/gravity.gd" id="4_366v2"]
+[ext_resource type="Script" uid="uid://bysdkvkcfxasm" path="res://demo_05_state_tree_3d_character/states/movement.gd" id="4_ec6pr"]
+[ext_resource type="Script" uid="uid://dgtfap75h7auc" path="res://demo_05_state_tree_3d_character/states/control/none.gd" id="4_fmyjt"]
+[ext_resource type="Script" uid="uid://buuc1g2v3utrs" path="res://demo_05_state_tree_3d_character/states/movement/idle.gd" id="5_dcwij"]
+[ext_resource type="Script" uid="uid://bl3jvt8lljea3" path="res://demo_05_state_tree_3d_character/states/control/input.gd" id="5_hve8x"]
+[ext_resource type="Script" uid="uid://beo42i5xfxmgb" path="res://demo_05_state_tree_3d_character/states/movement/run.gd" id="6_pt85u"]
+[ext_resource type="Script" uid="uid://c4cg4apkbin2h" path="res://demo_05_state_tree_3d_character/states/movement/jump.gd" id="11_rbkdm"]
+[ext_resource type="Script" uid="uid://bipk1agsp7kg3" path="res://demo_05_state_tree_3d_character/states/movement/airborn.gd" id="12_xgcap"]
+[ext_resource type="PackedScene" uid="uid://dsu4pkmjdarfe" path="res://addons/noodle_nodes/debuggers/state_charts/state_chart_debugger.tscn" id="14_1ul67"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ehdux"]
+height = 1.5
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rbkdm"]
+animation = &"Fall"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xgcap"]
+animation = &"Jump"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2dwb6"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dudgy"]
+xfade_time = 0.2
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ovm1n"]
+advance_mode = 2
+advance_expression = "is_on_floor()"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_du6op"]
+states/fall/node = SubResource("AnimationNodeAnimation_rbkdm")
+states/fall/position = Vector2(676.571, 99.9719)
+states/jump/node = SubResource("AnimationNodeAnimation_xgcap")
+states/jump/position = Vector2(422.857, 100.113)
+transitions = ["Start", "jump", SubResource("AnimationNodeStateMachineTransition_2dwb6"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_dudgy"), "fall", "End", SubResource("AnimationNodeStateMachineTransition_ovm1n")]
+graph_offset = Vector2(-3, -115)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hve8x"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x4txl"]
+animation = &"Walk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ehdux"]
+animation = &"Run"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ehdux"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rbkdm"]
+xfade_time = 0.2
+advance_mode = 2
+advance_expression = "get_horizontal_velocity().length() > 0.1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xgcap"]
+xfade_time = 0.2
+advance_mode = 2
+advance_expression = "get_horizontal_velocity().length() <= 0.1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1ul67"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"holding_sprint"
+advance_expression = "get_horizontal_velocity().length() > 0.1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_h5shp"]
+xfade_time = 0.2
+advance_mode = 2
+advance_expression = "get_horizontal_velocity().length() <= 0.1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_m6axq"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"holding_sprint"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lewoq"]
+xfade_time = 0.2
+advance_mode = 2
+advance_expression = "not anim_tree['parameters/basic_movement/conditions/holding_sprint'] and get_horizontal_velocity().length() > 0.3"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_1ul67"]
+states/Start/position = Vector2(204.571, 99.7551)
+states/idle/node = SubResource("AnimationNodeAnimation_hve8x")
+states/idle/position = Vector2(468.571, 100.041)
+states/run/node = SubResource("AnimationNodeAnimation_x4txl")
+states/run/position = Vector2(649.143, 98.3265)
+states/sprint/node = SubResource("AnimationNodeAnimation_ehdux")
+states/sprint/position = Vector2(556.714, -22.8571)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_ehdux"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_rbkdm"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_xgcap"), "idle", "sprint", SubResource("AnimationNodeStateMachineTransition_1ul67"), "sprint", "idle", SubResource("AnimationNodeStateMachineTransition_h5shp"), "run", "sprint", SubResource("AnimationNodeStateMachineTransition_m6axq"), "sprint", "run", SubResource("AnimationNodeStateMachineTransition_lewoq")]
+graph_offset = Vector2(-121, -87)
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_nildm"]
+fadein_time = 0.2
+fadeout_time = 0.1
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_h5shp"]
+graph_offset = Vector2(-657.143, 153.143)
+nodes/StateMachine/node = SubResource("AnimationNodeStateMachine_du6op")
+nodes/StateMachine/position = Vector2(-57.1429, 457.143)
+nodes/basic_movement/node = SubResource("AnimationNodeStateMachine_1ul67")
+nodes/basic_movement/position = Vector2(-365.714, 148.571)
+nodes/jump_oneshot/node = SubResource("AnimationNodeOneShot_nildm")
+nodes/jump_oneshot/position = Vector2(11.4286, 148.571)
+node_connections = [&"jump_oneshot", 0, &"basic_movement", &"jump_oneshot", 1, &"StateMachine", &"output", 0, &"jump_oneshot"]
+
+[node name="ai_entity" type="CharacterBody3D"]
+script = ExtResource("1_x4txl")
+
+[node name="gobot" parent="." instance=ExtResource("1_ha2aq")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CapsuleShape3D_ehdux")
+
+[node name="CameraArm" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.890725, 0)
+spring_length = 3.0
+script = ExtResource("2_83p2l")
+
+[node name="Camera3D" type="Camera3D" parent="CameraArm"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.24169)
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../gobot")
+tree_root = SubResource("AnimationNodeBlendTree_h5shp")
+advance_expression_base_node = NodePath("..")
+anim_player = NodePath("../gobot/AnimationPlayer")
+parameters/basic_movement/conditions/holding_sprint = false
+parameters/jump_oneshot/active = 0.0
+parameters/jump_oneshot/internal_active = 0.0
+parameters/jump_oneshot/request = 0
+
+[node name="NNSTRoot" type="NNSTRoot" parent="."]
+blackboard = {
+"acceleration": 0.75,
+"holding_sprint": false,
+"input_dir": Vector3(0, 0, 0)
+}
+script = ExtResource("3_twn2d")
+
+[node name="Root" type="NNSTParallel" parent="NNSTRoot"]
+
+[node name="Control" type="NNSTNode" parent="NNSTRoot/Root"]
+initial_state = NodePath("Input")
+
+[node name="None" type="NNSTNode" parent="NNSTRoot/Root/Control"]
+script = ExtResource("4_fmyjt")
+
+[node name="Input" type="NNSTNode" parent="NNSTRoot/Root/Control"]
+script = ExtResource("5_hve8x")
+
+[node name="Movement" type="NNSTNode" parent="NNSTRoot/Root"]
+script = ExtResource("4_ec6pr")
+
+[node name="Idle" type="NNSTNode" parent="NNSTRoot/Root/Movement"]
+script = ExtResource("5_dcwij")
+
+[node name="To_Run" type="NNSTTransition" parent="NNSTRoot/Root/Movement/Idle"]
+to = NodePath("../../Run")
+event_name = "movement_run"
+
+[node name="To_Jump" type="NNSTTransition" parent="NNSTRoot/Root/Movement/Idle"]
+to = NodePath("../../Jump")
+event_name = "movement_jump"
+
+[node name="Run" type="NNSTNode" parent="NNSTRoot/Root/Movement"]
+script = ExtResource("6_pt85u")
+
+[node name="To_Idle" type="NNSTTransition" parent="NNSTRoot/Root/Movement/Run"]
+to = NodePath("../../Idle")
+event_name = "movement_idle"
+
+[node name="To_Jump" type="NNSTTransition" parent="NNSTRoot/Root/Movement/Run"]
+to = NodePath("../../Jump")
+event_name = "movement_jump"
+
+[node name="Jump" type="NNSTNode" parent="NNSTRoot/Root/Movement"]
+script = ExtResource("11_rbkdm")
+
+[node name="To_Airborn" type="NNSTTransition" parent="NNSTRoot/Root/Movement/Jump"]
+to = NodePath("../../Airborn")
+event_name = "movement_airborn"
+
+[node name="Airborn" type="NNSTNode" parent="NNSTRoot/Root/Movement"]
+script = ExtResource("12_xgcap")
+
+[node name="To_Run" type="NNSTTransition" parent="NNSTRoot/Root/Movement/Airborn"]
+to = NodePath("../../Run")
+event_name = "movement_run"
+
+[node name="To_Idle" type="NNSTTransition" parent="NNSTRoot/Root/Movement/Airborn"]
+to = NodePath("../../Idle")
+event_name = "movement_idle"
+
+[node name="Forces" type="NNSTNode" parent="NNSTRoot/Root"]
+initial_state = NodePath("Gravity")
+
+[node name="Vaccuum" type="NNSTNode" parent="NNSTRoot/Root/Forces"]
+
+[node name="To_Gravity" type="NNSTTransition" parent="NNSTRoot/Root/Forces/Vaccuum"]
+to = NodePath("../../Gravity")
+event_name = "to_gravity"
+
+[node name="Gravity" type="NNSTNode" parent="NNSTRoot/Root/Forces"]
+script = ExtResource("4_366v2")
+
+[node name="To_Vaccuum" type="NNSTTransition" parent="NNSTRoot/Root/Forces/Gravity"]
+to = NodePath("../../Vaccuum")
+event_name = "forces_vaccuum"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="StateChartDebugger" parent="CanvasLayer" node_paths=PackedStringArray("initial_node_to_watch") instance=ExtResource("14_1ul67")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_bottom = 0.0
+offset_left = -408.0
+offset_top = 99.0
+offset_right = -65.0
+offset_bottom = 488.0
+grow_horizontal = 0
+grow_vertical = 1
+initial_node_to_watch = NodePath("../../NNSTRoot")

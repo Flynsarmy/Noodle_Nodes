@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var ai_entity_template: PackedScene = preload("res://demo_04_node_query_system/ai_entity.tscn")
+@onready var ai_entity_template: PackedScene = preload("ai_entity.tscn")
 @onready var mouse_point_grid: Node2D = $mouse_point_grid
 
 var mouse_position: Vector2

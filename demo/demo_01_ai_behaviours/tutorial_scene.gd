@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var ai_entity_template: PackedScene = preload("res://demo_01_ai_behaviours/ai_entity.tscn")
+@onready var ai_entity_template: PackedScene = preload("ai_entity.tscn")
 var mouse_position: Vector2
 
 

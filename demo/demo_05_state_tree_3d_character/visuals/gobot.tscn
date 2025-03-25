@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=3 uid="uid://b63nj6ojftrm7"]
+
+[ext_resource type="PackedScene" uid="uid://cawdaslowhjja" path="res://demo_05_state_tree_3d_character/visuals/gobot.glb" id="1_uxre4"]
+
+[node name="gobot" instance=ExtResource("1_uxre4")]
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/0/position = Vector3(0.137431, 0.10287, 0.0124146)
+bones/0/rotation = Quaternion(0.641472, 0.210655, -0.189552, 0.712887)
+bones/1/position = Vector3(-0.137431, 0.10287, 0.0124146)
+bones/1/rotation = Quaternion(0.641472, -0.210655, 0.189552, 0.712887)
+bones/2/position = Vector3(0, 0.31112, -0.051761)
+bones/2/rotation = Quaternion(0.104357, -4.34727e-08, -4.5616e-09, 0.99454)
+bones/3/rotation = Quaternion(1, 8.88178e-16, -7.54979e-08, -6.70556e-23)
+bones/4/rotation = Quaternion(-0.701607, -0.225479, -0.132917, 0.662752)
+bones/5/rotation = Quaternion(0.666428, 8.18501e-07, -2.27218e-05, 0.745569)
+bones/6/rotation = Quaternion(-0.701607, 0.225479, 0.132917, 0.662751)
+bones/7/rotation = Quaternion(0.666428, -8.48728e-07, 2.27942e-05, 0.745569)
+bones/8/rotation = Quaternion(-0.670402, -0.510982, -0.409337, 0.349145)
+bones/9/rotation = Quaternion(2.32346e-05, 2.83302e-07, -0.720166, 0.693802)
+bones/10/rotation = Quaternion(-0.678018, -0.527799, -0.297581, 0.416132)
+bones/11/rotation = Quaternion(0.0298192, -0.0194152, -0.000472976, 0.999367)
+bones/12/rotation = Quaternion(0.148909, 0.00125231, 0.00605024, 0.988832)
+bones/13/rotation = Quaternion(-0.337946, 9.61479e-06, -3.07413e-05, 0.941166)
+bones/14/rotation = Quaternion(0.148909, 0.0012523, 0.00605025, 0.988832)
+bones/15/rotation = Quaternion(-0.337946, 9.62932e-06, -3.07603e-05, 0.941166)
+bones/16/rotation = Quaternion(-0.670402, 0.510982, 0.409336, 0.349145)
+bones/17/rotation = Quaternion(2.31906e-05, -3.09496e-07, 0.720166, 0.693802)
+bones/18/rotation = Quaternion(-0.678018, 0.527798, 0.297581, 0.416132)
+bones/19/rotation = Quaternion(0.0298192, 0.0194152, 0.000472979, 0.999367)
+bones/20/rotation = Quaternion(0.148909, -0.0012523, -0.00605024, 0.988832)
+bones/21/rotation = Quaternion(-0.337946, -9.61044e-06, 3.07481e-05, 0.941166)
+bones/22/rotation = Quaternion(0.148909, -0.00125229, -0.00605026, 0.988832)
+bones/23/rotation = Quaternion(-0.337946, -9.61276e-06, 3.07596e-05, 0.941166)
+bones/24/position = Vector3(-1.46914e-15, 0.189977, -3.72529e-09)
+bones/24/rotation = Quaternion(-0.100298, 4.3491e-08, 4.38419e-09, 0.994957)
+
+[node name="Gobot" parent="Armature/Skeleton3D" index="0"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="AnimationPlayer" parent="." index="1"]
+autoplay = "Idle"
