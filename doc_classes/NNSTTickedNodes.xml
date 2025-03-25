@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="NNSTTickedNodes" inherits="NNSTBranchNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Base class for state tree nodes that are ticked by [NNSTRoot].
 	</brief_description>
 	<description>
 	</description>
@@ -64,6 +65,8 @@
 			Defines how the considerations are aggregated. Can be one of the following: `Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5`.
 		</member>
 		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
+			A value (usually between 0 and 1) that affects the likelihood of this node being entered when the parent's [member NNSTBranchNodes.child_state_selection_rule] property is set to `UtilityScoring`. The highest scored child of the parent node will be selected.
+			[b]Note:[/b] This value isn't set manually. It's calculated by adding [NNSTConsiderations] children that will be evaluated at time of scoring.
 		</member>
 	</members>
 	<signals>

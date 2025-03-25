@@ -107,8 +107,6 @@ void NNSTTickedNodes::send_event(String name) {
 }
 
 float NNSTTickedNodes::evaluate() {
-//if( !get_is_enabled() ) return 0.0f;
-//if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 #ifdef DEBUG_ENABLED
 	_last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
 #endif
@@ -121,11 +119,6 @@ float NNSTTickedNodes::evaluate() {
 	}
 	float child_score = 0.0;
 
-	//for( int i = 0; i < num_children; i++ ) {
-	//    Node* node = get_child(i);
-	//    if( node == nullptr ) continue;
-	//    NNConsiderations* considerationNode = godot::Object::cast_to<NNConsiderations>(node);
-	//    if( considerationNode == nullptr ) continue;
 	for (unsigned int i = 0; i < _num_child_considerations; i++) {
 		NNConsiderations *considerationNode = _child_considerations[i];
 		if (!considerationNode->get_is_enabled())
@@ -154,6 +147,7 @@ float NNSTTickedNodes::evaluate() {
 					_score = child_score;
 				else
 					_score *= child_score;
+
 				// If after multiplication we are at 0.0, then none of the
 				// other considerations will ever change the result, so bail.
 				if (_score == 0.0f) {
