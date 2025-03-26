@@ -8,6 +8,14 @@
 	<tutorials>
 	</tutorials>
 	<methods>
+		<method name="get_blackboard" qualifiers="const">
+			<return type="Variant" />
+			<param index="0" name="key" type="Variant" />
+			<param index="1" name="default" type="Variant" default="null" />
+			<description>
+				Returns the corresponding value for the given [param key] in the blackboard dictionary. If the key does not exist, returns [param default], or `null` if the parameter is omitted. See [method Dictionary.get].
+			</description>
+		</method>
 		<method name="get_on_entered_condition" qualifiers="const">
 			<return type="bool" />
 			<description>
@@ -43,6 +51,14 @@
 			<param index="0" name="delta" type="float" />
 			<description>
 				Logic to run when a state is ticked. This will execute before the corrosponding signal.
+			</description>
+		</method>
+		<method name="set_blackboard">
+			<return type="bool" />
+			<param index="0" name="key" type="Variant" />
+			<param index="1" name="value" type="Variant" />
+			<description>
+				Sets the value of the element at the given [param key] to the given [param value]. See [method Dictionary.set].
 			</description>
 		</method>
 		<method name="set_on_entered_condition">
