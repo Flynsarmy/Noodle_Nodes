@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNSTNotGuard" inherits="NNSTGuard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Negates the result of the [member guard].
+	</brief_description>
+	<description>
+		This guard negates the result of the [member guard]. If the [member guard] is satisfied, this guard will return [code]false[/code], and vice versa. This is useful for creating guards that are the opposite of another guard.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="is_satisfied">
+			<return type="bool" />
+			<param index="0" name="p_transition" type="NNSTTransition" />
+			<param index="1" name="p_state" type="NNSTTickedNodes" />
+			<description>
+				Evaluates the [member guard] and returns the opposite of its result. If the [member guard] is satisfied, this method returns [code]false[/code], and vice versa.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="guard" type="NNSTGuard" setter="set_guard" getter="get_guard">
+			The guard to be negated. This guard will be evaluated, and the result will be inverted.
+		</member>
+	</members>
+</class>

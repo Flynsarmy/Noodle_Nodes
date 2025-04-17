@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNSTAllOfGuard" inherits="NNSTGuard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Returns [code]true[/code] if all of the [member guards] are satisfied.
+	</brief_description>
+	<description>
+		This guard returns [code]true[/code] if all of the [member guards] are satisfied. This is useful for creating guards that can be satisfied by multiple conditions.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="is_satisfied">
+			<return type="bool" />
+			<param index="0" name="p_transition" type="NNSTTransition" />
+			<param index="1" name="p_state" type="NNSTTickedNodes" />
+			<description>
+				Returns [code]true[/code] if all of the [member guards] are satisfied, [code]false[/code] otherwise.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="guards" type="NNSTGuard[]" setter="set_guards" getter="get_guards" default="[]">
+			An array of guards to be evaluated.
+		</member>
+	</members>
+</class>

@@ -71,9 +71,14 @@
 // STATE TREE
 
 //#include "state_tree/leaf.h"
+#include "state_tree/all_of_guard.h"
+#include "state_tree/any_of_guard.h"
 #include "state_tree/branch_nodes.h"
+#include "state_tree/expression_guard.h"
+#include "state_tree/guard.h"
 #include "state_tree/node.h"
 #include "state_tree/nodes.h"
+#include "state_tree/not_guard.h"
 #include "state_tree/parallel.h"
 #include "state_tree/root.h"
 #include "state_tree/ticked_nodes.h"
@@ -203,6 +208,11 @@ void register_scene_classes() {
 	GDREGISTER_CLASS(NNBTCooldownMsec);
 
 	// State tree.
+	GDREGISTER_CLASS(NNSTGuard);
+	GDREGISTER_CLASS(NNSTExpressionGuard);
+	GDREGISTER_CLASS(NNSTAllOfGuard);
+	GDREGISTER_CLASS(NNSTAnyOfGuard);
+	GDREGISTER_CLASS(NNSTNotGuard);
 	GDREGISTER_VIRTUAL_CLASS(NNSTNodes);
 	GDREGISTER_VIRTUAL_CLASS(NNSTBranchNodes);
 	GDREGISTER_VIRTUAL_CLASS(NNSTTickedNodes);

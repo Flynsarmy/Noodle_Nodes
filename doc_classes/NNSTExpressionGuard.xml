@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNSTExpressionGuard" inherits="NNSTGuard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		[Expression] guard for State Tree transitions.
+	</brief_description>
+	<description>
+		Expression guards give you the most flexibility when it comes to guards. You can use expressions to determine whether a transition should be taken or not. Expression guards are evaluated using the [Expression] class.
+
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="is_satisfied">
+			<return type="bool" />
+			<param index="0" name="p_transition" type="NNSTTransition" />
+			<param index="1" name="p_state" type="NNSTTickedNodes" />
+			<description>
+				Returns [code]true[/code] if [member expression] evaluates to [code]true[/code], [code]false[/code] otherwise.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="expression" type="String" setter="set_expression" getter="get_expression" default="&quot;&quot;">
+			An expression to be evaluated by the [Expression] class. Expressions have access to the blackboard. For example is the blackboard has a key called [code]my_variable[/code], you can use it in the expression like this: [code]my_variable == 1[/code].
+		</member>
+	</members>
+</class>

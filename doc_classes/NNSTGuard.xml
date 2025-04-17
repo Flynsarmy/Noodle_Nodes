@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNSTGuard" inherits="Resource" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Base class for all State Tree guard resources.
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="is_satisfied">
+			<return type="bool" />
+			<param index="0" name="p_transition" type="NNSTTransition" />
+			<param index="1" name="p_state" type="NNSTTickedNodes" />
+			<description>
+				Returns [code]true[/code] if the guard is satisfied, [code]false[/code] otherwise.
+				Guards are used to determine if a transition can be taken or not. If the guard is satisfied, the transition can be taken.
+			</description>
+		</method>
+	</methods>
+</class>

@@ -12,6 +12,8 @@
 		<member name="event_name" type="String" setter="set_event_name" getter="get_event_name" default="&quot;&quot;">
 			Case sensitive event name that will trigger this [NNSTTransition].
 		</member>
+		<member name="guard" type="NNSTGuard" setter="set_guard" getter="get_guard">
+		</member>
 		<member name="to" type="NodePath" setter="set_to" getter="get_to" default="NodePath(&quot;&quot;)">
 			[NodePath] to target node.
 		</member>
