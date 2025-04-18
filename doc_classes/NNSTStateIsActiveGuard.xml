@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NNSTStateIsActiveGuard" inherits="NNSTGuard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Checks if a given state is active.
+	</brief_description>
+	<description>
+		This guard is used to check if the given [member state] is active.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="is_satisfied">
+			<return type="bool" />
+			<param index="0" name="p_transition" type="NNSTTransition" />
+			<param index="1" name="p_state" type="NNSTTickedNodes" />
+			<description>
+				Checks if the [member state] is active. Returns [code]true[/code] if the state is active, [code]false[/code] otherwise.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="state" type="NodePath" setter="set_state" getter="get_state" default="NodePath(&quot;&quot;)">
+			The state to be checked.
+		</member>
+	</members>
+</class>

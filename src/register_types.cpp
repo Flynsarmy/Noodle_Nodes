@@ -81,6 +81,7 @@
 #include "state_tree/not_guard.h"
 #include "state_tree/parallel.h"
 #include "state_tree/root.h"
+#include "state_tree/state_is_active_guard.h"
 #include "state_tree/ticked_nodes.h"
 #include "state_tree/transition.h"
 
@@ -213,6 +214,7 @@ void register_scene_classes() {
 	GDREGISTER_CLASS(NNSTAllOfGuard);
 	GDREGISTER_CLASS(NNSTAnyOfGuard);
 	GDREGISTER_CLASS(NNSTNotGuard);
+	GDREGISTER_CLASS(NNSTStateIsActiveGuard);
 	GDREGISTER_VIRTUAL_CLASS(NNSTNodes);
 	GDREGISTER_VIRTUAL_CLASS(NNSTBranchNodes);
 	GDREGISTER_VIRTUAL_CLASS(NNSTTickedNodes);
