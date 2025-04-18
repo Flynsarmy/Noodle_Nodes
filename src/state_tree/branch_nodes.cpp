@@ -17,9 +17,11 @@ void NNSTBranchNodes::_bind_methods() {
 
 	ADD_SUBGROUP("Debugging", "");
 
-	ClassDB::bind_method(D_METHOD("set_internal_status", "internal_status"), &NNSTBranchNodes::set_internal_status);
-	ClassDB::bind_method(D_METHOD("get_internal_status"), &NNSTBranchNodes::get_internal_status);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Inactive:0,Active:1"), "set_internal_status", "get_internal_status");
+	// ClassDB::bind_method(D_METHOD("set_internal_status", "internal_status"), &NNSTBranchNodes::set_internal_status);
+	// ClassDB::bind_method(D_METHOD("get_internal_status"), &NNSTBranchNodes::get_internal_status);
+	// ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Inactive:0,Active:1"), "set_internal_status", "get_internal_status");
+
+	ClassDB::bind_method(D_METHOD("get_is_active"), &NNSTBranchNodes::get_is_active);
 
 	ClassDB::bind_method(D_METHOD("send_event", "name"), &NNSTBranchNodes::send_event);
 
@@ -57,6 +59,10 @@ void NNSTBranchNodes::set_child_state_selection_rule(int child_state_selection_r
 
 int NNSTBranchNodes::get_child_state_selection_rule() const {
 	return _child_state_selection_rule;
+}
+
+bool NNSTBranchNodes::get_is_active() const {
+	return _internal_status == ST_INTERNAL_STATUS_ACTIVE;
 }
 
 void NNSTBranchNodes::set_internal_status(int internal_status) {

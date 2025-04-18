@@ -6,9 +6,9 @@ extends GutTest
 ## _get_active_states() should be 0 before first tick
 func test_active_before_ticked() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
-	assert_eq(_root.internal_status, 1)
+	assert_eq(_root.get_is_active(), true)
 	_root.tick(0.1)
-	assert_eq(_root.internal_status, 1)
+	assert_eq(_root.get_is_active(), true)
 
 ## _get_active_states() should be 1 before and after a tick
 func test_1_active_child_on_ticked_root() -> void:
@@ -18,10 +18,10 @@ func test_1_active_child_on_ticked_root() -> void:
 	_root.add_child(_child)
 	_root.add_child(_child2)
 	# before first tick it'll be 0
-	assert_eq(_child.internal_status, 1)
+	assert_eq(_child.get_is_active(), true)
 	_root.tick(0.1);
-	assert_eq(_child.internal_status, 1)
-	assert_eq(_child2.internal_status, 0)
+	assert_eq(_child.get_is_active(), true)
+	assert_eq(_child2.get_is_active(), false)
 
 ## _get_child_sensors() should match number of active children
 func test_child_sensor_count() -> void:
@@ -55,5 +55,5 @@ func test_on_enter_condition_works_on_children() -> void:
 	_root.add_child(_child2)
 
 	_root.tick(0.1)
-	assert_eq(_child1.internal_status, 0)
-	assert_eq(_child2.internal_status, 1)
+	assert_eq(_child1.get_is_active(), false)
+	assert_eq(_child2.get_is_active(), true)

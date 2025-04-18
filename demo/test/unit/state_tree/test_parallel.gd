@@ -15,9 +15,9 @@ func test_all_children_ticked() -> void:
 	_parallel.add_child(_node2)
 	_root.tick(0.1)
 
-	assert_eq(_parallel.internal_status, 1)
-	assert_eq(_node1.internal_status, 1)
-	assert_eq(_node2.internal_status, 1)
+	assert_eq(_parallel.get_is_active(), true)
+	assert_eq(_node1.get_is_active(), true)
+	assert_eq(_node2.get_is_active(), true)
 
 func test_children_failing_condition_dont_tick() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
@@ -36,9 +36,9 @@ func test_children_failing_condition_dont_tick() -> void:
 	_parallel.add_child(_node2)
 	_root.tick(0.1)
 
-	assert_eq(_parallel.internal_status, 1)
-	assert_eq(_node1.internal_status, 1)
-	assert_eq(_node2.internal_status, 0)
+	assert_eq(_parallel.get_is_active(), true)
+	assert_eq(_node1.get_is_active(), true)
+	assert_eq(_node2.get_is_active(), false)
 
 func test_transitions_away_in_correct_order() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
@@ -68,10 +68,10 @@ func test_transitions_away_in_correct_order() -> void:
 	_root.blackboard['log'] = []
 	_parallel.transition_to(_parallel.get_path_to(_node))
 
-	assert_eq(_parallel.internal_status, 0)
-	assert_eq(_grandchild1.internal_status, 0)
-	assert_eq(_grandchild2.internal_status, 0)
-	assert_eq(_node.internal_status, 1)
+	assert_eq(_parallel.get_is_active(), false)
+	assert_eq(_grandchild1.get_is_active(), false)
+	assert_eq(_grandchild2.get_is_active(), false)
+	assert_eq(_node.get_is_active(), true)
 	assert_eq(_root.blackboard['log'], [
 		"_grandchild2 on_exit_state",
 		"_grandchild1 on_exit_state",
@@ -106,10 +106,10 @@ func test_parallel_branches_tick_correct_nodes() -> void:
 	_child2.add_child(_grandchild22)
 
 	_root.tick(0.1)
-	assert_eq(_parallel.internal_status, 1)
-	assert_eq(_child1.internal_status, 1)
-	assert_eq(_grandchild11.internal_status, 1)
-	assert_eq(_grandchild12.internal_status, 0)
-	assert_eq(_child2.internal_status, 1)
-	assert_eq(_grandchild21.internal_status, 1)
-	assert_eq(_grandchild22.internal_status, 0)
+	assert_eq(_parallel.get_is_active(), true)
+	assert_eq(_child1.get_is_active(), true)
+	assert_eq(_grandchild11.get_is_active(), true)
+	assert_eq(_grandchild12.get_is_active(), false)
+	assert_eq(_child2.get_is_active(), true)
+	assert_eq(_grandchild21.get_is_active(), true)
+	assert_eq(_grandchild22.get_is_active(), false)

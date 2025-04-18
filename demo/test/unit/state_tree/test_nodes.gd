@@ -5,35 +5,35 @@ extends GutTest
 
 ## Confirms a child's state is set to active before tick() when the
 ## root is added to the tree with child already included.
-func test_internal_state_active_before_tick() -> void:
+func test_is_active_before_tick() -> void:
 	var _root: NNSTRoot = NNSTRoot.new()
 	var _child: NNSTNode = NNSTNode.new()
 	_root.add_child(_child)
 
 	add_child_autofree(_root)
-	assert_eq(_root.internal_status, 1)
-	assert_eq(_child.internal_status, 1)
+	assert_eq(_root.get_is_active(), true)
+	assert_eq(_child.get_is_active(), true)
 
 ## Confirms a child's state is set to active before tick() when the
 ## child is added after root is already in the tree.
-func test_child_internal_status_active_before_tick_with_root_in_tree() -> void:
+func test_child_is_active_before_tick_with_root_in_tree() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = NNSTNode.new()
 	_root.add_child(_child)
 
-	assert_eq(_root.internal_status, 1)
-	assert_eq(_child.internal_status, 1)
+	assert_eq(_root.get_is_active(), true)
+	assert_eq(_child.get_is_active(), true)
 
-func test_internal_status_active_after_tick() -> void:
+func test_is_active_after_tick() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = NNSTNode.new()
 	_root.add_child(_child)
 
 	_root.tick(0.1)
-	assert_eq(_root.internal_status, 1)
-	assert_eq(_child.internal_status, 1)
+	assert_eq(_root.get_is_active(), true)
+	assert_eq(_child.get_is_active(), true)
 
-func test_internal_status_inactive_on_enter_condition_fail() -> void:
+func test_is_not_running_on_enter_condition_fail() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = load("res://test/unit/state_tree/node_enter_condition_fail.gd").new()
 	_root.blackboard = {
@@ -45,10 +45,10 @@ func test_internal_status_inactive_on_enter_condition_fail() -> void:
 	_root.add_child(_child)
 
 	_root.tick(0.1)
-	assert_eq(_root.internal_status, 1)
-	assert_eq(_child.internal_status, 0)
+	assert_eq(_root.get_is_active(), true)
+	assert_eq(_child.get_is_active(), false)
 
-func test_internal_status_active_only_on_first_child_of_non_parallel_state() -> void:
+func test_is_active_only_on_first_child_of_non_parallel_state() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child1: NNSTNode = NNSTNode.new()
 	var _child2: NNSTNode = NNSTNode.new()
@@ -57,11 +57,11 @@ func test_internal_status_active_only_on_first_child_of_non_parallel_state() -> 
 	_root.add_child(_child2)
 
 	_root.tick(0.1)
-	assert_eq(_root.internal_status, 1)
-	assert_eq(_child1.internal_status, 1)
-	assert_eq(_child2.internal_status, 0)
+	assert_eq(_root.get_is_active(), true)
+	assert_eq(_child1.get_is_active(), true)
+	assert_eq(_child2.get_is_active(), false)
 
-func test_internal_status_updates_on_transition() -> void:
+func test_is_active_updates_on_transition() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child1: NNSTNode = NNSTNode.new()
 	var _child2: NNSTNode = NNSTNode.new()
@@ -71,11 +71,11 @@ func test_internal_status_updates_on_transition() -> void:
 
 	_root.tick(0.1)
 	_child1.transition_to(_child1.get_path_to(_child2))
-	assert_eq(_root.internal_status, 1)
-	assert_eq(_child1.internal_status, 0)
-	assert_eq(_child2.internal_status, 1)
+	assert_eq(_root.get_is_active(), true)
+	assert_eq(_child1.get_is_active(), false)
+	assert_eq(_child2.get_is_active(), true)
 
-func test_internal_status_active_on_grandchild() -> void:
+func test_is_active_on_grandchild() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = NNSTNode.new()
 	var _grandchild: NNSTNode = NNSTNode.new()
@@ -84,9 +84,9 @@ func test_internal_status_active_on_grandchild() -> void:
 	_child.add_child(_grandchild)
 
 	_root.tick(0.1)
-	assert_eq(_root.internal_status, 1)
-	assert_eq(_child.internal_status, 1)
-	assert_eq(_grandchild.internal_status, 1)
+	assert_eq(_root.get_is_active(), true)
+	assert_eq(_child.get_is_active(), true)
+	assert_eq(_grandchild.get_is_active(), true)
 
 func test_node_methods_called_in_correct_order() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())

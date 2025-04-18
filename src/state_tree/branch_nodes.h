@@ -45,6 +45,8 @@ public:
 
 	// Getters and setters for attributes.
 
+	bool get_is_active() const;
+
 #ifdef DEBUG_ENABLED
 	inline uint64_t get_last_visited_timestamp() const { return _last_visited_timestamp; };
 	inline uint64_t get_last_evaluated_timestamp() const { return _last_evaluated_timestamp; };

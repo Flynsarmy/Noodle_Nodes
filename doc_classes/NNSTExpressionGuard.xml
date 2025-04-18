@@ -5,7 +5,6 @@
 	</brief_description>
 	<description>
 		Expression guards give you the most flexibility when it comes to guards. You can use expressions to determine whether a transition should be taken or not. Expression guards are evaluated using the [Expression] class.
-
 	</description>
 	<tutorials>
 	</tutorials>

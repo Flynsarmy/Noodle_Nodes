@@ -21,8 +21,8 @@ func test_highest_scoring_child_of_root_is_entered() -> void:
 	_child2.add_child(_consideration)
 	add_child_autofree(_root)
 
-	assert_eq(_child1.internal_status, 0)
-	assert_eq(_child2.internal_status, 1)
+	assert_eq(_child1.get_is_active(), false)
+	assert_eq(_child2.get_is_active(), true)
 	assert_eq(_child2.score, 0.5)
 
 func test_highest_scoring_child_of_node_is_entered() -> void:
@@ -45,6 +45,6 @@ func test_highest_scoring_child_of_node_is_entered() -> void:
 	_grandchild2.add_child(_consideration)
 	add_child_autofree(_root)
 
-	assert_eq(_grandchild1.internal_status, 0)
-	assert_eq(_grandchild2.internal_status, 1)
+	assert_eq(_grandchild1.get_is_active(), false)
+	assert_eq(_grandchild2.get_is_active(), true)
 	assert_eq(_grandchild2.score, 0.5)

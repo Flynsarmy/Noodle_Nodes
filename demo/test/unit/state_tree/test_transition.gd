@@ -19,8 +19,8 @@ func test_state_transitions_successfully() -> void:
 	_root.tick(0.1)
 	_root.send_event('test')
 
-	assert_eq(_node1.internal_status, 0)
-	assert_eq(_node2.internal_status, 1)
+	assert_eq(_node1.get_is_active(), false)
+	assert_eq(_node2.get_is_active(), true)
 
 
 func test_events_are_case_sensitive() -> void:
@@ -39,8 +39,8 @@ func test_events_are_case_sensitive() -> void:
 	_root.tick(0.1)
 	_root.send_event('Test')
 
-	assert_eq(_node1.internal_status, 1)
-	assert_eq(_node2.internal_status, 0)
+	assert_eq(_node1.get_is_active(), true)
+	assert_eq(_node2.get_is_active(), false)
 
 func test_non_existant_event_does_nothing() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
@@ -58,5 +58,5 @@ func test_non_existant_event_does_nothing() -> void:
 	_root.tick(0.1)
 	_root.send_event('test')
 
-	assert_eq(_node1.internal_status, 1)
-	assert_eq(_node2.internal_status, 0)
+	assert_eq(_node1.get_is_active(), true)
+	assert_eq(_node2.get_is_active(), false)

@@ -115,8 +115,8 @@ func test_initial_state_works() -> void:
 	_child.add_child(_grandchild2)
 	add_child_autofree(_root)
 
-	assert_eq(_grandchild.internal_status, 0)
-	assert_eq(_grandchild2.internal_status, 1)
+	assert_eq(_grandchild.get_is_active(), false)
+	assert_eq(_grandchild2.get_is_active(), true)
 
 func test_initial_state_only_accepts_immediate_children() -> void:
 	var _node: NNSTNode = autofree(NNSTNode.new())

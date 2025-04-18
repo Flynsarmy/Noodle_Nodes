@@ -8,6 +8,12 @@
 	<tutorials>
 	</tutorials>
 	<methods>
+		<method name="get_is_active" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns if the state is currently active. This is set to [code]true[/code] when the state is entered and [code]false[/code] when exited.
+			</description>
+		</method>
 		<method name="on_input" qualifiers="virtual">
 			<return type="void" />
 			<param index="0" name="event" type="InputEvent" />
@@ -41,9 +47,6 @@
 		<member name="child_state_selection_rule" type="int" setter="set_child_state_selection_rule" getter="get_child_state_selection_rule" default="0">
 			Defines how the child state is chosen. Can be one of the following: "OnEnterConditionMethod:0,UtilityScoring:1", where "OnEnterConditionMethod" means that the user-defined [method NNSTTickedNodes.on_enter_condition] method is called and if it returns [code]true[/code], the state is selected. "UtilityScoring" option uses the considerations set in the properties of the state and/or as child nodes. The highest-scoring state will be chosen.
 			[b]Note:[/b] This setting has no affect on [NNSTParallel] which will always attempt to enter all children in order.
-		</member>
-		<member name="internal_status" type="int" setter="set_internal_status" getter="get_internal_status" default="0">
-			The current internal status of the node, useful for debugging and seeing how the execution progresses. The following choices are possible: "Inactive:0,Active:1".
 		</member>
 	</members>
 </class>
