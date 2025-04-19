@@ -5,6 +5,7 @@ type="CompressedTexture2D"
 uid="uid://c3ns6u4iufsah"
 path="res://.godot/imported/NNSTTtransition.svg-c28f2a83ff9f4f6cd0f4af9a95ac1e92.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
@@ -33,5 +34,5 @@ process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
 svg/scale=1.0
-editor/scale_with_editor_scale=false
+editor/scale_with_editor_scale=true
 editor/convert_colors_with_editor_theme=false
