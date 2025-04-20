@@ -110,7 +110,9 @@ bool NNSTTickedNodes::get_is_on_entered_condition_true() const {
 void NNSTTickedNodes::send_event(String name) {
 	for (unsigned int i = 0; i < _child_transitions.size(); i++) {
 		if (_child_transitions[i]->get_event_name() == name) {
-			transition_to(_child_transitions[i]->get_to().slice(1));
+			if (_child_transitions[i]->_can_transition()) {
+				transition_to(_child_transitions[i]->get_to().slice(1));
+			}
 			return;
 		}
 	}

@@ -52,5 +52,11 @@ void NNSTTransition::set_guard(const Ref<NNSTGuard> &p_guard) {
 }
 
 // Handling functions.
+bool NNSTTransition::_can_transition() {
+	if (guard.is_valid()) {
+		return guard->is_satisfied(this, Object::cast_to<NNSTTickedNodes>(get_parent()));
+	}
+	return true;
+}
 
 // Godot virtuals.

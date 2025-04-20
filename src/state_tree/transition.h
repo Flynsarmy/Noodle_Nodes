@@ -33,6 +33,7 @@ public:
 	void set_guard(const Ref<NNSTGuard> &p_guard);
 
 	// Handling functions.
+	virtual bool _can_transition();
 };
 
 } //namespace godot

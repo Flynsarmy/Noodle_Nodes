@@ -60,3 +60,51 @@ func test_non_existant_event_does_nothing() -> void:
 
 	assert_eq(_node1.get_is_active(), true)
 	assert_eq(_node2.get_is_active(), false)
+
+func test_transition_with_succeeding_guard() -> void:
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
+	var _node1: NNSTNode = NNSTNode.new()
+	var _node2: NNSTNode = NNSTNode.new()
+	var _transition: NNSTTransition = NNSTTransition.new()
+	var _guard: NNSTExpressionGuard = NNSTExpressionGuard.new()
+
+	_node1.add_child(_transition)
+	_root.add_child(_node1)
+	_root.add_child(_node2)
+
+	_transition.event_name = 'foo'
+	_transition.to = _transition.get_path_to(_node2)
+	_transition.guard = _guard
+	_guard.expression = "1==1"
+
+	assert_eq(_node1.get_is_active(), true)
+	assert_eq(_node2.get_is_active(), false)
+
+	_root.send_event('foo')
+
+	assert_eq(_node1.get_is_active(), false)
+	assert_eq(_node2.get_is_active(), true)
+
+func test_transition_with_failing_guard() -> void:
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
+	var _node1: NNSTNode = NNSTNode.new()
+	var _node2: NNSTNode = NNSTNode.new()
+	var _transition: NNSTTransition = NNSTTransition.new()
+	var _guard: NNSTExpressionGuard = NNSTExpressionGuard.new()
+
+	_node1.add_child(_transition)
+	_root.add_child(_node1)
+	_root.add_child(_node2)
+
+	_transition.event_name = 'foo'
+	_transition.to = _transition.get_path_to(_node2)
+	_transition.guard = _guard
+	_guard.expression = "1==0"
+
+	assert_eq(_node1.get_is_active(), true)
+	assert_eq(_node2.get_is_active(), false)
+
+	_root.send_event('foo')
+
+	assert_eq(_node1.get_is_active(), true)
+	assert_eq(_node2.get_is_active(), false)
