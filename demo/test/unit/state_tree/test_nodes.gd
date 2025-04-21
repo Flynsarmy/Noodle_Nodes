@@ -75,6 +75,30 @@ func test_is_active_updates_on_transition() -> void:
 	assert_eq(_child1.get_is_active(), false)
 	assert_eq(_child2.get_is_active(), true)
 
+func test_is_active_updates_on_transition_to_another_branch() -> void:
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
+	var _child1: NNSTNode = NNSTNode.new()
+	var _child11: NNSTNode = NNSTNode.new()
+	var _child2: NNSTNode = NNSTNode.new()
+	var _child21: NNSTNode = NNSTNode.new()
+
+	_child1.add_child(_child11)
+	_child2.add_child(_child21)
+	_root.add_child(_child1)
+	_root.add_child(_child2)
+
+	assert_eq(_root.get_is_active(), true)
+	assert_eq(_child1.get_is_active(), true)
+	assert_eq(_child11.get_is_active(), true)
+	assert_eq(_child2.get_is_active(), false)
+	assert_eq(_child21.get_is_active(), false)
+	_child11.transition_to(_child11.get_path_to(_child21))
+	assert_eq(_root.get_is_active(), true)
+	assert_eq(_child1.get_is_active(), false)
+	assert_eq(_child11.get_is_active(), false)
+	assert_eq(_child2.get_is_active(), true)
+	assert_eq(_child21.get_is_active(), true)
+
 func test_is_active_on_grandchild() -> void:
 	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
 	var _child: NNSTNode = NNSTNode.new()

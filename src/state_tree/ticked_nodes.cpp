@@ -1,4 +1,5 @@
 #include "ticked_nodes.h"
+#include "parallel.h"
 #include <state_tree/root.h>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/time.hpp>
@@ -204,17 +205,49 @@ float NNSTTickedNodes::evaluate() {
 }
 
 void NNSTTickedNodes::transition_to(NodePath path_to_node) {
-	NNSTBranchNodes *parent = godot::Object::cast_to<NNSTBranchNodes>(get_parent());
-	if (!parent) {
-		return;
-	}
-
+	// NNSTBranchNodes *parent = godot::Object::cast_to<NNSTBranchNodes>(get_parent());
+	// if (!parent) {
+	// 	return;
+	// }
 	NNSTTickedNodes *to_state = get_node<NNSTTickedNodes>(path_to_node);
 	if (to_state == nullptr) {
 		return;
 	}
 
-	parent->_handle_transition(this, to_state);
+	NNSTBranchNodes *common_ancestor = _get_common_ancestor(this, to_state);
+	if (common_ancestor == nullptr) {
+		return;
+	}
+
+	if (!_can_transition_to(this, to_state)) {
+		return;
+	}
+
+	// If the common ancestor is a parallel node, the to_node's lineage is already
+	// partially active and we'll need to figure out where the youngest non-active
+	// part is so let's not worry about that for now.
+	if (!common_ancestor->is_class("NNSTParallel")) {
+		// Transition out the from_states lineage
+		NNSTTickedNodes *child = common_ancestor->_get_active_child_states()[0];
+		common_ancestor->_remove_active_child_state(child);
+		child->_transition_out();
+
+		// Transition in the to_states lineage
+		NNSTBranchNodes *parent = this;
+		Vector<NNSTBranchNodes *> lineage;
+		parent = to_state;
+		lineage.push_back(parent);
+		// Get the lineage
+		while (parent != nullptr && parent != common_ancestor) {
+			parent = godot::Object::cast_to<NNSTBranchNodes>(parent->get_parent());
+			lineage.push_back(parent);
+		};
+
+		for (int i = 1; i < lineage.size(); i++) {
+			lineage[i]->_add_active_child_state(godot::Object::cast_to<NNSTTickedNodes>(lineage[i - 1]));
+			lineage[i - 1]->_transition_in();
+		}
+	}
 }
 
 void NNSTTickedNodes::_transition_in() {

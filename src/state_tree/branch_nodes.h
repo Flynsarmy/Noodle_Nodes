@@ -75,8 +75,12 @@ public:
 	virtual void send_event(String name) {};
 
 	virtual void _transition_in() {};
+	virtual std::vector<NNSTTickedNodes *> _get_active_child_states() const { return _active_states; };
+	virtual void _add_active_child_state(NNSTTickedNodes *child_state);
+	virtual void _remove_active_child_state(NNSTTickedNodes *child_state);
 	virtual void _handle_transition(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state);
 	virtual bool _can_transition_to(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state);
+	virtual NNSTBranchNodes *_get_common_ancestor(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state);
 	virtual void _evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes);
 
 	GDVIRTUAL1(on_input, Ref<InputEvent>);

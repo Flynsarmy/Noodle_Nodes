@@ -102,16 +102,16 @@ void NNSTNode::_evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes
 }
 
 void NNSTNode::_transition_in() {
-	if (_num_active_states > 0) {
-		return;
-	}
-
 	// This method is called when the child list changes. If we were already
 	// active but had no active children, we don't want to run on_enter_state()
 	// again.
 	if (_internal_status != ST_INTERNAL_STATUS_ACTIVE) {
 		set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
 		on_enter_state();
+	}
+
+	if (_num_active_states > 0) {
+		return;
 	}
 
 	NNSTTickedNodes *cur_active_state;

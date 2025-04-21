@@ -168,11 +168,11 @@ void NNSTRoot::_evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes
 }
 
 void NNSTRoot::_transition_in() {
+	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
+
 	if (_num_active_states > 0) {
 		return;
 	}
-
-	set_internal_status(ST_INTERNAL_STATUS_ACTIVE);
 
 	std::vector<NNSTTickedNodes *> new_active_states;
 	_evaluate_child_activations(new_active_states);

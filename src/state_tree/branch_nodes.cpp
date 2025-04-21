@@ -100,27 +100,39 @@ void NNSTBranchNodes::on_unhandled_key_input(const Ref<InputEvent> &event) {
 	}
 }
 
-/**
- * Called by a child state's transition_to() method. Transitions out of the old state and into the new.
- */
-void NNSTBranchNodes::_handle_transition(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state) {
-	if (!_can_transition_to(from_state, to_state)) {
+void NNSTBranchNodes::_add_active_child_state(NNSTTickedNodes *child_state) {
+	if (child_state == nullptr) {
 		return;
 	}
 
-	from_state->_transition_out();
-	// Remove the from_state from our list of active states
+	_active_states.push_back(child_state);
+	_num_active_states++;
+}
+
+void NNSTBranchNodes::_remove_active_child_state(NNSTTickedNodes *child_state) {
+	if (child_state == nullptr) {
+		return;
+	}
+
 	for (unsigned int i = 0; i < _num_active_states; i++) {
-		if (_active_states[i] == from_state) {
+		if (_active_states[i] == child_state) {
 			_active_states.erase(_active_states.begin() + i);
 			_num_active_states--;
 			break;
 		}
 	}
+}
+
+/**
+ * Called by a child state's transition_to() method. Transitions out of the old state and into the new.
+ */
+void NNSTBranchNodes::_handle_transition(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state) {
+	from_state->_transition_out();
+	// Remove the from_state from our list of active states
+	_remove_active_child_state(from_state);
 
 	to_state->_transition_in();
-	_active_states.push_back(to_state);
-	_num_active_states++;
+	_add_active_child_state(to_state);
 }
 
 bool NNSTBranchNodes::_can_transition_to(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state) {
@@ -132,11 +144,28 @@ bool NNSTBranchNodes::_can_transition_to(NNSTTickedNodes *from_state, NNSTTicked
 		return false;
 	}
 
+	// No transitioning into a nodes own child
 	if (from_state->is_ancestor_of(to_state)) {
 		return false;
 	}
 
 	return true;
+}
+
+NNSTBranchNodes *NNSTBranchNodes::_get_common_ancestor(NNSTTickedNodes *from_state, NNSTTickedNodes *to_state) {
+	if (from_state == nullptr || to_state == nullptr) {
+		return nullptr;
+	}
+
+	Node *parent = from_state->get_parent();
+	while (parent != nullptr) {
+		if (parent->is_ancestor_of(to_state)) {
+			return godot::Object::cast_to<NNSTBranchNodes>(parent);
+		}
+		parent = parent->get_parent();
+	}
+
+	return nullptr;
 }
 
 /**
