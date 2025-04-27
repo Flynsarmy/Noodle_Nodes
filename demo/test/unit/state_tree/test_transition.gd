@@ -108,3 +108,42 @@ func test_transition_with_failing_guard() -> void:
 
 	assert_eq(_node1.get_is_active(), true)
 	assert_eq(_node2.get_is_active(), false)
+
+## This test ensures active child counts don't screw up when transitioning in
+## and out of grandchild states repeatedly.
+func test_transition_into_and_out_of_grandchild_twice() -> void:
+	var _root: NNSTRoot = add_child_autofree(NNSTRoot.new())
+	var _node1: NNSTNode = NNSTNode.new()
+	var _node11: NNSTNode = NNSTNode.new()
+	var _node11_transition: NNSTTransition = NNSTTransition.new()
+	_node11_transition.event_name = "to_node2"
+	var _node2: NNSTNode = NNSTNode.new()
+	var _node2_transition: NNSTTransition = NNSTTransition.new()
+	_node2_transition.event_name = "to_node11"
+
+	_node2.add_child(_node2_transition)
+	_node11.add_child(_node11_transition)
+	_node1.add_child(_node11)
+	_root.add_child(_node1)
+	_root.add_child(_node2)
+	_node2_transition.to = _node2_transition.get_path_to(_node11)
+	_node11_transition.to = _node11_transition.get_path_to(_node2)
+
+	assert_eq(_node1.get_is_active(), true)
+	assert_eq(_node11.get_is_active(), true)
+	assert_eq(_node2.get_is_active(), false)
+
+	_root.send_event('to_node2')
+	assert_eq(_node1.get_is_active(), false)
+	assert_eq(_node11.get_is_active(), false)
+	assert_eq(_node2.get_is_active(), true)
+
+	_root.send_event('to_node11')
+	assert_eq(_node1.get_is_active(), true)
+	assert_eq(_node11.get_is_active(), true)
+	assert_eq(_node2.get_is_active(), false)
+
+	_root.send_event('to_node2')
+	assert_eq(_node1.get_is_active(), false)
+	assert_eq(_node11.get_is_active(), false)
+	assert_eq(_node2.get_is_active(), true)

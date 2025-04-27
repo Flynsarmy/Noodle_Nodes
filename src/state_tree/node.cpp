@@ -46,7 +46,7 @@ void NNSTNode::_evaluate_child_activations(std::vector<NNSTTickedNodes *> &nodes
 	if (!_initial_state.is_empty() && _num_child_states > 1) {
 		Node *initial_state_node = get_node_or_null(_initial_state);
 		if (initial_state_node != nullptr) {
-			for (unsigned int i = 1; i < _child_states.size(); i++) {
+			for (unsigned int i = 1; i < _num_child_states; i++) {
 				if (_child_states[i] == initial_state_node) {
 					NNSTTickedNodes *stnode = _child_states[i];
 					_child_states.erase(_child_states.begin() + i);

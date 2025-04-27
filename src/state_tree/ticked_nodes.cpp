@@ -109,7 +109,7 @@ bool NNSTTickedNodes::get_is_on_entered_condition_true() const {
 // Handling methods.
 
 void NNSTTickedNodes::send_event(String name) {
-	for (unsigned int i = 0; i < _child_transitions.size(); i++) {
+	for (unsigned int i = 0; i < _num_child_transitions; i++) {
 		if (_child_transitions[i]->get_event_name() == name) {
 			if (_child_transitions[i]->_can_transition()) {
 				transition_to(_child_transitions[i]->get_to().slice(1));
@@ -118,9 +118,8 @@ void NNSTTickedNodes::send_event(String name) {
 		}
 	}
 
-	for (unsigned int i = 0; i < _active_states.size(); i++) {
-		NNSTTickedNodes *stnode = godot::Object::cast_to<NNSTTickedNodes>(_active_states[i]);
-		stnode->send_event(name);
+	for (unsigned int i = 0; i < _num_active_states; i++) {
+		_active_states[i]->send_event(name);
 	}
 }
 
@@ -267,6 +266,7 @@ void NNSTTickedNodes::_transition_out() {
 	on_exit_state();
 	set_internal_status(ST_INTERNAL_STATUS_INACTIVE);
 	_active_states.clear();
+	_num_active_states = 0;
 };
 
 bool NNSTTickedNodes::on_enter_condition() {

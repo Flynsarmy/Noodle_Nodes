@@ -209,6 +209,7 @@ void NNSTBranchNodes::_notification(int p_what) {
 
 		_child_states.clear();
 		_child_considerations.clear();
+		_child_transitions.clear();
 		int num_children = get_child_count();
 		for (int i = 0; i < num_children; i++) {
 			if (NNConsiderations *cons = godot::Object::cast_to<NNConsiderations>(get_child(i))) {
