@@ -17,7 +17,14 @@ using namespace godot;
 void NNSTRoot::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_blackboard", "blackboard"), &NNSTRoot::set_blackboard);
 	ClassDB::bind_method(D_METHOD("get_blackboard"), &NNSTRoot::get_blackboard);
-	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "blackboard", PROPERTY_HINT_DICTIONARY_TYPE), "set_blackboard", "get_blackboard");
+	ADD_PROPERTY(
+			PropertyInfo(
+					Variant::DICTIONARY,
+					"blackboard",
+					PROPERTY_HINT_TYPE_STRING,
+					vformat("%s:;%s/%s", Variant::STRING, Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE)),
+			"set_blackboard",
+			"get_blackboard");
 
 #ifdef DEBUG_ENABLED
 	ADD_SUBGROUP("Debugging", "");
